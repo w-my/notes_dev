@@ -4,13 +4,13 @@
 
 ###### 关闭系统保护
 
-```cmd
+```sh
 $ sudo spctl --master-disable
 ```
 
 ###### 打开系统保护
 
-```cmd
+```sh
 $ sudo spctl --master-enable
 ```
 
@@ -20,13 +20,13 @@ $ sudo spctl --master-enable
 
 ###### 显示隐藏文件，重启 finder 生效
 
-```cmd
+```sh
 $ defaults write com.apple.finder AppleShowAllFiles -bool true
 ```
 
 ###### 隐藏 隐藏文件，重启 finder 生效
 
-```cmd
+```sh
 $ defaults write com.apple.finder AppleShowAllFiles -bool false
 ```
 
@@ -34,7 +34,7 @@ $ defaults write com.apple.finder AppleShowAllFiles -bool false
 
 #### 重启 Finder
 
-```cmd
+```sh
 $ killall Finder
 ```
 
@@ -42,13 +42,13 @@ $ killall Finder
 
 #### 打开文件
 
-```cmd
+```sh
 open a.md
 ```
 
 ###### 用指定软件打开文件
 
-```cmd
+```sh
 open -a /Applications/Typora.app a.md
 ```
 
@@ -58,13 +58,13 @@ open -a /Applications/Typora.app a.md
 
 ###### 显示资源库
 
-```cmd
+```sh
 $ chflags nohidden ~/Library/
 ```
 
 ###### 隐藏资源库
 
-```cmd
+```sh
 $ chflags hidden ~/Library/
 ```
 
@@ -72,7 +72,7 @@ $ chflags hidden ~/Library/
 
 #### Finder 标题栏显示完整路径，重启 Finder 生效
 
-```cmd
+```sh
 $ defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 ```
 
@@ -80,7 +80,7 @@ $ defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES
 
 #### 其他命令
 
-```cmd
+```sh
 # 显示单个文件，重启Finder生效
 $ chflags nohidden <file>
 # 隐藏单个文件，重启Finder生效

@@ -8,7 +8,7 @@
 
 **完成后，可以使用Git来获取 Git的升级：**
 
-```
+```sh
 $ git clone git://git.kernel.org/pub/scm/git/git.git
 ```
 
@@ -18,7 +18,7 @@ $ git clone git://git.kernel.org/pub/scm/git/git.git
 
 #### `git config` 配置用户信息
 
-```
+```sh
 $ git config --global user.name "John Doe"
 $ git config --global user.email johndoe@example.com
 ```
@@ -31,7 +31,7 @@ $ git config --global user.email johndoe@example.com
 
 还可以通过 `git config <key>`，来检查 Git 的某一项配置：
 
-```
+```sh
 $ git config user.name
 ```
 
@@ -39,7 +39,7 @@ $ git config user.name
 
 三种方式获取 Git 帮助，找到 Git 命令的使用手册：
 
-```
+```sh
 $ git help <verb>
 $ git <verb> --help
 $ man git-<verb>
@@ -47,7 +47,7 @@ $ man git-<verb>
 
 获取 config 命令手册：
 
-```
+```sh
 $ git help config
 ```
 
@@ -61,7 +61,7 @@ $ git help config
 
 使用 Git 对现有的项目进行管理，只需进入该项目目录并输入：
 
-```
+```sh
 $ git init
 ```
 
@@ -71,7 +71,7 @@ $ git init
 
 `git add` 跟踪指定文件，然后 `git commit` 提交：
 
-```
+```sh
 $ git add *.c
 $ git add LICENSE
 $ git commit -m "initial project version"
@@ -83,7 +83,7 @@ $ git commit -m "initial project version"
 
 使用 `git clone [url]` 命令，获得一份已经存在了的 Git 仓库的拷贝。Git 克隆的是该 Git 仓库服务器上的几乎所有数据，保罗每一个文件的每一个版本。
 
-```
+```sh
 $ git clone https://github.com/libgit2/libgit2
 ```
 
@@ -91,7 +91,7 @@ $ git clone https://github.com/libgit2/libgit2
 
 如果想在克隆远程仓库的时候，自定义本地仓库的名字，可以使用如下命令: 
 
-```
+```sh
 $ git clone https://github.com/libgit2/libgit2 mylibgit
 ```
 
@@ -111,7 +111,7 @@ Git 支持多种数据传输协议。 上面的例子使用的是 https:// 协�
 
 如果在克隆仓库后立即使用此命令，回看到类似的输出：
 
-```
+```sh
 $ git status
 On branch master
 nothing to commit, working directory clean
@@ -121,7 +121,7 @@ nothing to commit, working directory clean
 
 现在，在项目下创建一个新的 README 文件。如果之前并不存在这个文件，使用 `git status` 命令，将会看到一个新的未跟踪文件：
 
-```
+```sh
 $ echo `My project` > README
 $ git status
 On branch master
@@ -138,13 +138,13 @@ nothing added to commit but untracked files present (use "git add" to track)
 
 使用命令 `git add` 开始跟踪一个文件，要跟踪 README 文件，运行：
 
-```
+```sh
 $ git add README
 ```
 
 此时再运行 `git status` 命令，会看到 README 文件已经被跟踪，并处于暂存状态：
 
-```
+```sh
 $ git status
 On branch master
 Changes to be committed:
@@ -159,7 +159,7 @@ Changes to be committed:
 
 现在修改一个名为 `CONTRIBUTING.md` 的已被跟踪的文件，然后运行 `git status` 命令，会看到下面内容: 
 
-```
+```sh
 $ git status
 On branch master
 Changes to be committed:
@@ -172,7 +172,7 @@ Changes not staged for commit:
 
 文件 `CONTRIBUTING.md` 出现在 `Changes not staged for commit` 这行下面，说明已跟踪文件的内容发生了变化，但还没有放到暂存区。 要暂存这次更新，需要运行 `git add` 命令。 这是个多功能命令：可以用它开始跟踪新文件，或者把已跟踪的文件放到暂存区，还能用于合并时把有冲突的文件标记为已解决状态等。 将这个命令理解为“添加内容到下一次提交中”而不是“将一个文件添加到项目中”要更加合适。 现在运行 `git add` 将 `CONTRIBUTING.md` 放到暂存区，然后再看看 `git status` 的输出: 
 
-```
+```sh
 $ git add CONTRIBUTING.md 
 $ git status
 On branch master
@@ -184,7 +184,7 @@ Changes to be committed:
 
 现在两个文件都已暂存，下次提交时就会一并记录到仓库。 假设此时，想要在 `CONTRIBUTING.md` 里再加条 注释， 重新编辑存盘后，准备好提交。 不过且慢，再运行 `git status` 看看: 
 
-```
+```sh
 $ vim CONTRIBUTING.md
 $ git status
 On branch master
@@ -199,7 +199,7 @@ Changes not staged for commit:
 
 怎么回事? 现在 `CONTRIBUTING.md` 文件同时出现在暂存区和非暂存区。 这怎么可能呢? 好吧，实际上 Git 只不过暂存了你运行 `git add` 命令时的版本， 如果你现在提交，`CONTRIBUTING.md` 的版本是你最后一次运行` git add` 命令时的那个版本，而不是你运行 `git commit` 时，在工作目录中的当前版本。 所以，运行了 `git add` 之后又作了修订的文件，需要重新运行 `git add` 把最新版本重新暂存起来: 
 
-```
+```sh
 $ git add CONTRIBUTING.md 
 $ git status
 On branch master
@@ -215,7 +215,7 @@ Changes to be committed:
 
 `git status` 命令的输出十分的详细，还可以使用 `git status -s` 命令或 `git status --short` 命令，可以得到更为紧凑的格式输出：
 
-```
+```sh
 $ git status -s 
  M README
 MM Rakefile
@@ -232,7 +232,7 @@ M  lib/simplegit.rb
 
 一般我们总会有些文件无需纳入 Git 的管理，也不希望它们总出现在未跟踪文件列表。 通常都是些自动生成的文 件，比如日志文件，或者编译过程中创建的临时文件等。 在这种情况下，我们可以创建一个名为 `.gitignore` 的文件，列出要忽略的文件模式。 来看一个实际的例子: 
 
-```
+```sh
 $ cat .gitignore
 *.[oa]
 *~
@@ -258,7 +258,7 @@ $ cat .gitignore
 
 再看一个 `.gitignore` 文件的例子: 
 
-```
+```sh
 # no .a files
 *.a
 
@@ -288,7 +288,7 @@ doc/**/*.pdf
 
 假如再次修改 `README` 文件后暂存，然后编辑 `CONTRIBUTING.md` 文件后先不暂存， 运行 `status` 命令将会看到: 
 
-```
+```sh
 $ git status
 On branch master
 Changes to be committed:
@@ -301,7 +301,7 @@ Changes not staged for commit:
 
 要查看尚未暂存的文件更新了哪些部分，不加参数直接输入 `git diff` ，此命令比较的是工作目录中当前文件和暂存区域快照之间的差异：
 
-```
+```sh
 $ git diff
 diff --git a/CONTRIBUTING.md b/CONTRIBUTING.md
 index 8ebb991..643e24f 100644
@@ -322,7 +322,7 @@ that highlights your work in progress (and note in the PR title that it's
 
 若要查看已暂存的将要添加到下次提交里的内容，可以用 `git diff --cached` 命令。(Git 1.6.1 及更高版本 还允许使用 `git diff --staged`，效果是相同的，但更好记些。) 
 
-```
+```sh
 $ git diff --staged
 diff --git a/README b/README 
 new file mode 100644
@@ -341,11 +341,11 @@ index 0000000..03902a1
 
 现在的暂存区域已经准备妥当可以提交了。 在此之前，请一定要确认还有什么修改过的或新建的文件还没有 `git add` 过，否则提交的时候不会记录这些还没暂存起来的变化。 这些修改过的文件只保留在本地磁盘。 所 以，每次准备提交前，先用 `git status` 看下，是不是都已暂存起来了， 然后再运行提交命令 `git commit` ：
 
-```
+```sh
 $ git commit
 ```
 
-```
+```sh
 $ git commit -m "备注信息"
 ```
 
@@ -355,7 +355,7 @@ $ git commit -m "备注信息"
 
 尽管使用暂存区域的方式可以精心准备要提交的细节，但有时候这么做略显繁琐。 Git 提供了一个跳过使用暂存区域的方式， 只要在提交的时候，给 `git commit` 加上` -a` 选项，Git 就会自动把所有已经跟踪过的文件暂存 起来一并提交，从而跳过 `git add` 步骤: 
 
-```
+```sh
 $ git commit -a -m 'added new benchmarks'
 ```
 
@@ -367,7 +367,7 @@ $ git commit -a -m 'added new benchmarks'
 
 如果只是简单地从工作目录中手工删除文件，运行 `git status` 时就会在 “Changes not staged for commit” 部分(也就是 未暂存清单)看到: 
 
-```
+```sh
 $ rm PROJECTS.md
 $ git status
 On branch master
@@ -381,7 +381,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 
 然后再运行 `git rm` 记录此次移除文件的操作: 
 
-```
+```sh
 $ git rm PROJECTS.md
 rm 'PROJECTS.md'
 $ git status
@@ -397,19 +397,19 @@ Changes to be committed:
 
 另外一种情况是，我们想把文件从 Git 仓库中删除(亦即从暂存区域移除)，但仍然希望保留在当前工作目录中。 换句话说，你想让文件保留在磁盘，但是并不想让 Git 继续跟踪。 当你忘记添加 `.gitignore` 文件，不小心把一个很大的日志文件或一堆 `.a` 这样的编译生成文件添加到暂存区时，这一做法尤其有用。 为达到这一目的，使用 `--cached` 选项: 
 
-```
+```sh
 $ git rm --cached README
 ```
 
 `git rm` 命令后面可以列出文件或者目录的名字，也可以使用glob模式。比方说: 
 
-```
+```sh
 $ git rm log/\*.log
 ```
 
 注意到星号 `*` 之前的反斜杠 `\`， 因为 Git 有它自己的文件模式扩展匹配方式，所以我们不用 shell 来帮忙展开。 此命令删除 `log/` 目录下扩展名为 `.log` 的所有文件。 类似的比如: 
 
-```
+```sh
 $ git rm \*~
 ```
 
@@ -423,13 +423,13 @@ $ git rm \*~
 
 既然如此，当你看到 Git 的 `mv` 命令时一定会困惑不已。 要在 Git 中对文件改名，可以这么做: 
 
-```
+```sh
 $ git mv file_from file_to
 ```
 
 它会恰如预期般正常工作。 实际上，即便此时查看状态信息，也会明白无误地看到关于重命名操作的说明: 
 
-```
+```sh
 $ git mv README.md README $ git status
 On branch master
 Changes to be committed:
@@ -439,7 +439,7 @@ Changes to be committed:
 
 其实，运行 `git mv` 就相当于运行了下面三条命令: 
 
-```
+```sh
 $ mv README.md README 
 $ git rm README.md
 $ git add README
@@ -453,19 +453,19 @@ $ git add README
 
 克隆一个项目来练习 `git log`
 
-```
+```sh
 $ git clone https://github.com/schacon/simplegit-progit
 ```
 
 列出所有更新记录
 
-```
+```sh
 $ git log
 ```
 
 `-p` 用来显示每次提交的内容差异，`-2` 显示最近两次提交: 
 
-```
+```sh
 $ git log -p -2
 ```
 
@@ -473,7 +473,7 @@ $ git log -p -2
 
 `--stat` 可以为 `git log` 附带一系列的总结性选项， 比如想看到每次提交的简略的统计信息：
 
-```
+```sh
 $ git log --stat
 ```
 
@@ -481,13 +481,13 @@ $ git log --stat
 
 `--pretty` ，可以指定使用不同于默认格式的方式展示提交历史。 这个选项有一些内建的子选项供你使用。 比如用 `oneline` 将每个提交放在一行显示，查看的提交数很大时非常有用。 另外还有 `short`，`full` 和 `fuller` 可以用，展示的信息或多或少有些不同。 
 
-```
+```sh
 $ git log --pretty=oneline
 ```
 
 但最有意思的是 `format`，可以定制要显示的记录格式: 
 
-```
+```sh
 $ git log --pretty=format:"%h - %an, %ar : %s"
 ```
 
@@ -515,7 +515,7 @@ $ git log --pretty=format:"%h - %an, %ar : %s"
 
 当 `oneline` 或 `format` 与另一个 `log` 选项 `--graph` 结合使用时尤其有用。 这个选项添加了一些 `ASCII` 字符串来形象地展示你的分支、合并历史: 
 
-```
+```sh
 $ git log --pretty=format:"%h %s" --graph
 * 2d3acf9 ignore errors from SIGCHLD on trap
 * 5e3ee11 Merge branch 'master' of git://github.com/dustin/grit |\
@@ -550,7 +550,7 @@ $ git log --pretty=format:"%h %s" --graph
 
 `-<n>` 只显示最近提交的条数，另外还有按照时间作限制的选项 `--since` 和 `--until`。 例如，下面的命令列出所有最近两周 内的提交: 
 
-```
+```sh
 $ git log --since=2.weeks
 ```
 
@@ -560,7 +560,7 @@ $ git log --since=2.weeks
 
 另一个非常有用的筛选选项是 `-S`，可以列出那些添加或移除了某些字符串的提交。 比如想找出添加或移除了某一个特定函数的引用的提交: 
 
-```
+```sh
 $ git log -Sfunction_name
 ```
 
@@ -580,7 +580,7 @@ $ git log -Sfunction_name
 
 来看一个实际的例子，如果要查看 Git 仓库中，2008 年 10 月期间，Junio Hamano 提交的但未合并的测试文 件，可以用下面的查询命令: 
 
-```
+```sh
 $ git log --pretty="%h - %s" --author=gitster --since="2008-10-01" --before="2008-11-01" --no-merges -- t/
 
 5610e3b - Fix testcase failure when extended attributes are in use acd3b9e - Enhance hold_lock_file_for_{update,append}() API
@@ -599,7 +599,7 @@ b0ad11e - pull: allow "git pull origin $something:$current_branch" into an unbor
 
 有时候我们提交完了才发现漏掉了几个文件没有添加，或者提交信息写错了。 此时，可以运行带有 `--amend` 选项的提交命令尝试重新提交: 
 
-```
+```sh
 % git commit --amend
 ```
 
@@ -609,7 +609,7 @@ b0ad11e - pull: allow "git pull origin $something:$current_branch" into an unbor
 
 例如，你提交后发现忘记了暂存某些需要的修改，可以像下面这样操作: 
 
-```
+```sh
 $ git commit -m 'initial commit' 
 $ git add forgotten_file
 $ git commit --amend
@@ -623,7 +623,7 @@ $ git commit --amend
 
 接下来的两个小节演示如何操作暂存区域与工作目录中已修改的文件。 这些命令在修改文件状态的同时，也会 提示如何撤消操作。 例如，你已经修改了两个文件并且想要将它们作为两次独立的修改提交，但是却意外地输 入了 git add * 暂存了它们两个。 如何只取消暂存两个中的一个呢? git status 命令提示了你: 
 
-```
+```sh
 $ git add *
 $ git status
 On branch master
@@ -635,7 +635,7 @@ Changes to be committed:
 
 在 “Changes to be committed” 文字正下方，提示使用 `git reset HEAD <file>...` 来取消暂存。 所 以，我们可以这样来取消暂存 `CONTRIBUTING.md` 文件: 
 
-```
+```sh
 $ git reset HEAD CONTRIBUTING.md
 Unstaged changes after reset:
 M CONTRIBUTING.md
@@ -651,7 +651,7 @@ M CONTRIBUTING.md
 
 如果你并不想保留对 `CONTRIBUTING.md` 文件的修改怎么办? 你该如何方便地撤消修改——将它还原成上次提交时的样子(或者刚克隆完的样子，或者刚把它放入工作目录时的样子)?幸运的是，git status也告诉了 你应该如何做。 在最后一个例子中，未暂存区域是这样: 
 
-```
+```sh
 Changes not staged for commit:
 	(use "git add <file>..." to update what will be committed) 
 	(use "git checkout -- <file>..." to discard changes in working directory)
@@ -660,7 +660,7 @@ Changes not staged for commit:
 
 它非常清楚地告诉了你如何撤消之前所做的修改。 让我们来按照提示执行: 
 
-```
+```sh
 $ git checkout -- CONTRIBUTING.md 
 $ git status
 On branch master

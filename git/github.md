@@ -5,7 +5,7 @@
 
 #### SSH
 
-```cmd
+```sh
 $ ssh-keygen -t rsa -C "email@qq.com"
 $ ssh-keygen -t rsa -C "email@qq.com" -f ~/.ssh/github_rsa
 $ ssh-keygen -t rsa -C "email@qq.com" -f ~/.ssh/gitee_rsa
@@ -16,7 +16,7 @@ $ ssh-keygen -t rsa -C "email@qq.com" -f ~/.ssh/gitlab_rsa
 
 #### 配置多个publickey
 
-```cmd
+```sh
 $ vim config
 
 # gitee
@@ -44,7 +44,7 @@ Host *
 ```
 
 远程私有库
-```cmd
+```sh
 $ pod repo add ServyouCocoaPod <url>
 ```
 

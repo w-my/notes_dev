@@ -5,7 +5,7 @@
 #### 配置
 ###### 设置邮箱用户名
 
-```cmd
+```sh
 $ git config --global user.name "Your Name"
 $ git config --global user.email "email@example.com"
 ```
@@ -14,7 +14,7 @@ $ git config --global user.email "email@example.com"
 
 ###### 查看配置信息
 
-```cmd
+```sh
 $ git config --list
 ```
 
@@ -22,7 +22,7 @@ $ git config --list
 
 #### git 命令
 
-```cmd
+```sh
 $ git init
 $ git add <file>
 $ git commit -m <message>
@@ -42,7 +42,7 @@ $ git rm test.txt
 
 
 
-```cmd
+```sh
 start a working area (see also: git help tutorial)
    clone      Clone a repository into a new directory
    init       Create an empty Git repository or reinitialize an existing one
@@ -79,7 +79,7 @@ collaborate (see also: git help workflows)
 
 #### 本地仓库
 
-```cmd
+```sh
 $ mkdir learngit
 $ cd learngit
 $ git init
@@ -98,7 +98,7 @@ $ rm -f test.txt
 ###### 创建SSH Key
 用户主目录下是否有 `.ssh` 目录，再看看 `.ssh` 目录下有没有 `id_rsa` 和 `id_rsa.pub` 这两个文件，如果有则跳到下一步。没有则创建：
 
-```cmd
+```sh
 $ ssh-keygen -t rsa -C "youremail@example.com"
 ```
 邮件地址换成自己的邮件地址，然后一路回车，即使用默认值，这个 `Key` 也无需设置密码。
@@ -114,13 +114,13 @@ $ ssh-keygen -t rsa -C "youremail@example.com"
 ###### 关联远程仓库
 在本地`learngit`仓库下关联远端仓库
 
-```cmd
+```sh
 $ git remote add origin git@github.com:w-my/learngit.git
 ```
 
 ###### 把本地库的内容推送到远程仓库
 
-```cmd
+```sh
 $ git push -u origin master
 ```
 由于远程库是空的，第一次推送 `master` 分支时，加上了 `-u` 参数，`Git` 不但会把本地的 `master` 分支内容推送的远程新的 `master` 分支，还会把本地的 `master` 分支和远程的 `master` 分支关联起来，在以后的推送或者拉取时就可以简化命令。
@@ -128,7 +128,7 @@ $ git push -u origin master
 
 ###### 之后提交只需要用以下方式就可以把本地master分支的最新修改推送至GitHub：
 
-```cmd
+```sh
 $ git push origin master
 ```
 
@@ -153,7 +153,7 @@ $ git push origin master
 
 ###### 克隆远程库
 
-```cmd
+```sh
 $ git clone git@github.com:w-my/learngit.git
 ```
 
@@ -162,7 +162,7 @@ $ git clone git@github.com:w-my/learngit.git
 #### 分支管理
 
 ##### 创建与合并分支
-```cmd
+```sh
 $ git branch							# 查看分支
 $ git branch <name>			  # 创建分支
 $ git checkout <name>		  # 切换分支
@@ -175,7 +175,7 @@ $ git branch -d <name>		# 删除分支
 
 `git merge` 提示有冲突：
 
-```cmd
+```sh
 $ git merge fix
 
 Auto-merging README.md
@@ -185,7 +185,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 
 `git status` 也会提示有冲突
 
-```cmd
+```sh
 $ git status
 
 On branch dev
@@ -203,20 +203,20 @@ no changes added to commit (use "git add" and/or "git commit -a")
 需要修改解决冲突后，再次添加提交。
 
 使用 `log `可以查看分支图
-```cmd
+```sh
 $ git log --graph --pretty=oneline --abbrev-commit
 ```
 
 
 ##### 分支管理策略
 使用`--no-ff`方式的`git merge`：
-```cmd
+```sh
 $ git merge --no-ff -m "merge with no-ff" dev
 ```
 因为本次合并要创建一个新的commit，所以加上-m参数，把commit描述写进去。
 
 合并后，用git log看看分支历史：
-```cmd
+```sh
 $ git log --graph --pretty=oneline --abbrev-commit
 ```
 合并分支时，加上`--no-ff`参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而`fast forward`合并就看不出来曾经做过合并。
@@ -231,17 +231,17 @@ $ git log --graph --pretty=oneline --abbrev-commit
 
 #####  Bug分支
 当前分支还为开发完，需要零时切换分支做别的事情，可以使用`git stash`把当前分支内容暂存起来。
-```cmd
+```sh
 $ git stash
 ```
 
 使用`git stash list`可以查看暂存列表
-```cmd
+```sh
 $ git stash list
 ```
 
 当处理完其他内容回到工作分支后，可以使用`git stash apply`来恢复之前的工作内容，然后使用`git stash drop`删除暂存历史信息。也可以使用`git stash pop`来恢复暂存内容并删除暂存列表信息。
-```cmd
+```sh
 $ git stash apply
 $ git stash drop
 $ git stash pop
@@ -254,7 +254,7 @@ $ git stash pop
 ##### Feature分支
 开发一个新feature，最好新建一个分支；
 如果要丢弃一个没有被合并过的分支，可以通过`git branch -D <name>`强行删除。
-```cmd
+```sh
 $ git branch -D <name>
 ```
 
@@ -262,17 +262,17 @@ $ git branch -D <name>
 ##### 多人协作
 Git会把本地的`master`分支和远程的`master`分支对应起来了，并且，远程仓库的默认名称是`origin`。
 要查看远程库的信息，用`git remote` 或 `git remote -v`
-```cmd
+```sh
 $ git remote
 git remote -v
 ```
 
 ###### 推送分支
-```cmd
+```sh
 $ git push origin master
 ```
 如果要推送其他分支，比如`dev`，就改成：
-```cmd
+```sh
 $ git push origin dev
 ```
 
@@ -287,32 +287,32 @@ $ git push origin dev
 1、 远端有 `dev` 分支
 基于远程 `dev` 分支创建本地 `dev` 分支
 
-```cmd
+```sh
 $ git checkout -b dev origin/dev
 ```
 
 2、 远端只有 `mater` 分支
 
 - 创建本地新的 `dev` 分支
-```cmd
+```sh
 $ git branch dev
 ```
 
 - 发布 `dev` 分支
 发布`dev` 分支指的是同步 `dev` 分支的代码到远程服务器，这样远程仓库也有一个 `dev` 分支了
-```cmd
+```sh
 $ git push origin dev:dev
 ```
 
 - 切换到 `dev `分支进行开发
-```cmd
+```sh
 $ git checkout dev
 ```
 
 - 开发代码之后，我们有两个选择
 
 第一个：如果功能开发完成了，可以合并主分支
-```cmd
+```sh
 $ git checkout master  # 切换到主分支
 $ git merge dev  # 把dev分支的更改和master合并
 $ git push  # 提交主分支代码远程
@@ -321,39 +321,39 @@ $ git push  # 提交dev分支到远程
 ```
 
 第二个：如果功能没有完成，可以直接推送
-```cmd
+```sh
 $ git push  # 提交到dev远程分支
 ```
 注意：在分支切换之前最好先commit全部的改变，除非你真的知道自己在做什么
 
 - 删除分支
-```cmd
+```sh
 $ git push origin :dev  # 删除远程dev分支，危险命令哦
 ```
 下面两条是删除本地分支
-```cmd
+```sh
 $ git checkout master  # 切换到master分支
 $ git branch -d dev  # 删除本地dev分支
 ```
 
 ###### 推送修改
-```cmd
+```sh
 $ git push origin dev
 ```
 当小伙伴的最新提交和你试图推送的提交有冲突，则`push`会失败，Git提示我们，先用`git pull`把最新的提交从`origin/dev`抓下来，然后，在本地合并，解决冲突，再推送：
-```cmd
+```sh
 $ git pull
 ```
 `git pull`也失败了，原因是没有指定本地`dev`分支与远程`origin/dev`分支的链接，根据提示，设置`dev`和`origin/dev`的链接：
-```cmd
+```sh
 $ git branch --set-upstream-to=origin/dev dev
 ```
 再`pull`：
-```cmd
+```sh
 $ git pull
 ```
 这回`git pull`成功，但是合并有冲突，手动解决后，提交，再`push`
-```cmd
+```sh
 $ git push origin dev
 ```
 
@@ -376,7 +376,7 @@ $ git push origin dev
 #### 标签管理
 
 ##### 创建标签
-```cmd
+```sh
 $ git tag <tagname>  #新建标签，默认为HEAD，也可以指定一个commit id；
 $ git tag -a <tagname> -m "message"  #新建标签同时指定标签信息；
 $ git tag  #查看所有标签
@@ -384,37 +384,37 @@ $ git show <tagname>  #查看指定标签处信息
 ```
 
 查看提交列表
-```cmd
+```sh
 $ git log --pretty=oneline --abbrev-commit
 ```
 
 给指定`commit id`位置添加标签
-```cmd
+```sh
 $ git tag -a v1.0.0 -m "version 1.0.0 released" 1094adb
 ```
 
 ##### 操作标签
 删除指定标签：
-```cmd
+```sh
 $ git tag -d <tagname>
 ```
 
 推送指定标签到远端：
-```cmd
+```sh
 $ git push origin <tagname>
 ```
 
 或者，一次性推送全部尚未推送到远端的本地标签：
-```cmd
+```sh
 $ git push origin --tags
 ```
 
 要删除已经推送到远端的标签，需先从本地删除：
-```cmd
+```sh
 $ git tag -d <tagname>
 ```
 然后，从远程删除。删除命令也是push：
-```cmd
+```sh
 $ git push origin :refs/tags/<tagname>
 ```
 
@@ -441,12 +441,12 @@ $ git push origin :refs/tags/<tagname>
 
 ##### 配置别名
 告诉Git，以后st就表示status：
-```cmd
+```sh
 $ git config --global alias.st status
 ```
 
 其他
-```cmd
+```sh
 $ git config --global alias.co checkout
 $ git config --global alias.ci commit
 $ git config --global alias.br branch
@@ -454,7 +454,7 @@ $ git config --global alias.unstage 'reset HEAD'
 ```
 
 而当前用户的Git配置文件放在用户主目录下的一个隐藏文件`.gitconfig`中：
-```cmd
+```sh
 $ cat .gitconfig
 [alias]
     co = checkout
