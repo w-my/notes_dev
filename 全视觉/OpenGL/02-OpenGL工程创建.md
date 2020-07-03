@@ -15,13 +15,6 @@
 3. 在 `main.cpp` 文件中写入测试代码，渲染一个三角形
 
 ```c++
-//
-//  main.cpp
-//  01_OpenGL
-//
-//  Created by Wmy on 2020/7/2.
-//
-
 /*
  `#include<GLShaderManager.h>` 引入了 GLTool 着色器管理器（shaderMananger）类。没有着色器，我们就不能在 OpenGL（核心框架）进行着色。
     着色器管理器不仅允许我们创建并管理着色器，还提供一组“存储着色器”，他们能够进行一些初步䄦基本的渲染操作。
