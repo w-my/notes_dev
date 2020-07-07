@@ -262,9 +262,141 @@ glEnable(GL_PROGRAM_POINT_SIZE);
 
 
 
-
-
 #### 线
+
+一条线段是在两个顶点之间绘制的，所以一批线段应该包括偶数个顶点，每个顶点都是线段的端点。
+
+改变线段宽度的唯一方式是使用函数：glLineWidth。
+
+```c++
+void glLineWidth(GLfloat width);
+```
+
+
+
+#### 线带
+
+线带（line strip）连续地从一个顶点到下一个顶点绘制线段，以形成一个真正连接点的线条。
+
+
+
+#### 线环
+
+线环（line loop）是线带的一种简单扩展，在线带的基础上额外增加一条连接着一批次中最后一个点和第一个点的线段。
+
+
+
+#### 单独的三角形
+
+三角形是存在的最简单的实体多边形。而现在三角形已经是 OpenGL 中支持的唯一一种多边形了。
+
+##### 环绕
+
+逆时针环绕的多边形是正面的，逆时针环绕的多边形是背面的。
+
+通过不同的环绕，可以为多边形的正面和背面设置不同的物理特征，也可以隐藏一个多边形的背面，或者给它设置一种不同的颜色和反射属性。纹理图像在背面三角形中也是相反的。
+
+OpenGL 中默认逆时针方向环绕的多边形是正面的。但可以通过函数修改：
+
+```c++
+glFrontFace(GL_CW);
+```
+
+GL_CW 参数告诉 OpenGL 顺时针环绕的多边形被认为是正面的。使用 GL_CCW 参数使正面恢复默认的逆时针环绕。
+
+
+
+#### 三角形带
+
+使用 GL_TRIANGLE_STRIP 图元绘制一串相连的三角形，可以节省大量时间。
+
+
+
+#### 三角形扇
+
+使用 GL_TRIANGLE_FAN 创建一组围绕一个中心点的相连三角形。第一个顶点会构成扇形的原点。
+
+
+
+#### 一个简单批次容器
+
+GLTools 库中的一个简单容器类 GLBatch。这个类可以作为图元简单批次的容器使用，而且它知道在使用 GLShaderManager 支持的任意存储着色器时如何对图元进行渲染。使用 GLBatch 类，首先对批次进行初始化，告诉这个类代表那种图元，其中包括定点数，以及（可选）一组或两组纹理坐标。
+
+```c++
+void GLBatch::Begin(GLenum primitive, GLuint nVerts, GLuint nTextureUnits=0);
+```
+
+然后，至少要复制一个由 3 分量（x, y, z）顶点组成的数组。
+
+```c++
+void GLBatch::CopyVertexData3f(GLfloat *vVerts);
+```
+
+还可以选择复制表面发现、颜色和纹理坐标。
+
+```c++
+void GLBatch::CopyNormalDataf(GLfloat *vNorms);
+void GLBatch::CopyColorData4f(GLfloat *vColors);
+void GLBatch::CopyTexCoordData2f(GLfloat *vTexCoords, GLuint uiTextureLayer);
+```
+
+最后调用 End 完成数据复制，并且将设置内部标记，以通知这个类包含哪些属性。
+
+```c++
+void GLBatch::End(void);
+```
+
+一旦调用 End 函数，就不能再增加新的属性了。
+
+
+
+##### 正面和背面剔除
+
+对正面和背面三角形进行区分的原因之一就是为了进行剔除。背面剔除能够极大地提高性能，并且修正一些问题。
+
+开启表面剔除：
+
+```c++
+glEnable(GL_CULL_FACE);
+```
+
+关闭表面剔除：
+
+```c++
+glDisable(GL_CULL_FACE);
+```
+
+设置 正面 或 背面 剔除：
+
+```c++
+// mode：GL_FRONT、GL_BACK 或 GL_FRONT_AND_BACK
+void glCullFace(GLenum mode);
+```
+
+消除不透明物体内部几何图形：
+
+```c++
+glCullFace(GL_BACK);
+glEnable(GL_CULL_FACE);
+```
+
+在某些情况下，剔除实体几何体的正面也是非常有用的，例如在需要显示某些图形内部渲染的时候。在渲染透明对象时，经常会对一个对象进行两次渲染，第一次开启透明并剔除正面，第二次则消除背面。这样就在渲染正面之前渲染了背面。
+
+
+
+##### 深度测试
+
+深度测试时另一种高效消除影藏表面的技术。它的概念很简单：在绘制一个像素时，将一个值（称为 z 值）分配给它，这个值表示它到观察者的距离。当然，当另外一个像素需要在屏幕上的同样位置进行绘制时，新像素的 z 值将与已经存储的像素的 z 值进行比较。如果新像素的 z 值比较大，那它距离观察者就比较近，则原来的像素就会被新的像素覆盖。
+
+使用 GLUT 设置 OpenGL 窗口时，用如下方式申请一个颜色缓冲区 和 一个深度缓冲区。
+
+```c++
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTR);
+```
+
+
+
+
 
 
 
@@ -708,12 +840,5 @@ int main(int argc, char *argv[]) {
     return 0;
 }
 ```
-
-
-
-
-
-
-
 
 
