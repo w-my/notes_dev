@@ -29,7 +29,7 @@
  * 在 Windows 和 Linux 上，使用 freeglut 的静态库版本并且需要添加 FREEGLUT_STATIC 处理器宏；
  */
 #ifdef __APPLE__
-#include <GLUT/GLUT.h>
+#include <glut/glut.h>
 #else
 #define FREEGLUT_STATIC
 #include <GL/glut.h>
