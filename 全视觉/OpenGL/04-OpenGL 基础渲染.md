@@ -350,7 +350,7 @@ void GLBatch::End(void);
 
 
 
-##### 正面和背面剔除
+#### 正面和背面剔除
 
 对正面和背面三角形进行区分的原因之一就是为了进行剔除。背面剔除能够极大地提高性能，并且修正一些问题。
 
@@ -384,7 +384,7 @@ glEnable(GL_CULL_FACE);
 
 
 
-##### 深度测试
+#### 深度测试
 
 深度测试时另一种高效消除影藏表面的技术。它的概念很简单：在绘制一个像素时，将一个值（称为 z 值）分配给它，这个值表示它到观察者的距离。当然，当另外一个像素需要在屏幕上的同样位置进行绘制时，新像素的 z 值将与已经存储的像素的 z 值进行比较。如果新像素的 z 值比较大，那它距离观察者就比较近，则原来的像素就会被新的像素覆盖。
 
@@ -393,6 +393,117 @@ glEnable(GL_CULL_FACE);
 ```c++
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTR);
 ```
+
+启用深度测试
+
+```c++
+glEnable(GL_DEPTH_TEST);
+```
+
+
+
+#### 多边形模式
+
+在默认情况下，多边形是作为实心图形绘制的，但可以通过将多边形指定为显示轮廓或只有点（只显示顶点）来改变。
+
+函数 `glPolygonMode` 允许将多边形渲染成实体、轮廓或只有点。
+
+```c++
+// face: GL_FRONT、GL_BACK 或 GL_FRONT_AND_BACK
+// mode: GL_FILL（默认值）、GL_LINE 或 GL_POINT
+void glPolygonMode(GLenum face, GLenum mode);
+// e.g. 实现线框渲染
+glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+// e.g. 绘制成点模式
+glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+```
+
+
+
+#### 多边形偏移
+
+问题：如果在实体图形的同一位置绘制线框，会遇到 z-fighting（z 冲突）问题。
+
+解决：使用 glPolygonOffset 函数调节片段的深度值，这样就能使深度值产生偏移而并不实际改变 3D 控件中的物理位置。
+
+```c++
+void glPolygonOffset(GLfloat factor, GLfloat units);
+```
+
+应用到片段上的总偏移可以通过下面的方程式表示。
+
+```
+// DZ：深度值（z 值）
+// r：是使深度缓冲区值产生变化的最小值
+Depth Offset = (DZ x factor) + (r x units)
+```
+
+
+
+#### 裁剪
+
+另一种提高渲染性能的方法只刷新屏幕上发生变化的部分。OpenGL 允许我们在将要进行渲染的窗口中指定一个裁剪框。裁剪框默认与窗口同样大小，并且不会进行裁剪测试。
+
+```c++
+glEnable(GL_SCISSOR_TEST);
+```
+
+指定裁剪窗口坐标（像素）：
+
+```c++
+// x, y： 指定裁剪框的左下角
+// width, height：指定裁剪框的尺寸
+void glScissor(GLint x, GLint y, GLsizei width, GLsizei height);
+```
+
+##### 获取一组重叠的彩色三角形
+
+```c++
+void RenderScene() {
+    
+    glClearColor(0.0f, 0.0f, 1.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+    glScissor(100, 100, 600, 400);
+    glEnable(GL_SCISSOR_TEST);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+  	// ......
+  
+    glClearColor(0.0f, 1.0f, 0.0f, 0.0f);
+    glScissor(200, 200, 400, 200);
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+  	// ......
+  
+    glDisable(GL_SCISSOR_TEST);
+    
+    glutSwapBuffers();
+}
+```
+
+
+
+## 混合
+
+
+
+#### 组合颜色
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -405,14 +516,15 @@ glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTR);
 ## 实例：点 线 线段 线环 金字塔 六边形 圆环
 
 ```c++
-#include "GLTools.h"
-#include "GLMatrixStack.h"
-#include "GLFrame.h"
-#include "GLFrustum.h"
-#include "GLBatch.h"
-#include "GLGeometryTransform.h"
+#include "GLTools.h" // 包含了大部分GLTool中类似C语言的独立函数
+#include "GLMatrixStack.h" // 矩阵工具类，可用于加载单元矩阵/矩阵/矩阵相乘/压栈/出栈/缩放/平移/旋转
+#include "GLFrame.h" // 矩阵工具类,表示位置.通过设置 vOrigin, vForward ,vUp
+#include "GLFrustum.h" // 矩阵⼯具类,用来快速设置正/透视投影矩阵.完成坐标从3D->2D映射过程.
+#include "GLBatch.h" // 三角形批次类,帮助类,利用它可以传输顶点/光照/纹理/颜色数据到存储着色器中.
+#include "GLGeometryTransform.h" // 变换管道类,⽤来快速在代码中传输视图矩阵/投影矩阵/视图投影变换矩阵等.
 
-#include <math.h>
+#include <math.h> // 数学库
+
 #ifdef __APPLE__
 #include <glut/glut.h>
 #else
@@ -434,25 +546,25 @@ glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTR);
 */
 
 // 各种需要的类
-GLShaderManager         shaderManager;
-GLMatrixStack           modelViewMatrix;
-GLMatrixStack           projectionMatrix;
-GLFrame                 cameraFrame;
-GLFrame                 objectFrame;
+GLShaderManager     shaderManager; // 存储着⾊器管理工具类
+GLMatrixStack       modelViewMatrix; // 模型视图矩阵
+GLMatrixStack       projectionMatrix; // 投影矩阵
+GLFrame             cameraFrame; // 设置观察者视图坐标
+GLFrame             objectFrame; // 设置图形环绕时,视图坐标
 // 投影矩阵
-GLFrustum               viewFrustum;
+GLFrustum           viewFrustum; // 设置图元绘制时的投影方式
 
 // 容器类（7种不同的图元对应7种容器对象）
-GLBatch                 pointBatch;
-GLBatch                 lineBatch;
-GLBatch                 lineStripBatch;
-GLBatch                 lineLoopBatch;
-GLBatch                 triangleBatch;
-GLBatch                 triangleStripBatch;
-GLBatch                 triangleFanBatch;
+GLBatch             pointBatch;
+GLBatch             lineBatch;
+GLBatch             lineStripBatch;
+GLBatch             lineLoopBatch;
+GLBatch             triangleBatch;
+GLBatch             triangleStripBatch;
+GLBatch             triangleFanBatch;
 
 // 几何变换的管道
-GLGeometryTransform     transformPipeline;
+GLGeometryTransform     transformPipeline; // 变换管道,存储投影/视图/投影视图变换矩阵
 
 GLfloat vGreen[] = { 0.0f, 1.0f, 0.0f, 1.0f };
 GLfloat vBlack[] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -461,7 +573,7 @@ GLfloat vBlack[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 // 跟踪效果步骤
 int nStep = 0;
 
-
+/// ⾃自定义函数,设置你需要渲染的图形的 相关顶点数据/颜色数据等数据装备工作
 void SetupRC() {
     glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
     shaderManager.InitializeStockShaders();
@@ -672,7 +784,8 @@ void DrawViewFramedBatch(GLBatch *pBatch) {
     glDisable(GL_LINE_SMOOTH);
 }
 
-// 召唤场景
+/// 自定义函数.通过glutDisplayFunc(函数名)注册为显示渲染函数.
+/// 当屏幕发⽣变化/或者开发者主动渲染会调用此函数,用来实现数据->渲染过程
 void RenderScene() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     
@@ -795,8 +908,8 @@ void KeyPressFunc(unsigned char key, int x, int y) {
     glutPostRedisplay();
 }
 
-// 窗口已更改大小，或刚刚创建。无论哪种情况，我们都需要
-// 使用窗口维度设置视口和投影矩阵.
+/// 自定义函数.通过glutReshaperFunc(函数名)注册为重塑函数.
+/// 当屏幕⼤小发生变化/或者第⼀次创建窗口时,会调用该函数调整窗口⼤小/视⼝⼤小.
 void ChangeSize(int w, int h) {
     glViewport(0, 0, w, h);
     
