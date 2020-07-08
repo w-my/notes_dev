@@ -487,13 +487,63 @@ void RenderScene() {
 
 ## 混合
 
+使用混合
 
+```c++
+glEnable(GL_BLEND);
+```
 
 #### 组合颜色
 
+已经存储在颜色缓冲区中的颜色值叫作 `目标颜色`，这个颜色值包含了单独的红、绿、蓝以及一个可选的 alpha 值。
+
+作为当前渲染命令的结果进入颜色缓冲区的颜色称为 `源颜色`，它可能与目标颜色进行交互，也可能不与之进行交互。
+
+源颜色和目标颜色的组合方式是由 `混合方程式` 控制的
+
+```c++
+// Cf：最终计算产生的颜色
+// Cs：源颜色
+// Cd：目标颜色
+// S：源
+// D：目标混合因子
+Cf = (Cs * S) + (Cd * D)
+```
+
+设置混合因子
+
+```c++
+// S 和 D 都是枚举值
+glBlendFunc(GLenum S, GLenum D);
+```
+
+如下为混合函数可使用的值。其下标表示标题、目标和颜色。
+
+**penGL 混合因子**
+
+| 函数                        | RGB 混合因子             | Alpha 混合因子 |
+| --------------------------- | ------------------------ | -------------- |
+| GL_ZERO                     | (0, 0, 0)                | 0              |
+| GL_ONE                      | (1, 1, 1)                | 1              |
+| GL_SRC_COLOR                | (Rs, Gs, Bs)             | As             |
+| GL_ONE_MINUS_SRC_COLOR      | (1, 1, 1) - (Rs, Gs, Bs) | 1 - As         |
+| GL_DST_COLOR                | (Rd, Gd, Bd)             | Ad             |
+| GL_ONE_MINUS_DST_COLOR      | (1, 1, 1) - (Rd, Gd, Bd) | 1 - Ad         |
+| GL_SRC_ALPHA                | (As, As, As)             | As             |
+| GL_ONE_MINUS_SRC_ALPHA      | (1, 1, 1) - (As, As, As) | 1 - As         |
+| GL_DST_ALPHA                | (Ad, Ad, Ad)             | Ad             |
+| GL_ONE_MINUS_DST_ALPHA      | (1, 1, 1) - (Ad, Ad, Ad) | 1 - Ad         |
+| GL_CONSTANT_COLOR           | (Rc, Gc, Bc)             | Ac             |
+| GL_ONE_MINUS_CONSTANT_COLOR | (1, 1, 1) - (Rc, Gc, Bc) | 1 - Ac         |
+| GL_CONSTANT_ALPHA           | (Ac, Ac, Ac)             | Ac             |
+| GL_ONE_MINUS_CONSTANT_ALPHA | (1, 1, 1) - (Ac, Ac, Ac) | 1 - Ac         |
+| GL_SRC_ALPHA_SATURATE       | (f, f, f)*               | 1              |
+
+*其中 f=min(As, 1 - Ad)
 
 
 
+P82
 
 
 
