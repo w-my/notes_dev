@@ -541,21 +541,189 @@ glBlendFunc(GLenum S, GLenum D);
 
 *其中 f=min(As, 1 - Ad)
 
+**e.g.**
+
+```c++
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+```
+
+这个函数告诉 OpenGL 接收源颜色并将这个颜色（RGB 值）与 alpha 值相乘，然后把这个结果加上目标颜色乘以 ”1 减去源颜色的 alpha 值“ 的结果。
+
+例如，如果颜色缓冲区中已经又一种红色（ 1.0f, 0.0f, 0.0f ），这是目标颜色（ Cd ）。如果在这上面用一种 alpha 值为 0.6 的蓝色 （ 0.0f, 0.0f, 1.0f, 0.6f ），就可以像下面这样计算最终颜色。
+
+​		Cd = 目标颜色 = （ 1.0f, 0.0f, 0.0f, 0.0f )
+
+​		Cs = 源颜色 = （ 0.0f, 0.0f, 1.0f, 0.6f ）
+
+​		S = 源 alpha 值 = 0.6
+
+​		D = 1 减去源 alpha 值 = 1.0 - 0.6 = 0.4
+
+​		现在，
+
+​				Cf = （ Cs * S ）+ （ Cd * D ）
+
+​		等价于
+
+​				Cf = （ Blue * 0.6 ）+（ Red * 0.4 ）
+
+最终的颜色是原先的红色（目标颜色）与后来的颜色（源颜色）进行缩放后的组合。
 
 
-P82
+
+#### 改变混合方式
+
+默认的混合方程式：
+
+```c++
+Cf = (Cs * S) + (Cd * D)
+```
+
+也可以通过下面的函数，选择混合方程式
+
+```c++
+void glBlendEquation(GLenum mode);
+```
+
+**可用的混合方程式模式**
+
+| 模式                    | 函数                         |
+| ----------------------- | ---------------------------- |
+| GL_FUNC_ADD             | Cf = ( Cs * s ) + ( Cd * d ) |
+| GL_FUNC_SUBTRACT        | Cf = ( Cs * s ) - ( Cd * d ) |
+| GL_FUNCREVERSE_SUBTRACT | Cf = ( Cd * D ) - ( Cs * S ) |
+| GL_MIN                  | Cf = min ( Cs, Cd )          |
+| GL_MAX                  | Cf = max ( Cs, Cd )          |
+
+除了 glBlendFunc 之外，还可以利用下面的函数更加灵活地进行选择。
+
+```c++
+void glBlendFuncSeparate(Glenum srcRGB, Glenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
+```
+
+glBlendFunc 函数指定了源和目标 RGBA 值的混合函数，而 glBlendFuncSeparate 函数则允许为 RGB 和 alpha 单独指定混合函数。
+
+下面这个函数可以修改混合方程式中引入的
+
+混合方程式中可以引入一个常量混合颜色，默认为黑色（ 0.0f, 0.0f, 0.0f, 0.0f ），可以通过下面的函数修改
+
+```c++
+void glBlendColor(GLclampf red, GLclampf green, GLclampf blue, GLclampf alpha);
+```
 
 
 
+#### 抗锯齿
+
+OpenGL 使用混合功能来混合片段的颜色，也就是把像素的目标颜色与周围像素的颜色进行混合。
+
+开启抗锯齿功能：
+
+```c++
+glEnable(GL_BLEND);
+glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+```
+
+还需要确保混合方程式设置为 GL_ADD，不过这是默认设置，也是最常见的混合方程式。
+
+之后可以选择调用 glEnable 函数对 点、直线和多边形 进行抗锯齿处理。
+
+```c++
+glEnable(GL_POINT_SMOOTH);
+glEnable(GL_LINE_SMOOTH);
+glEnable(GL_POLYGON_SMOOTH);
+```
+
+**在抗锯齿和正常渲染模式间切换**
+
+```c++
+// 对菜单选择作出反应，正确的重置标志
+void ProcessMenu(int value) {
+  switch(value) {
+    case 1:
+      // 打开抗锯齿，并给出关于尽可能进行最佳的处理的提示
+      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+      glEnable(GL_BLEND);
+      glEnable(GL_POINT_SMOOTH);
+      glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+      glEnable(GL_LINE_SMOOTH);
+      glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+      glEnable(GL_POLYGON_SMOOTH);
+      glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+      break;
+    case 2:
+      // 关闭混合和所有的平滑处理
+      glDisable(GL_BLEND);
+      glDisable(GL_LINE_SMOOTH);
+      glDisable(GL_POINT_SMOOTH);
+      glDisable(GL_POLYGON_SMOOTH);
+      break;
+      
+    default:
+      break;
+  }
+	// 触发重绘
+  glutPostRedisplay();
+}
+```
 
 
 
+#### 多重采样
+
+抗锯齿处理的最大优点之一就是能够使多边形的边缘更为平滑，但是多边形的平滑处理并没有在所有的平台上都得到实现。
+
+OpenGL 1.3 新增的一个特性，多重采样（ multisampling ），可以用来解决这个问题。
+
+为了进行多重采样，首先必须获得一个支持多重采样帧缓冲区的渲染环境。这在不同的平台中可能各不相同。但 GLUT 提供了一个位段（ GLUT_MULTISAMPLE ），允许请求这种帧缓冲区。例如，请求一个多重采样、完全颜色、带深度的双缓冲帧缓冲区，可以调用：
+
+```c++
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH | GLUT_MULTISAMPLE);
+```
+
+可以使用 glEnable / glDisable 组合（使用 GL_MULTISAMPLE 标记）打开或关闭多重采样：
+
+```c++
+glEnable(GL_MULTISAMPLE);
+```
+
+或
+
+```c++
+glDisable(GL_MULTISAMPLE);
+```
+
+**注意**
+
+启用多重采样时，点、直线和多边形的平滑特性将被忽略。也就意味着在使用多重采样时，就不能同时使用点和直线的平滑处理。在特定的 OpenGL 实现中，点和直线如果采用平滑处理可能会比使用多重采样效果更好。因此，当绘制点和直线时，可以关闭多重采样，在绘制其他实心几何图形时再打开多重采样。例如（伪代码）：
+
+```c++
+glDisable(GL_MULTISAMPLE);
+glEnable(GL_POINT_SMOOTH);
+
+// Draw some smooth points 
+// ...
+glDisable(GL_POINT_SMOOTH);
+glEnable(GL_MULTISAMPLE);
+```
+
+当然，如果没有多重采样缓冲区，OpenGL 就当做 GL_MULTISAMPLE 是被禁用的。
 
 
 
+多重采样缓冲区在默认情况下使用片段的 RGB 值，并不包括颜色的 alpha 成分。可以通过调用 glEnable 使用下面3个值来修改。
 
+- GL_SAMPLE_ALPHA_TO_COVERAGE ：使用 alpha值
 
+- GL_SAMPLE_ALPHA_TO_ON ：将 alpha 值设为 1 并使用
 
+- GL_SAMPLE_COVERAGE ：使用 glSampleConverage 所设定的值
+
+当启用 GL_SAMPLE_COVERAGE 时，glSampleConverage 函数允许指定一个特定的值，它是与片断覆盖值进行按位与操作的结果。
+
+```c++
+void glSampleCoverage(GLclampf value, GLboolean invert);
+```
 
 
 
