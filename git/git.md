@@ -233,6 +233,7 @@ $ git log --graph --pretty=oneline --abbrev-commit
 当前分支还为开发完，需要零时切换分支做别的事情，可以使用`git stash`把当前分支内容暂存起来。
 ```sh
 $ git stash
+$ git stash save '本次暂存名称'
 ```
 
 使用`git stash list`可以查看暂存列表
@@ -245,6 +246,10 @@ $ git stash list
 $ git stash apply
 $ git stash drop
 $ git stash pop
+// 恢复指定索引暂存
+$ git stash pop stash@{index} 
+// 清除所有暂存内容
+$ git stash clear
 ```
 ###### 小结
 修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除；
