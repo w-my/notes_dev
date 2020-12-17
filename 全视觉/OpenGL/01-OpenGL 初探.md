@@ -36,6 +36,31 @@
 
 
 
+## 三个阶段
+
+#### OpenGL 阶段：
+
+- 熟悉图形图像API中的专有名次
+- 熟悉图形图像常用处理手段，比如深度测试等
+- 熟悉图形渲染流程
+- 熟悉API使用
+
+#### OpenGL ES 阶段：
+
+- 熟练掌握GLSL语法
+- 熟悉GLKit框架
+- OpenGL ES 渲染流程
+- 能通过案例灵活运用API
+
+#### Metal 阶段：
+
+- 熟悉 Metal shading language
+- 熟悉 Metal kit
+- 熟悉 Metal 渲染流程
+- 能通过案例灵活运用API
+
+
+
 ## OpenGL 专业名词解析
 
 #### OpenGL 上下文 【context】
@@ -174,7 +199,7 @@ OpenGL 着色语言（OpenGL Shading Language）是用来在 OpenGL 中着色编
 
 ##### 正投影
 
-一般平面图形用正投影，不会有进大远小的效果
+一般平面图形用正投影，不会有近大远小的效果
 
 
 
