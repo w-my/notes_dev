@@ -4,15 +4,15 @@
 
    > main.cpp 文件的创建：创建一个 C++ File，命名为 `main` ，取消 `Also create a header file` 的勾选。
 
-2. 引入资源库
+2. 引入系统资源库 `OpenGL.framework` `GLUT.framework` 
 
-   `OpenGL.framework` `GLUT.framework` 
+3. 下载 libGLTools 并解压到本地，然后直接拖入到工程，并配置 `Header Search path` 和 `Library Search Paths` 。 下载 libGLTools 的地址:
 
-   和资源文件 `include` `libGLTools.a`
+   https://pan.baidu.com/s/1IFWuDG_SGJnt0He-alSiPg 提取码：qbwh
 
-   资源文件地址：https://pan.baidu.com/s/1IFWuDG_SGJnt0He-alSiPg 提取码：qbwh
+   https://github.com/GhostClock/OpenGL/blob/master/source/libGLTools.zip
 
-3. 在 `main.cpp` 文件中写入测试代码
+4. 在 `main.cpp` 文件中写入测试代码
 
 ## 渲染一个三角形
 
