@@ -1,6 +1,8 @@
 # OpenGL工程创建
 
-1. 创建一个 `macOS` 项目，删除原项目入口文件。如：AppDelegate、ViewController、main 文件，创建 main.cpp 文件。
+1. 创建一个 `macOS` `Command Line Tool` 项目，语言选择 `C++`。
+
+   或 创建删除原项目入口文件。如：AppDelegate、ViewController、main 文件，创建 main.cpp 文件。
 
    > main.cpp 文件的创建：创建一个 C++ File，命名为 `main` ，取消 `Also create a header file` 的勾选。
 
@@ -12,7 +14,7 @@
 
    https://github.com/GhostClock/OpenGL/blob/master/source/libGLTools.zip
 
-4. 在 `main.cpp` 文件中写入测试代码
+4. 在 `main.cpp` 文件中写入测试代码（M1芯片mac 需要选择 Rosetta运行）
 
 ## 渲染一个三角形
 
@@ -29,7 +31,7 @@
  * 在 Windows 和 Linux 上，使用 freeglut 的静态库版本并且需要添加 FREEGLUT_STATIC 处理器宏；
  */
 #ifdef __APPLE__
-#include <glut/glut.h>
+#include <glut/glut.h> // OpenGL Utility Toolkit
 #else
 #define FREEGLUT_STATIC
 #include <GL/glut.h>
@@ -44,13 +46,13 @@ GLShaderManager shaderManager;
 /// 供 GLUT 库在窗口维度改变时调用
 /// @param w 窗口宽
 /// @param h 窗口高
-void ChangeSize(int w, int h) {
+void changeSize(int w, int h) {
     // x,y 参数代表窗口中视图的左下角坐标
     glViewport(0, 0, w, h);
 }
 
 /// 设置渲染环境（Rendering Context）
-void SetupRC() {
+void etupRC() {
     // 设置清屏颜色（背景颜色）
     glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
     
@@ -70,7 +72,7 @@ void SetupRC() {
     batch.End();
 }
 
-void RenderScene(void) {
+void display(void) {
     /** 清除一个或者一组特定的缓存区
      * 缓冲区是一块存储图像信息的储存空间，红色、绿色、蓝色和 alpha 通常一起作为颜色缓存区或像素缓存区引用。
      * GL_COLOR_BUFFER_BIT 颜色缓存区：指示当前激活的用来进行颜色写入缓冲区
@@ -105,9 +107,9 @@ int main(int argc, char *argv[]) {
     glutInitWindowSize(800, 600);
     glutCreateWindow("Triangle");
     // 注册重塑函数
-    glutReshapeFunc(ChangeSize);
+    glutReshapeFunc(changeSize);
     // 注册显示函数
-    glutDisplayFunc(RenderScene);
+    glutDisplayFunc(display);
     /**
      * 初始化一个 GLEW 库,确保 OpenGL API 对程序完全可用；
      * 在试图做任何渲染之前，要检查确定驱动程序的初始化过程中没有任何问题；
@@ -118,7 +120,7 @@ int main(int argc, char *argv[]) {
     }
     
     // 设置渲染环境（Rendering Context）
-    SetupRC();
+    setupRC();
     
     // 在开始设置OpenGL窗口的时候，我们指定要一个双缓冲区的渲染环境。这就意味着将在后台缓冲区进行渲染，渲染结束后交换给前台。这种方式可以防止观察者看到可能伴随着动画帧与动画帧之间的闪烁的渲染过程。缓冲区交换平台将以平台特定的方式进行。
     // 将后台缓冲区进行渲染，然后结束后交换给前台
