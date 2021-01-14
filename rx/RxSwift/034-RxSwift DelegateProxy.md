@@ -958,7 +958,7 @@ public enum AppState {
 }
  
 // 扩展
-extension UIApplicationState {
+extension UIApplication.State {
     // 将其转为我们自定义的应用状态枚举
     func toAppState() -> AppState{
         switch self {
@@ -1113,22 +1113,21 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
          
-        // 应用重新回到活动状态
-        UIApplication.shared.rx
-            .state
-            .subscribe(onNext: { state in
-                switch state {
-                case .active:
-                    print("应用进入活动状态。")
-                case .inactive:
-                    print("应用进入非活动状态。")
-                case .background:
-                    print("应用进入到后台。")
-                case .terminated:
-                    print("应用终止。")
-                }
-            })
-            .disposed(by: disposeBag)
+         UIApplication.shared.rx
+             .state
+             .subscribe(onNext: { state in
+                 switch state {
+                 case .active:
+                     print("应用进入活动状态。")
+                 case .inactive:
+                     print("应用从后台准备进入活动状态，或准备进入非活动状态。")
+                 case .background:
+                     print("应用进入到后台。")
+                 case .terminated:
+                     print("应用终止。")
+                 }
+             })
+             .disposed(by: disposeBag)
     }
 }
 ```

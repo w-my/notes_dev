@@ -8,10 +8,10 @@
 
 需要用到的库
 
-- RxSwift：[https://github.com/ReactiveX/RxSwift](https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2FReactiveX%2FRxSwift)
-- Alamofire：[https://github.com/Alamofire/Alamofire](https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2FAlamofire%2FAlamofire)
-- Moya：[https://github.com/Moya/Moya](https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2FMoya%2FMoya)
-- Result：[https://github.com/antitypical/Result](https://link.jianshu.com/?t=https%3A%2F%2Fgithub.com%2Fantitypical%2FResult)
+- RxSwift：[https://github.com/ReactiveX/RxSwift](https://github.com/ReactiveX/RxSwift)
+- Alamofire：[https://github.com/Alamofire/Alamofire](https://github.com/Alamofire/Alamofire)
+- Moya：[https://github.com/Moya/Moya](https://github.com/Moya/Moya)
+- Result：[https://github.com/antitypical/Result](https://github.com/antitypical/Result)
 
 
 

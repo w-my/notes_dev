@@ -25,7 +25,7 @@ class ViewController: UIViewController {
          
         // 监听应用进入后台通知
         _ = NotificationCenter.default.rx
-            .notification(NSNotification.Name.UIApplicationDidEnterBackground)
+            .notification(UIApplication.didEnterBackgroundNotification)
             .takeUntil(self.rx.deallocated) // 页面销毁自动移除通知监听
             .subscribe(onNext: { _ in
                 print("程序进入到后台了")

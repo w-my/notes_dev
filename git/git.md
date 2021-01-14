@@ -164,6 +164,7 @@ $ git clone git@github.com:w-my/learngit.git
 ##### 创建与合并分支
 ```sh
 $ git branch							# 查看分支
+$ git branch -a						# 查看远端分支
 $ git branch <name>			  # 创建分支
 $ git checkout <name>		  # 切换分支
 $ git checkout -b <name>	# 创建+切换分支
