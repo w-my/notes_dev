@@ -17,7 +17,7 @@
 
 标准化：把一个向量缩放到 1。
 
-math3d 库中，M3DVector3f 表示一个三维向量 （X, Y, Z），M3DVector4f 表示一个四维向量（X, Y, Z, W）。典型情况下 W 坐标设为 1.0。X，Y 和 Z 值通过除以 W 来进行缩放。
+math3d 库中，M3DVector3f 表示一 个三维向量 （X, Y, Z），M3DVector4f 表示一个四维向量（X, Y, Z, W）。典型情况下 W 坐标设为 1.0。X，Y 和 Z 值通过除以 W 来进行缩放。
 
 定义成数组：
 
@@ -867,18 +867,46 @@ GLFrustum::SetPerspective(float fFov, float fAspect, float fNear, float fFar);
 
 ## 变换管线
 
+首先，我们的顶点将被视为一个1x4矩阵，其中前3个值为x，y和z坐标。第4个数字是一个缩放因子，如果需要的话我们可以手动进行设置。这就是w坐标，通常在默认情况下为1.0，我们很少会真正去直接修改这个值。然后，顶点将乘以模型视图矩阵，生成变换的视觉坐标。随后，视觉坐标再乘以投影矩阵，生成裁剪坐标。裁剪坐标值位于我们前面提到的+/-1.0单位坐标系内。将有效地将所有位于这个裁剪空间之外的数据消除掉。裁剪坐标随后再除以w坐标，生成规范化的设备坐标。其中w值可能会被投影矩阵或模型视图矩阵修改，这取决于所发生的变换。透视除法将作为图元装配过程的一部分进行。最后，坐标三元组将通过视口变换被映射到2D平面上。这项操作也是由一个矩阵来表示的，但不能直接指定或者修改这个矩阵。OpenGL将在内部根据指定的glViewport值来设置这个矩阵。
+
+```objc
+// 初始化矩阵堆栈，包含了单位矩阵，默认堆栈深度为64
+GLMatrixStack::GLMatrixStack(int iStackDepth = 64);
+// 可以通过调用在顶部载入这个单位矩阵
+void GLMatrixStack::LoadIdentity(void);
+// 或者可以在堆栈的顶部载入任何矩阵
+void GLMatrixStack::LoadMatrix(const M3DMatrix44f m);
+// 此外，还可以用一个矩阵乘以矩阵堆栈的顶部矩阵，相乘的到的结果随后将存储在堆栈的顶部
+void GLMatrixStack::MultMatrix(const M3DMatrix33f);
+// 最后，只要用 GetMatrix 函数就可以获得矩阵堆栈顶部的值，这个函数可以进行两次重载。
+const M3DMatrix44f& GLMatrixStack::GetMatrix(void);
+void GLMatrixStack::GetMatrix(M3DMatrix44f mMatrix);
+```
+
+##### 压栈与出栈
+
+一个矩阵的真正价值在于通过压栈操作存储一个状态，然后通过出栈操作恢复这个状态。通过GLMatrixStack类，可以使用 PushMatrix 函数将矩阵压入堆栈来存储当前矩阵值。
+这样做实际上是复制了当前矩阵值，并将新的值放入了堆栈的顶部。类似地，PopMatrix 将移除顶部矩阵，并恢复它下面的值。以上每种情况都有几次重载。
+
+```objc
+void GLMatrixStack::PushMatrix(void);
+void PushMatrix(const M3DMatrix44f mMatrix);
+void PushMatrix(GLFrame& frame);
+```
+
+##### 仿射变换
+
+GLMatrixStack 类也内建了对创建旋转、平移和缩放矩阵的支持
+
+```objc
+void MatrixStack::Rotate(GLfloat angle, GLfloat x, GLfloat y, GLfloat z);
+void MatrixStack::Translate(GLfloat x, GLfloat y, GLfloat z);
+void MatrixStack::Scale(GLfloat x, GLfloat y, GLfloat z);
+```
 
 
 
-
-
-
-
-
-
-
-
-
+#### 管理管线
 
 
 
