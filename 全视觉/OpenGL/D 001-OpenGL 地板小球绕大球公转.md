@@ -130,8 +130,6 @@ void RenderScene() {
 	}
 	
 	// 让一个小篮球围绕大球公转自转
-//	modelViewMatrix.PushMatrix();
-	
 	modelViewMatrix.Rotate(yRot * -2.0f, 0.0f, 1.0f, 0.0f);
 	modelViewMatrix.Translate(0.8f, 0.0f, 0.0f);
 	shaderManager.UseStockShader(GLT_SHADER_FLAT,

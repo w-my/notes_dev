@@ -869,6 +869,8 @@ GLFrustum::SetPerspective(float fFov, float fAspect, float fNear, float fFar);
 
 首先，我们的顶点将被视为一个1x4矩阵，其中前3个值为x，y和z坐标。第4个数字是一个缩放因子，如果需要的话我们可以手动进行设置。这就是w坐标，通常在默认情况下为1.0，我们很少会真正去直接修改这个值。然后，顶点将乘以模型视图矩阵，生成变换的视觉坐标。随后，视觉坐标再乘以投影矩阵，生成裁剪坐标。裁剪坐标值位于我们前面提到的+/-1.0单位坐标系内。将有效地将所有位于这个裁剪空间之外的数据消除掉。裁剪坐标随后再除以w坐标，生成规范化的设备坐标。其中w值可能会被投影矩阵或模型视图矩阵修改，这取决于所发生的变换。透视除法将作为图元装配过程的一部分进行。最后，坐标三元组将通过视口变换被映射到2D平面上。这项操作也是由一个矩阵来表示的，但不能直接指定或者修改这个矩阵。OpenGL将在内部根据指定的glViewport值来设置这个矩阵。
 
+##### 矩阵堆栈
+
 ```objc
 // 初始化矩阵堆栈，包含了单位矩阵，默认堆栈深度为64
 GLMatrixStack::GLMatrixStack(int iStackDepth = 64);
@@ -892,6 +894,7 @@ void GLMatrixStack::GetMatrix(M3DMatrix44f mMatrix);
 void GLMatrixStack::PushMatrix(void);
 void PushMatrix(const M3DMatrix44f mMatrix);
 void PushMatrix(GLFrame& frame);
+void GLMatrixStack::PopMatrix(void);
 ```
 
 ##### 仿射变换
@@ -907,6 +910,12 @@ void MatrixStack::Scale(GLfloat x, GLfloat y, GLfloat z);
 
 
 #### 管理管线
+
+
+
+
+
+
 
 
 
