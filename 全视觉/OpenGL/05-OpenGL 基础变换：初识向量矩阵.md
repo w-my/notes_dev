@@ -913,12 +913,4 @@ void MatrixStack::Scale(GLfloat x, GLfloat y, GLfloat z);
 
 
 
-
-
-
-
-
-
-
-
-
+#### 照相机管理
