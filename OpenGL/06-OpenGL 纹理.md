@@ -44,13 +44,40 @@ glReadBuffer(mode);
 glWriteBuffer(mode);
 ```
 
-###### 载入纹理
 
-```objc
 
+##### 使用纹理
+
+```c
+// 1.读取文件
+void glReadPixels(GLint x,GLint y,GLSizei width,GLSizei height, GLenu m format, GLenum type,const void * pixels);
+// 2.载入纹理
+void glTexImage2D(GLenum target,GLint level,GLint internalformat,GLsizei width,GLsizei height,GLint border,GLenum format,GLenum type,void * data);
+// 3.纹理对象
+// 使用函数分配纹理对象
+// 制定纹理对象的数量和指针（指针指向一个无符号整形数组，由纹理对象标识符填充）
+void glGenTextures(GLsizei n,GLuint * textTures);
+// 绑定纹理状态
+// 参数target:GL_TEXTURE_1D、GL_TEXTURE_2D、GL_TEXTURE_3D
+// 参数texture:需要绑定的纹理对象
+void glBindTexture(GLenum target,GLunit texture);
+// 删除绑定纹理对象
+// 纹理对象 以及 纹理对象指针（指针指向一个无符号整形数组，由纹理对象标识符填充）
+void glDeleteTextures(GLsizei n,GLuint *textures);
+// 测试纹理对象是否有效
+// 如果texture是一个已经分配空间的纹理对象，那么这个函数会返回GL_TRUE，否则会返回GL_FALSE
+GLboolean glIsTexture(GLuint texture);
+// 设置纹理的相关参数
+// 放大/缩小过滤（邻近过滤，线性过滤）
+glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+
+glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+// 设置x轴/y轴上环绕方式
+// x,y,z,w
+// s,t,r,q
+glTextParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAR_S,GL_CLAMP_TO_EDGE); glTextParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAR_T,GL_CLAMP_TO_EDGE);
 ```
-
-
 
 
 
