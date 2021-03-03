@@ -420,7 +420,6 @@
 	
 	// 开始绘制
 	glDrawArrays(GL_TRIANGLES, 0, 6);
-	
 }
 
 - (void)didReceiveMemoryWarning {
