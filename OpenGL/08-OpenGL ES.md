@@ -33,6 +33,19 @@ OpenGL for Embedded Systems(OpenGL ES)是OpenGL的简化版本，它消除了冗
 
 **总结：**它可以用于执⾏自定义计算，实施新的变换，照明或者传统的固定功能所不允许的基于顶点的效果。
 
+**顶点着色代码案例：**
+
+```c
+attribute vec4 position;
+attribute vec2 textCoordinate; 
+uniform mat4 rotateMatrix; 
+varying lowp vec2 varyTextCoord;
+void main() {
+	varyTextCoord = textCoordinate; vec4 vPos = position;
+	vPos = vPos * rotateMatrix; gl_Position = vPos;
+}
+```
+
 #### 图元装配
 
 顶点着色器之后，下一阶段是图元装配。
@@ -66,27 +79,42 @@ OpenGL for Embedded Systems(OpenGL ES)是OpenGL的简化版本，它消除了冗
 
 **总结：**它可以⽤于图⽚/视频/图形中每个像素的颜色填充（比如给视频添加滤镜，实际 上就是将视频中每个图片的像素点颜色填充进行修改）。
 
+**片元着色代码案例：**
+
+```c
+varying lowp vec2 varyTextCoord; 
+uniform sampler2D colorMap; 
+void main() {
+  gl_FragColor = texture2D(colorMap, varyTextCoord); 
+}
+```
+
 #### 逐片段操作
 
+<img src="/Users/caianfang/Desktop/gitdir/note/OpenGL/img/08-003 OpenGL ES 3.0 逐片段操作.png" alt="08-003 OpenGL ES 3.0 逐片段操作" style="zoom:50%;" />
 
+- **像素归属测试**：确定帧缓存区中位置**(Xw,Yw)**的像素⽬前是不是归属于 **OpenGL ES** 所有。例如，如果⼀个显示 **OpenGL ES** 帧缓存区 **View** 被另外⼀个 **View** 所遮蔽，则窗⼝系统可以确定被遮蔽的像素不属于**OpenGL ES**上下文，从⽽不全显示这些像素。⽽像素归属测试是 **OpenGL ES ** 的⼀部分，它不由开发者开⼈为控制，⽽是由 **OpenGL ES** 内部进⾏。
 
+- **裁剪测试**：裁剪测试确定 **(Xw,Yw)** 是否位于作为 **OpenGL ES** 状态的⼀部分裁剪矩形范围内。如果该⽚段位于裁剪区域之外，则被抛弃。
 
+- **深度测试**：输⼊片段的深度值进步比较，确定⽚段是否拒绝测试。
 
+- **混合**：混合将新⽣成的⽚段颜⾊与保存在帧缓存的位置的颜⾊值组合起来。
 
+- **抖动**：抖动可⽤于最⼩化因为使⽤有限精度在帧缓存区中保存颜⾊值而产生的伪像。
 
+#### EGL（Embedded Graphics Library）
 
+- **OpenGL ES** 命令需要渲染上下文和绘制表⾯才能完成图形图像的绘制。
 
+- **渲染上下⽂文**：存储相关 **OpenGL ES** 状态。
 
+- **绘制表面**：是⽤于绘制图元的表⾯，它指定渲染所需要的缓存区类型，例如颜色缓冲区，深度缓冲区和模板缓存区。
 
+- **OpenGL ES API** 并没有提供如何创建渲染上下⽂或者上下文如何连接到原⽣窗⼝系统。**EGL** 是 **Khronos** 渲染 **API**（如 **OpenGL ES**）和原⽣窗口系统之间的接口。唯一支持 **OpenGL ES** 却不支持 **EGL** 的平台是 **iOS. Apple** 提供自己的 **EGL API** 的 **iOS**实现，称为 **EAGL**。
 
+- 因为每个窗口系统都有不同的定义，所以 **EGL** 提供基本的不透明类型 — **EGLDisplay**，这 个类型封装了所有系统相关性，用于和原⽣窗口系统接口。
 
-
-
-
-
-
-
-
-
+由于 **OpenGL ES** 是基于 **C** 的 **API**，因此它非常便携且受到⼴泛支持。作为 **C API**，它与 **Objective-C Cocoa Touch** 应用程序⽆缝集成。**OpenGL ES** 规范没有定义窗口层; 相反，托管操作系统必须提供函数来创建⼀个接受命令的 **OpenGL ES** 渲染上下文和一个帧缓冲区，其中写⼊任何绘图命令的结果。在 **iOS** 上使用 **OpenGL ES** 需要使用 **iOS** 类来设置和呈现绘图表面，并使⽤平台中立的 **API** 来呈现其内容。
 
 
