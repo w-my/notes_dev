@@ -12,20 +12,20 @@
 
 然后创建一个子模块，选择 `Modules` 点 `+` 号，选 `New Modules`，在 `Java` 下选择 `Module SDK` ，点 `Next` ，填写 `Module name` ，如 `basic-code` ，点 `Finish` ，最后点 `OK` 就完成了。
 
-之后就可以在 `src` 目录下右键 `New`，创建 `Package` 如：`com.xxx.demo01` ，然后在新建的包下，右键 `New` ，创建 `Java Class` 如 `HelloWorld` ，这就完成了项目的初步创建。
+之后就可以在 `src` 目录下右键 `New`，创建 `Package` 如：`cn.xxx.demo01` ，然后在新建的包下，右键 `New` ，创建 `Java Class` 如 `HelloWorld` ，这就完成了项目的初步创建。
 
 
 
 ## IDEA 常用快捷键
 
-| 快捷键                 | 功能                                    |
-| ---------------------- | --------------------------------------- |
-| Alt + Enter            | 导入包，自动修正代码                    |
-| Ctrl + Y               | 删除光标所在行                          |
-| Ctrl + D               | 复制光标所在行的内容，插入光标位置下面  |
-| Ctrl + Alt + L         | 格式化代码                              |
-| Ctrl + /               | 单行注释，再按取消注释                  |
-| Ctrl + Shift + /       | 选中代码注释，多行注释，再按取消注释    |
-| Alt + Ins              | 自动生成代码，toString，get，set 等方法 |
-| Alt + Shift + 上下箭头 | 移动当前代码行                          |
+| 快捷键                 | 快捷键（Mac）             | 功能                                    |
+| ---------------------- | ------------------------- | --------------------------------------- |
+| Alt + Enter            | Option + Enter            | 导入包，自动修正代码                    |
+| Ctrl + Y               |                           | 删除光标所在行                          |
+| Ctrl + D               | Command + D               | 复制光标所在行的内容，插入光标位置下面  |
+| Ctrl + Alt + L         | Command + Option + L      | 格式化代码                              |
+| Ctrl + /               | Command + /               | 单行注释，再按取消注释                  |
+| Ctrl + Shift + /       | Command + Option + /      | 选中代码注释，多行注释，再按取消注释    |
+| Alt + Ins              |                           | 自动生成代码，toString，get，set 等方法 |
+| Alt + Shift + 上下箭头 | Option + Shift + 上下肩头 | 移动当前代码行                          |
 
