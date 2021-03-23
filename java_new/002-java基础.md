@@ -61,6 +61,17 @@ int i = (int)1.5;
 
 
 
+## 流程控制语句
+
+- if else
+- switch
+- for
+- while
+- do while
+- break, continue
+
+
+
 ## 方法
 
 **方法** 就是将一个功能抽取出来，把代码单独定义在一个大括号内，形成一个单独的功能。
@@ -91,24 +102,31 @@ public class Demo {
 
 
 
-## JShell 脚本工具
+#### 方法重载
+
+指在同一个类中，允许存在一个以上的同名方法，只要它们的**参数列表不同**即可，与**修饰符和返回值类型无关**。
+
+```java
+public static int sum(int a, int b) {
+  return a + b;
+}
+public static int sum(int a, int b, int c) {
+  return a + b + c;
+}
+```
+
+```java
+public static boolean compare(char a, char b) {
+  return a == b;
+}
+public static boolean compare(int a, int b) {
+  return a == b;
+}
+```
 
 
 
-
-
-## 流程控制语句
-
-- if else
-- switch
-- for
-- while
-- do while
-- break, continue
-
-
-
-
+day05
 
 
 
