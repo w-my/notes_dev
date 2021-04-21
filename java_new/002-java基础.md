@@ -280,6 +280,27 @@ public class JavaClass {
 
 
 
+## 类
+
+```java
+public class Demo01 {
+    public static void main(String[] args) {
+        Dog dog = new Dog();
+        dog.name = "小狗";
+        dog.run();
+    }
+}
+
+class Dog {
+    String name;
+    public void run() {
+        System.out.println(name + " 在跑步");
+    }
+}
+```
+
+
+
 
 
 
