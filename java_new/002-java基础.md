@@ -278,6 +278,12 @@ public class JavaClass {
 **面向过程**：当需要实现一个功能等时候，每一个具体的步骤都要亲力亲为，详细处理每一个细节。
 **面向对象**：当需要实现一个功能等时候，不关心具体的步骤，而是找一个已经具有改功能的人，来帮我做事儿。
 
+#### 面向对象的三大特征
+
+- **封装**：将一些细节信息隐藏起来，对于外界不可见；
+- **继承**：
+- **多态**：
+
 
 
 ## 类
@@ -285,27 +291,50 @@ public class JavaClass {
 ```java
 public class Demo01 {
     public static void main(String[] args) {
-        Dog dog = new Dog();
-        dog.name = "小狗";
-        dog.run();
+        Dog dogA = new Dog();
+        dogA.setName("小狗");
+        dogA.run();
+      
+      	Dog dogB = new Dog("大狗", true);
     }
 }
 
 class Dog {
-    String name;
+    private String name;
+  	private boolean sleep;
+  
+  	public Dog() {
+      
+    }
+  
+  	public Dog(String name, boolean sleep) {
+      	this.name = name;
+      	this.sleep = sleep;
+    }
+  
     public void run() {
         System.out.println(name + " 在跑步");
+    }
+  
+  	public void setName(String str) {
+        name = str;
+    }
+  	public String getName() {
+      	return name;
+    }
+  
+  	public void setSleep(boolean b) {
+      	sleep = b;
+    }
+  	public boolean isSleep() { // boolean getter方法特殊，需要使用 isXxx
+      	return sleep;
     }
 }
 ```
 
 
 
-
-
-
-
-Day06
+## 07
 
 
 
