@@ -582,17 +582,354 @@ public class Game {
 
 ## 继承
 
-09
+就是子类继承父类的**属性**和**行为**，使得子类对象具有与父类相同的属性、相同的行为。子类可以直接访问父类中的**非私有**的属性和方法。
 
+- 提高代码的复用性；
+- 类与类之间产生了关系，是多态的前提；
 
+```java
+class 父类 {
+  ...
+}
+class 子类 extends 父类 {
+  ...
+}
+```
 
-
-
-
+- **方法重写** ：子类中出现与父类一模一样的方法时(返回值类型，方法名和参数列表都相同)，会出现覆盖效 果，也称为重写或者复写。**声明不变，重新实现**。
 
 
 
 ## 抽象类
+
+没有方法主体的方法称为**抽象方法**。包含抽象方法的类就是**抽象类**。
+
+- **抽象方法** ：没有方法体的方法。
+- **抽象类** ：包含抽象方法的类。
+
+#### abstract
+
+使用 `abstract` 关键字修饰的方法，就是抽象方法，抽象方法只包含一个方法名，而没有方法体。
+
+```java
+修饰符 abstract 返回值类型 方法名(参数列表);
+```
+
+```java
+public abstract void run();
+```
+
+如果一个类包含抽象方法，那么该类必须是抽象类。
+
+```java
+abstract class 类名 {
+  
+}
+```
+
+```java
+public abstract class Animal {
+  public abstract void run();
+}
+```
+
+#### 抽象的使用
+
+继承抽象类的子类**必须重写父类所有的抽象方法**。否则，该子类也必须声明为抽象类。最终，必须有子类实现该父类的抽象方法，否则，从最初的父类到最终的子类都不能创建对象，失去意义。
+
+```java
+public class Cat extends Animal {
+  public void run() {
+    System.out.println("小猫在墙头走～～～");
+  }
+}
+```
+
+
+
+## 接口
+
+接口，是Java语言中一种引用类型，是方法的集合，如果说类的内部封装了成员变量、构造方法和成员方法，那么 接口的内部主要就是**封装了方法**，包含抽象方法(JDK 7及以前)，默认方法和静态方法(JDK 8)，私有方法 (JDK 9)。
+
+接口的定义，它与定义类方式相似，但是使用 `interface` 关键字。它也会被编译成.class文件，但一定要明确它并 不是类，而是另外一种引用数据类型。
+
+> 引用数据类型:数组，类，接口。
+
+接口的使用，它不能创建对象，但是可以被实现( `implements` ，类似于被继承)。一个实现接口的类(可以看做 是接口的子类)，需要实现接口中所有的抽象方法，创建该类对象，就可以调用方法了，否则它必须是一个抽象类。
+
+```java
+public interface 接口名称 {
+  // 抽象方法
+  // 默认方法
+  // 静态方法
+  // 私有方法
+}
+```
+
+#### 定义格式
+
+##### 含抽象方法
+
+抽象方法：使用 `abstract` 关键字修饰，可以省略，没有方法体。该方法供子类实现使用。
+
+```java
+public interface InterfaceName {
+  public abstract void method();
+}
+```
+
+##### 含有默认方法和静态方法
+
+默认方法：使用 `default` 修饰，不可省略，供子类调用或者子类重写。
+
+静态方法：使用 `static` 修饰，供接口直接调用。
+
+```java
+public interface InterfaceName {
+  public default void method() {
+    
+  }
+  public static void method2() {
+    
+  }
+}
+```
+
+##### 含有私有方法和私有静态方法
+
+私有方法：使用 `private` 修饰，供接口中的默认方法或者静态方法调用。
+
+```java
+public interface InterfaceName {
+  private void method() {
+    
+  }
+}
+```
+
+#### 基本的实现
+
+##### 实现的概述
+
+类与接口的关系为实现关系，即类实现接口，该类可以称为接口的实现类，也可以称为接口的子类。实现的动作类 似继承，格式相仿，只是关键字不同，实现使用 `implements` 关键字。
+
+非抽象子类实现接口：
+
+	- 必须重写接口中所有抽象方法。
+	- 继承了接口的默认方法，即可以直接调用，也可以重写。
+
+```java
+class 类名 implements 接口名 {
+  // 重写接口中抽象方法【必须】
+  // 重写接口中默认方法【可选】
+}
+```
+
+##### 抽象方法的使用
+
+必须全部实现。
+
+定义接口：
+
+```java
+public interface LiveAble {
+  // 定义抽象方法
+  public abstract void eat();
+  public abstract void sleep();
+}
+```
+
+定义实现类：
+
+```java
+public class Animal implements LiveAble {
+  @Override
+  public void eat() {
+    System.out.println("吃东西");
+  }
+  
+  @Override
+  public void sleep() {
+    System.out.println("晚上睡");
+  }
+}
+```
+
+定义测试类：
+
+```java
+public class InterfaceDemo {
+  public static void main(String[] args) {
+    Animal a = new Animal();
+    a.eat();
+    a.sleep();
+  }
+}
+输出结果：
+吃东西
+晚上睡
+```
+
+##### 默认方法的使用
+
+可以继承，可以重写，二选一，但是只能通过实现类的对象来调用。
+
+- 继承默认方法：
+
+定义接口：
+
+```java
+public interface LiveAble {
+  public default void fly() {
+    System.out.println("天上飞");
+  }
+}
+```
+
+定义实现类：
+
+```java
+public class Animal implements LiveAble {
+  // 继承，什么都不用写，直接调用
+}
+```
+
+定义测试类：
+
+```java
+public class InterfaceDemo {
+  public static void main(String[] args) {
+    Animal a = new Animal();
+    a.fly();
+  }
+}
+```
+
+- 重写默认方法：
+
+定义接口：
+
+```java
+public interface LiveAble {
+  public default void fly() {
+    System.out.println("天上飞");
+  }
+}
+```
+
+定义实现类：
+
+```java
+public class Animal implements LiveAble {
+  @Override
+  public void fly() {
+    System.out.println("自由自在的飞");
+  }
+}
+```
+
+定义测试类：
+
+```java
+public class InterfaceDemo {
+  public static void main(String[] args) {
+    Animal a = new Animal();
+    a.fly();
+  }
+}
+```
+
+##### 静态方法的使用
+
+静态与 .class 文件相关，只能使用接口名调用，不可以通过实现类的类名或实现类的对象调用。
+
+定义接口：
+
+```java
+public interface LiveAble {
+  public static void run() {
+    System.out.println("跑起来~~~");
+  }
+}
+```
+
+定义实现类：
+
+```java
+public class Animal implement LiveAble {
+  // 无法重写静态方法
+}
+```
+
+定义测试类：
+
+```java
+public class InterfaceDemo {
+  public static void main(String[] args) {
+    // Animal.run(); // 【错误】无法继承方法，也无法调用
+    LiveAble.run();
+  }
+}
+```
+
+##### 私有方法的使用
+
+- 私有方法：只有默认方法可以调用。
+- 私有静态方法：默认方法和静态方法可以调用。
+
+如果一个接口中有多个默认方法，并且方法中有重复的内容，那么可以抽取出来，封装到私有方法中，供默认方法去调用。从设计的角度讲，私有的方法是对默认方法和静态方法的辅助。
+
+#### 接口的多实现
+
+d10
+
+##### 抽象方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 多态
+
+
+
+
+
+
+
+
+
+
 
 
 
