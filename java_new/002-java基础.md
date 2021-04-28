@@ -881,67 +881,725 @@ public class InterfaceDemo {
 
 #### 接口的多实现
 
-d10
+在继承中，一个类只能继承一个父类。而对于接口而言，一个类是可以实现多个接口的，这叫做接口的 `多实现` 。并且，一个类能继承一个父类，同时实现多个接口。
+
+```java
+class 类名 [extends 父类名] implements 接口1,接口2,接口3... {
+  // 重写接口中抽象方法【必须】
+  // 重写接口中默认方法【不重名时可选】
+}
+```
+
+> [ ] ：表示可选操作。
 
 ##### 抽象方法
 
+接口中，有多个抽象方法时，实现类必须重写所有抽象方法。 **如果抽象方法有重名的，只需要重写一次。**
 
+定义多个接口：
 
+```java
+interface A {
+  public abstract void showA();
+  public abstract void show();
+}
+interface B {
+  public abstract void showB();
+  public abstract void show();
+}
+```
 
+定义实现类：
 
+```java
+public class C implements A,B {
+	@Override
+  public void showA() {
+    System.out.println("showA");
+  }
+  @Override
+  public void showB() {
+    System.out.println("showB");
+  }
+  @Override
+  public void show() {
+    System.out.println("show");
+  }
+}
+```
 
+##### 默认方法
 
+接口中，有多个默认方法时，实现类都可继承使用。**如果默认方法有重名的，必须重写一次。**
 
+定义多个接口：
 
+```java
+interface A {
+  public default void methodA() {}
+  public default void method() {}
+}
+interface B {
+  public default show methodB() {}
+  public default show method() {}
+}
+```
 
+定义实现类：
 
+```java
+public class C implements A,B {
+  @Override
+  public void method() {
+    System.out.println("method");
+  }
+}
+```
 
+##### 静态方法
 
+接口中，存在同名的静态方法并不会冲突，原因是只能通过各自接口名访问静态方法。
 
+##### 优先级的问题
 
+当一个类，既继承一个父类，又实现若干个接口时，父类中的成员方法与接口中的默认方法重名，子类就近选择执行父类的成员方法。
 
+定义接口：
 
+```java
+interface A {
+  public default void methodA() {
+    System.out.println("AAA");
+  }
+}
+```
 
+定义父类：
 
+```java
+class D {
+  public void methodA() {
+    System.out.println("DDD");
+  }
+}
+```
 
+定义子类：
 
+```java
+class C extends D implements A {
+  // 未重写methodA方法
+}
+```
 
+定义测试类：
 
+```java
+public class Test {
+  public static void main(String[] args) {
+    C c = new C();
+    c.methodA();
+  }
+}
+输出结果：
+DDD
+```
 
+#### 接口的多继承
 
+一个接口能继承另一个或者多个接口，这和类之间的继承比较相似。接口的继承使用 extends 关键字，子接口继承父接口的方法。**如果父接口中的默认方法有重名的，那么子接口需要重写一次。**
 
+> 子接口重写默认方法时，default关键字可以保留。 
+> 子类重写默认方法时，default关键字不可以保留。
 
+#### 其他成员特点
 
-
-
-
-
+- 接口中，无法定义成员变量，但是可以定义常量，其值不可以改变，默认使用 public static final 修饰。
+- 接口中，没有构造方法，不能创建对象。
+- 接口中，没有静态代码块。
 
 
 
 ## 多态
 
+多态是继封装、继承之后，面向对象的第三大特性。
+
+##### 定义
+
+- **多态**：是指同一行为，具有多个不同表现形式。
+
+##### 前提【重点】
+
+- 继承或着实现【二选一】
+- 方法的重写【意义体现：不同写，无意义】
+- 父类引用指向子类对象【格式体现】
+
+#### 多态的体现
+
+多态体现的格式：
+
+```java
+父类类型 变量名 = new 子类对象;
+变量名.方法名();
+```
+
+> 父类类型：指子类对象继承的父类类型，或者实现的父接口类型。
+
+代码如下：
+
+```java
+Fu f = new Zi();
+f.method();
+```
+
+**当使用多态方式调用方法时，首先检查父类中是否有该方法，如果没有，则编译错误；如果有，执行的是子类重写后方法。**
+
+定义父类：
+
+```java
+public abstract class Animal {
+  public abstract void eat();
+}
+```
+
+定义子类：
+
+```java
+class Cat extends Animal {
+  public void eat() { System.out.println("吃鱼"); }
+}
+class Dog extends Animal {
+  public void eat() { System.out.println("吃骨头"); }
+}
+```
+
+定义测试类：
+
+```java
+public class Test {
+  public static void main(String[] args) {
+    Animal a1 = new Cat();
+    a1.eat(); // 调用的是 Cat 的 eat
+    
+    Animal a2 = new Dog();
+    a2.eat(); // 调用的是 Dog 的 eat
+  }
+}
+```
+
+#### 多态的好处
+
+实际开发的过程中，父类类型作为方法形式参数，传递子类对象给方法，进行方法的调用，更能体现出多态的扩展性与便利。
+
+定义父类：
+
+```java
+public abstract class Animal {
+  public abstract void eat();
+}
+```
+
+定义子类：
+
+```java
+class Cat extends Animal { 
+  public void eat() {
+		System.out.println("吃鱼"); 
+  }
+}
+class Dog extends Animal { 
+  public void eat() {
+		System.out.println("吃骨头"); 
+  }
+}
+```
+
+定义测试类：
+
+```java
+public class Test {
+  public static void main(String[] args) {
+    Cat c = new Cat();
+    Dog d = new Dog();
+		showAnimalEat(c);
+		showAnimalEat(d);
+  }
+  public static void showAnimalEat (Animal a){ 
+    a.eat();
+  }
+}
+```
+
+#### 引用类型转换
+
+##### 向上转型
+
+- **向上转型**：多态本身是子类类型向父类类型向上转换的过程，这个过程是默认的。
+
+当父类引用指向一个子类对象时，便是向上转型。
+
+```java
+父类类型 变量名 = new 子类类型();
+Animal a = new Cat();
+```
+
+##### 向下转型
+
+- **向下转型**：父类类型向子类类型向下转换的过程，这个过程是强制的。
+
+一个已经向上转型的子类对象，将父类引用转为子类引用，可以使用强制类型转换的格式，便是向下转型。
+
+```java
+子类类型 变量名 = (子类类型)父类变量名;
+Cat c = (Cat)a;
+```
+
+##### 为什么要转型
+
+当使用多态方式调用方法时，首先检查父类中是否有该方法，如果没有，则编译错误。也就是说，不能调用子类拥 有，而父类没有的方法。编译都错误，更别说运行了。这也是多态给我们带来的一点"小麻烦"。所以，想要调用子 类特有的方法，必须做向下转型。
+
+##### 转型的异常
+
+```java
+public class Test {
+	public static void main(String[] args) {
+		// 向上转型
+    Animal a = new Cat();
+    a.eat();
+    // 向下转型
+    Dog d = (Dog)a;
+    d.watchHouse();	// 调用的是 Dog 的 watchHouse【运行报错】
+  } 
+}
+```
+
+这段代码可以通过编译，但是运行时，却报出了 `ClassCastException` ，类型转换异常!这是因为，明明创建了 Cat类型对象，运行时，当然不能转换成Dog对象的。这两个类型并没有任何继承关系，不符合类型转换的定义。
+
+为了避免 `ClassCastException` 的发生，Java 提供了 `instanceof` 关键字，给引用变量做类型的校验，格式如下:
+
+```java
+变量名 instanceof 数据类型
+如果变量属于该数据类型，返回true。
+如果变量不属于该数据类型，返回false。
+```
+
+```java
+public class Test {
+  public static void main(String[] args) {
+    Animal a = new Cat();
+    a.eat;
+    
+    if (a instanceof Cat) {
+      Cat c = (cat)a;
+      c.catchMouse();
+    } 
+    else if (a instanceof Dog) {
+      Dog d = (Dog)a;
+      d.watchHouse();
+    }
+  }
+}
+```
 
 
 
+## final 关键字
+
+- **final**：不可改变。可以用于修饰类、方法和变量。
+  - 类：被修饰的类，不能被继承。
+  - 方法：被修饰符方法，不能被重写。
+  - 变量：被修饰的变量，不能被重新赋值。
+
+```java
+final class 类名 {
+  
+}
+```
+
+```java
+修饰符 final 返回值类型 方法名(参数列表) {
+  // 方法体
+}
+```
+
+```java
+public class User {
+	final String USERNAME = "张三"; 
+  private int age;
+}
+```
+
+```java
+public class User {
+  final String USERNAME;
+  private int age;
+  public User(String username, int age) {
+    this.USERNAME = username;
+    this.age = age; 
+  }
+}
+```
+
+> 被 final 修饰的常量名称，一般都有书写规范，**所有字母都大写**。
 
 
 
+## 权限修饰符
+
+- public：公共的
+- protected：受保护的
+- default：默认的
+- private：私有的
+
+|                  | public | protected | default(空的) | private |
+| ---------------- | ------ | --------- | ------------- | ------- |
+| 同一类中         | √      | √         | √             | √       |
+| 同一包中         | √      | √         | √             |         |
+| 不同包的子类     | √      | √         |               |         |
+| 不同包中的无关类 | √      |           |               |         |
+
+建议使用规范：
+
+- 成员变量使用 `private` ，隐藏细节。
+- 构造方法使用 `public` ，方便创建对象。
+- 成员方法使用 `public` ，方便调用方法。
+
+> 不加权限修饰符，其访问能力与 default 修饰符相同。
 
 
 
+## 内部类
+
+将一个类A定义在另一个类B里面，里面的那个类A就称为`内部类`，B则称为`外部类`。
+
+#### 成员内部类
+
+- 成员内部类：定义在`类中方法外`的类。
+
+```java
+class 外部类 {
+  class 内部类 {
+    
+  }
+}
+```
+
+创建内部类对象格式：
+
+```java
+外部类名.内部类名 对象名 = new 外部类型().new 内部类型();
+```
+
+> 内部类仍然是一个独立的类，在编译之后会内部类会被编译成独立的.class文件，但是前面冠以外部类的类名 和$符号 。
+>
+> 比如，Person$Heart.class
+
+#### 匿名内部类【重点】
+
+- 匿名内部类：是内部类的简化写法。它的本质是一个 `带具体实现的` `父类或者父接口的` `匿名的` **子类对象**。
+
+开发中，最常用到的内部类就是匿名内部类了。以接口举例，当你使用一个接口时，似乎得做如下几步操作，
+
+	1、定义子类
+	2、重写接口中的方法
+	3、创建子类对象
+	4、调用重写后的方法
+
+最终只是为了调用方法，那么能不能简化一下，把以上四步合成一步呢?匿名内部类就是做这样的快捷方式。
+
+**前提**
+
+匿名内部类必须**继承一个父类**或者**实现一个父接口**。
+
+**格式**
+
+```java
+new 父类名或者接口名() {
+  // 方法重写
+  @Override
+  public void method() {
+    // 执行语句
+  }
+};
+```
+
+**使用方法**
+
+以接口为例，匿名内部类的使用，代码如下：
+
+定义接口：
+
+```java
+public abstract class FlyAble {
+  public abstract void fly();
+}
+```
+
+创建匿名内部类，并调用：
+
+```java
+public class InnerDemo {
+  public static void main(String[] args) {
+    /* 
+    	1.等号右边:是匿名内部类，定义并创建该接口的子类对象 
+    	2.等号左边:是多态赋值，接口类型引用指向子类对象
+		*/
+    FlyAble f = new FlyAble() {
+      public void fly() {
+        System.out.println("飞喽~~~");
+      }
+    };
+    // 调用fly方法,执行重写后的方法
+    f.fly();
+  }
+}
+```
+
+通常在方法的形式参数是接口或者抽象类时，也可以将匿名内部类作为参数传递。代码如下:
+
+```java
+public class InnerDemo2 {
+  public static void main(String[] args) {
+    
+    FlyAble f = new FlyAble() {
+			public void fly() {
+        System.out.println("飞喽~~~");
+      }
+    }
+    
+    showFly(f);
+  }
+  public static void showFly(FlyAble f) {
+    f.fly();
+  }
+}
+```
+
+以上两步，也可以简化为一步，代码如下：
+
+```java
+public class InnerDemo3 {
+  public static void main(String[] args) {
+    showFly(new FlyAble() {
+      public void fly() {
+        System.out.println("飞喽~~~");
+      }
+    });
+  }
+  public static void showFly(FlyAble f) {
+    f.fly();
+  }
+}
+```
 
 
 
+## 引用类型用法总结
 
+#### class 作为成员变量
 
+定义一个Role（游戏角色）：
 
+```java
+class Role {
+  int id; // 角色id
+  int blood; // 生命值
+  String name; // 角色名称
+}
+```
 
+定义武器类，将增加攻击能力：
 
+```java
+class Weapon {
+  String name; // 武器名称
+  int hurt; // 伤害
+}
+```
 
+定义穿戴盔甲类，增加防御能力，也就是提升生命值：
 
+```java
+class Armour {
+	String name; // 装备名称
+  int protect; // 防御值
+}
+```
 
+定义角色类：
 
+```java
+class Role {
+  int id;
+  int blood;
+  String name;
+  
+  Weapon wp;
+  
+  Armour ar;
+  
+  public Weapon getWp() {
+    return wp;
+  }
+  public void setWeapon(Weapon wp) {
+    this.wp = wp;
+  }
+  public Armour getArmour() {
+    return ar;
+  }
+  public void setArmour(Armour ar) {
+    this.ar = ar;
+  }
+  
+  public void attack() {
+    System.out.println("使用" + wp.getName() + "，造成" + wp.getHurt() + "点伤害");
+  }
+  
+  public void wear() {
+    this.blood += ar.getProtect();
+    System.out.println("穿上" + ar.getName() + ", 生命值增加" + ar.getProtect());
+  }
+}
+```
 
+测试类：
+
+```java
+public class Test {
+  public static void main(String[] args) {
+    Weapon wp = new Weapon("屠龙刀", 99999);
+    Armour ar = new Armour("麒麟甲"， 10000);
+    Role r = new Role();
+    
+    r.setWeapon(wp);
+    r.setArmour(ar);
+    
+    r.attack();
+    r.wear();
+  }
+}
+```
+
+> 类作为成员变量时，对它进行赋值的操作，实际上，是赋给它该类的一个对象。
+
+#### interface 作为成员变量
+
+接口是对方法的封装，对应游戏当中，可以看作是扩展游戏角色的技能。所以，如果想扩展更强大技能，我们在`Role` 中，可以增加接口作为成员变量，来设置不同的技能。
+
+定义接口：
+
+```java
+// 法术攻击
+public interface FaShuSkill {
+  public abstract void faShuAttack();
+}
+```
+
+定义角色类：
+
+```java
+public class Role {
+  FaShuSkill fs;
+  public void setFaShuSkill(FaShuSkill fs) {
+    this.fs = fs;
+  }
+  public void faShuSkillAttack() {
+    System.out.print("发动法术攻击:"); 
+    fs.faShuAttack();
+    System.out.println("攻击完毕");
+  }
+}
+```
+
+定义测试类：
+
+```java
+public class Test {
+	public static void main(String[] args) {
+    // 创建游戏角色
+    Role role = new Role();
+    // 设置角色法术技能 
+    role.setFaShuSkill(new FaShuSkill() {
+      @Override
+      public void faShuAttack() { 
+        System.out.println("纵横天下");
+      } 
+    });
+    // 发动法术攻击 
+    role.faShuSkillAttack();
+    
+    // 更换技能
+    role.setFaShuSkill(new FaShuSkill() {
+      @Override
+      public void faShuAttack() { 
+        System.out.println("逆转乾坤");
+      } 
+    });
+    // 发动法术攻击
+    role.faShuSkillAttack(); 
+  }
+}
+输出结果: 
+发动法术攻击:纵横天下 
+攻击完毕
+
+  发动法术攻击:逆转乾坤 
+攻击完毕
+```
+
+> 我们使用一个接口，作为成员变量，以便随时更换技能，这样的设计更为灵活，增强了程序的扩展性。
+>
+> 接口作为成员变量时，对它进行赋值的操作，实际上，是赋给它该接口的一个子类对象。
+
+#### interface 作为方法参数和返回值类型
+
+当接口作为方法的参数时,需要传递什么呢?当接口作为方法的返回值类型时，需要返回什么呢?对，其实都是它的 子类对象。 `ArrayList` 类我们并不陌生，查看API我们发现，实际上，它是 `java.util.List` 接口的实现类。所 以，当我们看见 `List` 接口作为参数或者返回值类型时，当然可以将 `ArrayList` 的对象进行传递或返回。
+
+请观察如下方法：**获取某集合中所有的偶数。**
+
+定义方法：
+
+```java
+public static List<Integer> getEvenNum(List<Integer> list) { 
+  // 创建保存偶数的集合
+	ArrayList<Integer> evenList = new ArrayList<>();
+	// 遍历集合list,判断元素为偶数,就添加到evenList中
+	for (int i = 0; i < list.size(); i++) { 
+    Integer integer = list.get(i);
+    if (integer % 2 == 0) {
+      evenList.add(integer); 
+    }
+	}
+	/*
+		返回偶数集合
+		因为getEvenNum方法的返回值类型是List,而ArrayList是List的子类, 所以evenList可以返回
+	*/
+	return evenList;
+}
+```
+
+调用方法：
+
+```java
+public class Test {
+	public static void main(String[] args) {
+    // 创建ArrayList集合,并添加数字 
+    ArrayList<Integer> srcList = new ArrayList<>(); 
+    for (int i = 0; i < 10; i++) {
+      srcList.add(i); 
+    }
+    /*
+    	获取偶数集合 
+    	因为getEvenNum方法的参数是List,而ArrayList是List的子类, 
+    	所以srcList可以传递
+    */
+    List list = getEvenNum(srcList); System.out.println(list);
+  } 
+}
+```
+
+>接口作为参数时，传递它的子类对象。
+>
+>接口作为返回值类型时，返回它的子类对象。
 
 
