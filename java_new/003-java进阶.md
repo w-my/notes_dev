@@ -970,13 +970,325 @@ public class Student implements Comparable<Student>{
 
 
 
+## Map 集合
+
+`java.util.Map`
+
+#### Map 常用子类
+
+- **HashMap**：存储数据采用的哈希表结构，元素的存取顺序不能保证一致。由于要保证键的唯一、不重复、需要重写键的 hashCode() 方法、equals() 方法。
+- **LinkedHashMap**：HashMap 的子类。存储数据采用的哈希表结构+链表结构。通过链表结构可以保证元素的存取顺序一致；通过哈希表结构可以保证键的唯一、不重复，需要重写键的 hashCode() 方法、equals() 方法。
+
+#### Map 接口中的常用方法
+
+- `public V put(K key, V value)`:  添加指定键值对。
+- `public V remove(Object key)`: 删除指定键值对，返回被删除元素的值。
+- `public V get(Object key)` 根据指定的键，获取对应的值。
+- `boolean containsKey(Object key)  ` 判断集合中是否包含指定的键。
+- `public Set<K> keySet()`: 获取Map集合中所有的键，存储到Set集合中。
+- `public Set<Map.Entry<K,V>> entrySet()`: 获取到Map集合中所有的键值对对象的集合(Set集合)。
+
+```java
+// 创建 map对象
+HashMap<String, String>  map = new HashMap<String, String>();
+
+// 添加元素到集合
+map.put("黄晓明", "杨颖");
+map.put("文章", "马伊琍");
+map.put("邓超", "孙俪");
+System.out.println(map);
+
+// String remove(String key)
+System.out.println(map.remove("邓超"));
+System.out.println(map);
+
+// 想要查看 黄晓明的媳妇 是谁
+System.out.println(map.get("黄晓明"));
+System.out.println(map.get("邓超"));  
+```
+
+> tips:
+> 使用put方法时，若指定的键(key)在集合中没有，则没有这个键对应的值，返回null，并把指定的键值添加到集合中； 
+> 若指定的键(key)在集合中存在，则返回值为集合中键对应的值（该值为替换前的值），并把指定键所对应的值，替换成指定的新值。 
+
+#### Map 集合遍历
+
+```java
+HashMap<String, String> map = new HashMap<String, String>();
+Set<String> keys = map.keySet();
+for (String key : keys) {
+  String value = map.get(key);
+}
+```
+
+```java
+HashMap<String, String> map = new HashMap<String, String>();
+Set<Entry<String, String>> entrySet = map.entrySet();
+for (Entry<String, String> entry : entrySet) {
+  String key = entry.getKey();
+  String value = entry.getValue();
+}
+```
 
 
 
+## 异常
+
+#### 异常体系
+
+异常的根类是 `java.lang.Throwable` ，其下有两个子类： `java.lang.Error` 与 `java.lang.Exception` ，平常所说的异常指 `java.lang.Exception`。
+
+##### Throwable 体系
+
+- **Error**：严重错误 Error，无法通过处理的错误，只能事先避免。
+- **Exception**：表示异常，异常产生后程序员可以通过代码的方式纠正。
+
+##### Throwable 中的常用方法
+
+- `public void printStackTrace()` ：打印异常的详细信息。
+- `public String getMessage()` ：获取发生异常的原因。
+- `public String toString()` ：获取异常的类型和异常描述信息（不用）。
+
+#### 异常分类
+
+- 编译期异常：checked 异常。
+- 运行期异常：runtime 异常。
 
 
 
+## 异常的处理
 
+Java 异常处理的五个关键字：**try、catch、finally、throw、throws**
+
+#### 抛出异常 throw
+
+```java
+throw new 异常类名(参数);
+```
+
+例如：
+
+```java
+throw new NullPointerException("要访问的arr数组不存在");
+throw new ArrayIndexOutOfBoundsException("数组越界");
+```
+
+#### Objects 非空判断
+
+- `public static <T> T requireNonNull(T obj)`：查看指定引用对象不是null。
+
+源码对 null 进行了抛出异常操作：
+
+```java
+public static <T> T requireNonNull(T obj) {
+  if (obj == null)
+    throw new NullPointerException();
+  return obj;
+}
+```
+
+#### 声明异常 throws
+
+**声明异常**：将问题标识出来，报告给调用者。
+
+```java
+修饰符 返回值类型 方法名(参数) throws 异常类名,异常类名2... { }
+```
+
+```java
+public class ThrowsDemo {
+  public static void main(String[] args) throws FileNotFoundException {
+    read("a.txt");
+  }
+  
+  public static void read(String path) throws FileNotFoundException {
+    if (!path.equals("a.txt")) {
+      throws new FileNotFoundException("文件不存在").
+    }
+  }
+}
+```
+
+#### 捕获异常 try...catch
+
+- **捕获异常**：对出现的异常进行指定方式的处理。
+
+```java
+try {
+  // 可能出现异常的代码
+} catch (异常类型 e) {
+  // 处理异常的代码
+  // 记录日志/打印异常信息/继续抛出异常
+}
+```
+
+```java
+public class TryCatchDemo {
+  public static void main(String[] args) {
+		try {
+      read("b.txt");
+    } catch (FileNotFoundException e) {
+      System.out.println(e);
+    }
+    System.out.println("over");
+  }
+  
+  public static void read(String path) throws FileNotFoundException {
+    if (!path.equals("a.txt")) {
+      throws new FileNotFoundException("文件不存在").
+    }
+  }
+}
+```
+
+##### 获取异常信息
+
+- `public String getMessage()` ：获取异常的描述信息，原因。
+- `public String toString()` ：获取异常的类型和异常描述信息（不用）。
+- `public void printStackTrace()` ：打印异常的跟踪栈信息并输出到控制台。
+
+#### finally 代码块
+
+**finally** ：无论异常是否发生，都会执行。
+
+`try...catch...finally`
+
+```java
+public class TryCatchDemo {
+  public static void main(String[] args) {
+    try {
+      read("a.txt");
+    } catch (FileNotFoundException e) {
+      throw new RuntimeException(e);
+    } finally {
+      System.out.println("不管程序怎么样，这里都将会被执行。");
+    }
+    System.out.println("over");
+  }
+  public static void read(String path) throws FileNotFoundException {
+    if (!path.equals("a.txt")) {
+      throw new FileNotFoundException("文件不存在");
+    }
+  }
+}
+```
+
+
+
+## 自定义异常
+
+`RegisterException` ，注册异常类。
+
+- 自定义编译期异常：自定义类 并继承于 `java.lang.Exception`。
+- 自定义运行期异常：自定义类 并继承于 `java.lang.RuntimeException`。
+
+举个例子：
+
+```java
+public class RegisterException extends Exception {
+  public RegisterException() {
+    
+  }
+  public RegisterException(String message) {
+    super(message);
+  }
+}
+```
+
+```java
+public class Demo {
+  private static String[] names = {"bill", "hill", "jill"};
+  public static void main(String[] args) {
+    try {
+      checkUserName("null");
+      System.out.println("注册成功");
+    } catch (RegisterException e) {
+      e.printStackTrace();
+    }
+  }
+  public static boolean checkUserName(String uname) throws LoginException {
+    for (String name: names) {
+      if (name.equals(uname)) {
+        throw new RegisterException(name + "已经被注册！");
+      }
+    }
+    return true;
+  }
+}
+```
+
+
+
+## 多线程
+
+#### 并发与并行
+
+- **并发** ：指两个或多个事件在**同一个时间段内**发生。
+- **并行** ：指两个或多个事件在**同一时刻**发生（同时发生）。
+
+#### 线程与进程
+
+- **进程**：是指一个内存中运行的应用程序，每个进程都有一个独立的内存空间，一个应用程序可以同时运行多个进程；进程也是程序的一次执行过程，是系统运行程序的基本单位；系统运行一个程序即是一个进程从创建、运行到消亡的过程。
+
+- **线程**：线程是进程中的一个执行单元，负责当前进程中程序的执行，一个进程中至少有一个线程。一个进程中是可以有多个线程的，这个应用程序也可以称之为多线程程序。 
+
+简而言之:一个程序运行后至少有一个进程，一个进程中可以包含多个线程。
+
+**线程调度:**
+
+- 分时调度
+
+  所有线程轮流使用 CPU 的使用权，平均分配每个线程占用 CPU 的时间。
+
+- 抢占式调度
+
+  优先让优先级高的线程使用 CPU，如果线程的优先级相同，那么会随机选择一个(线程随机性)，Java使用的为抢占式调度。
+
+#### 创建线程类
+
+Java 使用 `java.lang.Thread` 类代表**线程**，所有的线程对象都必须是Thread类或其子类的实例。每个线程的作用是完成一定的任务，实际上就是执行一段程序流即一段顺序执行的代码。Java使用线程执行体来代表这段程序流。Java中通过继承Thread类来**创建**并**启动多线程**的步骤如下：
+
+1. 定义Thread类的子类，并重写该类的run()方法，该run()方法的方法体就代表了线程需要完成的任务,因此把run()方法称为线程执行体。
+2. 创建Thread子类的实例，即创建了线程对象
+3. 调用线程对象的start()方法来启动该线程
+
+测试类：
+
+```java
+public class Demo01 {
+	public static void main(String[] args) {
+		//创建自定义线程对象
+		MyThread mt = new MyThread("新的线程！");
+		//开启新线程
+		mt.start();
+		//在主方法中执行for循环
+		for (int i = 0; i < 10; i++) {
+			System.out.println("main线程！"+i);
+		}
+	}
+}
+```
+
+自定义线程类：
+
+```java
+public class MyThread extends Thread {
+	// 定义指定线程名称的构造方法
+	public MyThread(String name) {
+		// 调用父类的String参数的构造方法，指定线程的名称
+		super(name);
+	}
+	/**
+	 * 重写run方法，完成该线程执行的逻辑
+	 */
+	@Override
+	public void run() {
+		for (int i = 0; i < 10; i++) {
+			System.out.println(getName()+"：正在执行！"+i);
+		}
+	}
+}
+```
 
 
 
