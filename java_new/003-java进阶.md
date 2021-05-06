@@ -1290,6 +1290,202 @@ public class MyThread extends Thread {
 }
 ```
 
+#### Thread 类
+
+`java.lang.Thread`
+
+**构造方法**
+
+- `public Thread()`：分配一个新的线程对象。
+- `public Thread(String name)`：分配一个指定名字的线程对象。
+- `public Thread(Runnable target)`：分配一个带有指定目标新的线程对象。
+- `public Thread(Tunnable target, String name)`：分配一个带有指定目标的线程对象并指定名字。
+
+**常用方法**
+
+- `public String getName()`
+- `public void start()`
+- `public void run()`
+- `public static void sleep(long millis)`
+- `public static Thread currentThread()`
+
+#### 创建线程方式二
+
+`java.lang.Runnable`，只需要重写run方法即可。
+
+```java
+public class MyRunnable implements Runnable {
+  @Override
+  public void run() {
+    for (int i = 0; i < 10; i++) {
+      System.out.println(Thread.currentThread().getName()+" "+i);
+    }
+  }
+}
+```
+
+```java
+public class Demo {
+  public static void main(String[] args) {
+    MyRunnable mr = new MyRunnable();
+    Thread t = new Thread(mr, "小黑");
+    t.start();
+    for (int i = 0; i < 10; i++) {
+    	System.out.println("旺财" + i); 
+    }
+  }
+}
+```
+
+通过实现Runnable接口，使得该类有了多线程类的特征。run()方法是多线程程序的一个执行目标。所有的多线程 代码都在run方法里面。Thread类实际上也是实现了Runnable接口的类。
+
+#### Thread 和 Runnable 的区别
+
+如果一个类继承Thread，则不适合资源共享。但是如果实现了Runnable接口的话，则很容易实现资源共享。
+
+**实现Runnable接口比继承Thread类所具有的优势**
+
+1.适合多个相同的程序代码的线程去共享同一个资源。
+2.可以避免java中单继承的局限性。
+3.增加程序的健壮性，实现解耦操作，代码可以被多个线程共享，代码和线程独立。
+4.线程池只能放入实现Runnable或Callable类线程，不能直接放入继承Thread的类。
+
+#### 匿名内部类方式实现线程的创建
+
+```java
+public class NoNameInnerClassThread {
+  public static void main(String[] args) {
+//    new Runnable() {
+//      public void run() {
+//    		for (int i = 0; i < 10; i++) {
+//          System.out.println("aaa");
+// 			  }
+//      }
+//    }; // 这个整体 相当于new MyRunnable()
+    
+    Runnable r = new Runnable() {
+      public void run() {
+        for (int i = 0; i < 10; i++) {
+          System.out.println("bbb");
+    		}
+      }
+    }
+    
+    new Thread(r).start();
+    
+    for (int i = 0; i < 10; i++) {
+      System.out.println("ccc");
+    }
+  }
+}
+```
+
+
+
+## 线程安全
+
+#### 线程同步
+
+使用 `synchronized` 实现线程同步。
+
+三种方式实现同步操作：
+
+1. 同步代码块。
+2. 同步方法。
+3. 锁机制。
+
+#### 同步代码块
+
+```java
+synchronized (同步锁) {
+  
+}
+```
+
+```java
+public class Ticket implements Runnable {
+  Object lock = new Object();
+  
+  @Override
+  public void run() {
+    synchronized (lock) {
+
+    }
+  }
+}
+```
+
+#### 同步方法
+
+```java
+public synchronized void method() {
+  
+}
+```
+
+> 同步锁是谁？
+>
+> 对于非static方法，同步锁就是this。
+>
+> 对于static方法，使用当前方法所在类的字节码对象（类名.class）。
+
+```java
+public class Ticket implements Runnable {
+  @Override
+  public void run() {
+    sellTicket();
+  }
+  
+  public synchronized void sellTicket() {
+    
+  }
+}
+```
+
+#### Lock 锁
+
+`java.util.concurrent.locks.Lock` 机制提供了比synchronized代码块和synchronized方法更广泛的锁定操作,同步代码块/同步方法具有的功能Lock都有,除此之外更强大,更体现面向对象。
+
+Lock 锁也称同步锁，加锁与释放锁方法化了：
+
+- `public void lock()`
+- `public void unlock()`
+
+```java
+public class Ticket implements Runnable {
+  Lock lock = new reetrantLock();
+  
+  @Override
+  public void run() {
+    lock.lock();
+    // ...
+    lock.unlock();
+  }
+}
+```
+
+
+
+## 线程状态
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
