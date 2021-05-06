@@ -1221,6 +1221,8 @@ public class Demo {
 
 ## 多线程
 
+### 多线程
+
 #### 并发与并行
 
 - **并发** ：指两个或多个事件在**同一个时间段内**发生。
@@ -1382,7 +1384,7 @@ public class NoNameInnerClassThread {
 
 
 
-## 线程安全
+### 线程安全
 
 #### 线程同步
 
@@ -1464,9 +1466,251 @@ public class Ticket implements Runnable {
 }
 ```
 
+### 线程状态
+
+`java.lang.Thread.State` 给出了六种线程状态：
+
+- New（新建）
+- Runnable（可运行）
+- Blocked（锁阻塞）
+- Waiting（无限等待）
+- Timed Waiting（计时等待）
+- Teminated（被终止）
+
+### 等待唤醒机制
+
+#### 等待唤醒中的方法
+
+1. wait：线程不再活动，不再参与调度，进入 wait set 中，因此不会浪费 CPU 资源，也不会去竞争锁了，这时的线程状态即是 WAITING。它还要等着别的线程执行一个**特别的动作**，也即是“**通知（notify）**”在这个对象上等待的线程从wait set 中释放出来，重新进入到调度队列（ready queue）中
+2. notify：则选取所通知对象的 wait set 中的一个线程释放；例如，餐馆有空位置后，等候就餐最久的顾客最先入座。
+3. notifyAll：则释放所通知对象的 wait set 上的全部线程。
+
+**实例**
+
+包子类资源：
+
+```java
+public class BaoZi {
+  String pier;
+  String xianer;
+  boolean flag = false; // 包子资源 是否存在 包子资源状态
+}
+```
+
+吃货线程类：
+
+```java
+public class ChiHuo extends Thread {
+  private BaoZi bz;
+  public ChiHuo(Stirng name, BaoZi bz) {
+    super(name);
+    this.bz = bz;
+  }
+  @Override
+  public void run() {
+    synchronized(bz) {
+      if (bz.flag == false) { // 没包子
+       	try {
+          bz.wait();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      System.out.println("吃货正在吃"+bz.pier+bz.xianer+"包子");
+      bz.flag = false;
+      bz.notify();
+    }
+  }
+}
+```
+
+包子铺线程类：
+
+```java
+public class BaoZiPu extends Thread {
+  private BaoZi bz;
+  
+  public BaoZiPu(String name, BaoZi bz) {
+    super(name);
+    this.bz = bz;
+  }
+  
+  @Override
+  public void run() {
+    int count = 0;
+    // 造包子
+    while(true) {
+      // 同步
+      synchronized(bz) {
+        if (bz.flag == true) { // 包子资源 存在
+          try {
+            bz.wait();
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        
+        // 没有包子 造包子
+        System.out.println("包子铺开始做包子");
+        if (count%2 == 0) {
+          bz.pier = "冰皮";
+          bz.xianer = "五仁";
+        } else {
+          bz.pier = "薄皮";
+          bz.xianer = "牛肉大葱";
+        }
+        count++;
+        
+        bz.flag = true;
+        System.out.println("包子造好了:"+bz.pier+bz.xianer); 
+        System.out.println("吃货来吃吧");
+				// 唤醒等待线程 (吃货)
+				bz.notify();
+      }
+    }
+  }
+}
+```
+
+测试类：
+
+```java
+public class Demo {
+  public static void main(String[] args) {
+    BaoZi bz = new BaoZi();
+    
+    ChiHuo ch = new ChiHuo("吃货", bz);
+    BaoZiPu bzp = new BaoZiPu("包子铺", bz);
+    
+    ch.start();
+    bzp.start();
+  }
+}
+```
+
+### 线程池
+
+- **线程池**：其实就是一个容纳多个线程的容器，其中的线程可以反复使用，省去了频繁创建线程对象的操作， 无需反复创建线程而消耗过多资源。
 
 
-## 线程状态
+
+## Lambda 表达式
+
+**传统写法**
+
+```java
+public class DemoRunnable {
+  public static void main(String[] args) {
+    Runnable task = new Runnable() {
+      @Override
+      public void run() {
+      	System.out.println("多线程任务执行!");  
+      }
+    };
+    new Thread(task).start();
+  }
+}
+```
+
+**Lambda 优雅写法** Java8全新语法
+
+```java
+public class DemoLambdaRunnable {
+  public static void main(String[] args) {
+    new Thread(() -> System.out.println("多线程任务执行！")).start();
+  }
+}
+```
+
+#### Lambda 标准格式
+
+```java
+(参数类型 参数名称) -> { 代码语句 }
+```
+
+
+
+## File 类
+
+`java.io.File` 类是文件和目录路径名的抽象表示。
+
+#### 构造方法
+
+- `public File(String pathname)`
+- `public File(String parent, String child)`
+- `public File(File parent, String child)`
+
+#### 常用方法
+
+**获取**
+
+- `public String getAbsolutePath()`：返回此File的绝对路径名
+- `public String getPath()`：返回File路径名
+- `public String getName()`：返回File表示的文件或目录名
+- `public long length()`：返回File表示的文件的长度
+
+**判断**
+
+- `public boolean exists()` ：文件或目录是否存在
+- `public boolean isDirectory()` ：是否为目录
+- `public boolean isFile()` ：是否为文件
+
+**创建删除**
+
+- `public boolean createNewFile()` ：文件不存在时，创建一个新的空文件
+- `public boolean delete()` ：删除文件或目录
+- `public boolean mkdir()` ：创建目录
+- `public boolean mkdirs()` ：创建目录，包活不存在的父目录
+
+#### 目录的遍历
+
+- `public String[] list()` ：返回该目录中所有子文件或目录的名称
+- `public File[] listFiles()` ：返回该目录中所有的子文件或目录
+
+```java
+public class FileFor {
+  public static void main(String[] args) {
+    File dir = new File("d:\\java_code");
+    // 获取当前目录下的文件及文件夹的名称
+    String[] names = dir.list();
+    for (String name : names) {
+      System.out.println(name);
+    }
+    // 获取当前目录下的文件及文件夹对象
+    File[] files = dir.listFiles();
+    for(File file : files) {
+      System.out.println(file);
+    }
+  }
+}
+```
+
+
+
+## 递归
+
+#### 递归打印多级目录
+
+```java
+public class Dmoe {
+	public static void main(String[] args) {
+		File dir = new File("D:\\aa");
+		printDir(dir);
+	}
+
+	public static void printDir(File dir) {
+		File[] files = dir.listFiles;
+		for (File file: files) {
+			if (file.isFile) {
+				System.out.println("文件名："+file.getAbsolutePath());
+			} else {
+				System.out.println("目录："+file.getAbsolutePath());
+				printDir(file);
+			}
+		}
+	}
+}
+```
 
 
 
