@@ -1712,6 +1712,60 @@ public class Dmoe {
 }
 ```
 
+#### 文件过滤器优化
+
+`java.io.FileFilter` 是一个接口，是File的过滤器。
+
+- `boolean accept(File pathname)` ：测试pathname是否应该包含在当前File目录中，符合则返回true。
+
+```java
+public class Demo {
+	public static void main(String[] args) {
+		File dir = new File("D:\\aa");
+		printDir(dir);
+	}
+
+	public static void printDir(File dir) {
+		File[] files = dir.listFiles(new FileFilter() {
+			@Override
+			public boolean accept(File pathname) {
+				return pathname.getName().endsWith(".java") || pathname.isDirectory();
+			}
+		});
+		for (File file : files) {
+			if (file.isFile()) {
+				System.out.println("文件名：" + file.getAbsolutePath());
+			} else {
+				printDir(file);
+			}
+		}
+	}
+}
+```
+
+#### Lambda 优化
+
+`FileFilter` 是只有一个方法的接口，因此可以用 lambda 表达式简写。
+
+```
+()->{ }
+```
+
+```java
+public static void printDir(File dir) {
+  File[] files = dir.listFiles(f -> {
+    return f.getName().endsWith(".java") || f.isDirectory();
+  });
+  for (File file : files) {
+    if (file.isFile()) {
+      System.out.println("文件名：" + file.getAbsolutePath());
+    } else {
+      printDir(file);
+    }
+  }
+}
+```
+
 
 
 
