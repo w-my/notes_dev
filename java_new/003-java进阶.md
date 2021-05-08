@@ -1714,21 +1714,571 @@ public class Dmoe {
 
 
 
+## IO
+
+#### IO 分类
+
+根据数据的流向分为：
+
+- **输入流** ：把数据从`其他设备`上读取到`内存`中的流。 
+- **输出流** ：把数据从`内存` 中写出到`其他设备`上的流。
+
+根据数据的类型分为：
+
+- **字节流** ： 把数据从`内存` 中写出到`其他设备`上的流。
+- **字符流** ： 以字符为单位，读写数据的流。
+
+#### 顶级父类
+
+|            |           **输入流**            |              输出流              |
+| :--------: | :-----------------------------: | :------------------------------: |
+| **字节流** | 字节输入流 **InputStream** | 字节输出流 **OutputStream** |
+| **字符流** |   字符输入流 **Reader**   |    字符输出流 **Writer**    |
+
+### 字节流
+
+#### 字节输出流【OutputStream】
+
+`java.io.OutputStream` ，字节输出流的所有类的超类。
+
+- `public void close()`
+- `public void flush()`
+- `public void write(byte[] b)`
+- `public void write(byte[] b, int off, int len)`
+
+#### FileOutputStream
+
+`java.io.FileOutputStream` 类是文件输出流，用于将数据写出到文件。
+
+**构造方法**
+
+- `public FileOutputStream(File file)`
+- `public FileOutputStream(String name)`
+
+**写出字节数据**
+
+- `write(int b)` ：写出字节
+
+```java
+public static void main(String[] args) throws IOException {
+  FileOutputStream fos = new FileOutputStream("a.txt");
+  fos.write(97);
+  fos.write(98);
+  fos.close();
+}
+// ab
+```
+
+**写出字节数组**
+
+- `write(byte[] b)` 
+
+```java
+public static void main(String[] args) throws IOException {
+  FileOutputStream fos = new FileOutputStream("a.txt");
+  byte[] b = "搬砖程序员".getBytes();
+  fos.write(b);
+  fos.close();
+}
+// 搬砖程序员
+```
+
+**写出指定长度字节数组**
+
+- `write(byte[] b, int off, int len)`
+
+```java
+public static void main(String[] args) throws IOException {
+  FileOutputStream fos = new FileOutputStream("a.txt");
+  byte[] b = "abcde".getBytes();
+  fos.write(b, 2, 2); // 从2开始，两个字节
+  fos.close();
+}
+// cd
+```
+
+**数据追加续写**
+
+- `public FileOutputStream(File file, boolean append)`
+- `public FileOutputStream(String name, boolean append)`
+
+参数boolean，`true`表示追加数据，`false` 表示清空原有数据。
+
+```java
+public static void main(String[] args) throws IOException {
+  FileOutputStream fos = new FileOutputStream("a.txt", true);
+  byte[] b = "abcde".getBytes();
+  fos.write(b);
+  fos.close();
+}
+```
+
+**写出换行**
+
+`\r\n`
+
+```java
+public static void main(String[] args) throws IOException {
+  FileOutputStream fos = new FileOutputStream("a.txt");
+  byte[] words = {97, 98, 99, 100, 101};
+  for (int i = 0; i < words.length; i++) {
+    fos.write(words[i]);
+    fos.write("\r\n".getBytes());
+  }
+  fos.close();
+}
+```
+
+> - 回车符 `\r` 和 换行符 `\n`
+>   - 回车符：回到一行的开头（return）。
+>   - 换行符：下一行（newline）。
+> - 系统中的换行：
+>   - Windows系统里，每行结尾是 `回车+换行`，即 `\r\n` ；
+>   - Unix 系统里，每行结尾只有 `换行` ，即 `\n` ；
+>   - Max 系统里，每行结尾是 `回车` ，即 `\r` 。从 Max OS X 开始与 Linux 统一。
+
+#### 字节输入流【InputStream】
+
+`java.io.InputStream`
+
+- `public void close()`
+- `public abstract int read()`
+- `public int read(byte[] b)`
+
+#### FileInputStream 类
+
+`java.io.FileInputStream` 文件输入流，从文件中读取字节。
+
+**构造方法**
+
+- `FileInputStrram(File file)`
+- `FileInputStream(String name)`
+
+**读取字节数据**
+
+- `read` 读取字节，每次读取一个字节数据，提升为int类型，读取到文件末尾，返回 `-1` 。
+
+```java
+public static void main(String[] args) throws IOException {
+  FileInputStream fis = new FileInputStream("a.txt");
+  int b;
+  while ( (b = fis.read()) != -1) {
+    System.out.println((char)b);
+  }
+  fis.close();
+}
+```
+
+**使用字节数组读取**
+
+- `read(byte[] b)` 
+
+```java
+public static void main(String[] args) throws IOException {
+  FileInputStream fis = new FileInputStream("a.txt");
+  int len;
+  byte[] b = new byte[2];
+  while ( (len = fis.read()) != -1) {
+    System.out.println(new String(b, 0, len));
+  }
+  fis.close();
+}
+// 输出：
+ab
+cd
+e
+```
+
+#### 字节流复制图片
+
+```java
+public static void main(String[] args) throws IOException {
+  FileInputStream fis = new FileInputStream("D:\\a.jpg");
+  FileOutputStream fos = new FileOutputStream(b.jpg);
+  byte[] b = new byte[1024];
+  int len;
+  while ((len = fis.read(b)) != -1) {
+    fos.write(b, 0, len);
+  }
+  fos.close();
+  fis.close();
+}
+```
+
+### 字符流
+
+#### 字符输入流【Reader】
+
+`java.io.Reader` 抽象类是表示用于读取字符流的所有类的超类。
+
+- `public void close()`
+- `public int read()`
+- `public int read(char[] cbuf)`
+
+#### FileReader 类
+
+`java.io.FileReader`
+
+**构造方法**
+
+- `FileReader(File file)`
+- `FileReader(String fileName)`
+
+**读取字符数据**
+
+**读取字符**： `read` 方法，每次读取一个字符的数据，提升为int类型，读取到文件末尾，返回`-1` 。
+
+**使用字符数组读取**：`read(char[] cbuf)`
+
+```java
+public static void main(String[] args) throws IOException {
+  FileReader fr = new FileReader("a.txt");
+  int len;
+  char[] cbuf = new char[2];
+  while((len = fr.read(cbuf)) != -1) {
+    System.out.println(new String(cbuf, 0, len));
+  }
+  fr.close();
+}
+```
+
+#### 字符输出流【Writer】
+
+`java.io.Writer` 抽象类是表示用于写出字符流的所有类的超类。
+
+- `void write(int c)`
+- `void write(char[] cbuf)`
+- `abstract void write(char[] cbuf, int off, int len)`
+- `void write(String str)`
+- `void write(String str, int off, int len)`
+- `void flush()`
+- `void close()`
+
+#### FileWriter 类
+
+`java.io.FileWriter` 
+
+**构造方法**
+
+- `FileWriter(File file)`
+- `FileWriter(String fileName)`
+
+**写出数据**
+
+- **写出字符**：`write(int b)` 
+
+```java
+public static void main(String[] args) throws IOException {
+  FileWriter fw = new FileWriter("a.txt");
+  fw.write('刷');
+  fw.flush();
+  fw.write('新');
+  fw.flush();
+
+  fw.write('关');
+  fw.close();
+  fw.write('闭'); //【报错】java.io.IOException: Stream closed
+  fw.close();
+}
+```
+
+- **写出字符数组** ：`write(char[] cbuf)` 和 `write(char[] cbuf, int off, int len)` 
+
+```java
+FileWriter fw = new FileWriter("a.txt");
+char[] chars = "搬砖程序员".toCharArray();
+fw.write(chars);
+fw.write(chars, 2, 2);
+fw.close();
+```
+
+- **写出字符串**：`write(String str)` 和 `wirte(String str, int off, int len)` 
+
+```java
+FileWriter fw = new FileWriter("a.txt");
+String msg = "搬砖程序员";
+fw.write(msg);
+fw.write((msg, 2, 2));
+fw.close();
+```
+
+- **续写和换行** ：`\r\n`
+
+```java
+FileWriter fw = new FileWriter("a.txt");
+fw.write("搬砖");
+fw.write("\r\n");
+fw.write("程序员");
+fw.close();
+```
+
+
+
+## IO 异常的处理
+
+`try...catch...finally`
+
+#### JDK7 前处理
+
+```java
+public static void main(String[] args) {
+    FileWriter fw = null;
+    try {
+        fw = new FileWriter("a.txt");
+        fw.write("搬砖程序员");
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        try {
+            if (fw != null) {
+                fw.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+#### JDK7的处理（扩展）
+
+还可以使用JDK7优化后的`try-with-resource` 语句，该语句确保了每个资源在语句结束时关闭。所谓的资源（resource）是指在程序完成后，必须关闭的对象。
+
+格式：
+
+```java
+try (创建流对象语句，如果多个,使用';'隔开) {
+	// 读写数据
+} catch (IOException e) {
+	e.printStackTrace();
+}
+```
+
+```java
+public static void main(String[] args) {
+    try ( FileWriter fw = new FileWriter("fw.txt"); ) {
+        fw.write("搬砖程序员"); 
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+#### JDK9的改进（扩展）
+
+JDK9中`try-with-resource` 的改进，对于**引入对象**的方式，支持的更加简洁。被引入的对象，同样可以自动关闭，无需手动close，我们来了解一下格式。
+
+改进前格式：
+
+```java
+// 被final修饰的对象
+final Resource resource1 = new Resource("resource1");
+// 普通对象
+Resource resource2 = new Resource("resource2");
+// 引入方式：创建新的变量保存
+try (Resource r1 = resource1;
+     Resource r2 = resource2) {
+     // 使用对象
+}
+```
+
+改进后格式：
+
+```java
+// 被final修饰的对象
+final Resource resource1 = new Resource("resource1");
+// 普通对象
+Resource resource2 = new Resource("resource2");
+
+// 引入方式：直接引入
+try (resource1; resource2) {
+     // 使用对象
+}
+```
+
+实例：
+
+```java
+public class TryDemo {
+    public static void main(String[] args) throws IOException {
+       	// 创建流对象
+        final  FileReader fr  = new FileReader("in.txt");
+        FileWriter fw = new FileWriter("out.txt");
+       	// 引入到try中
+        try (fr; fw) {
+          	// 定义变量
+            int b;
+          	// 读取数据
+          	while ((b = fr.read())!=-1) {
+            	// 写出数据
+            	fw.write(b);
+          	}
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+```
+
+
+
+## 属性集
+
+`java.util.Properties ` 继承于` Hashtable` ，来表示一个持久的属性集。它使用键值结构存储数据，每个键及其对应值都是一个字符串。该类也被许多Java类使用，比如获取系统属性时，`System.getProperties` 方法就是返回一个`Properties`对象。
+
+#### Properties 类
+
+**构造方法**
+
+- `public properties()`
+
+**基本的存储方法**
+
+- `public Object setProperty(String key, String value)`
+- `public String getProperty(String key)`
+- `public Set<String> stringPropertyNames()`
+
+```java
+public class ProDemo {
+    public static void main(String[] args) throws FileNotFoundException {
+        // 创建属性集对象
+        Properties properties = new Properties();
+        // 添加键值对元素
+        properties.setProperty("filename", "a.txt");
+        properties.setProperty("length", "209385038");
+        properties.setProperty("location", "D:\\a.txt");
+        // 打印属性集对象
+        System.out.println(properties);
+        // 通过键,获取属性值
+        System.out.println(properties.getProperty("filename"));
+        System.out.println(properties.getProperty("length"));
+        System.out.println(properties.getProperty("location"));
+
+        // 遍历属性集,获取所有键的集合
+        Set<String> strings = properties.stringPropertyNames();
+        // 打印键值对
+        for (String key : strings ) {
+          	System.out.println(key+" -- "+properties.getProperty(key));
+        }
+    }
+}
+输出结果：
+{filename=a.txt, length=209385038, location=D:\a.txt}
+a.txt
+209385038
+D:\a.txt
+filename -- a.txt
+length -- 209385038
+location -- D:\a.txt
+```
+
+**与流相关的方法**
+
+- `public void load(InputStream inStream)` ：从字节输入流中读取键值对。
+
+```java
+public class ProDemo2 {
+    public static void main(String[] args) throws FileNotFoundException {
+        // 创建属性集对象
+        Properties pro = new Properties();
+        // 加载文本中信息到属性集
+        pro.load(new FileInputStream("read.txt"));
+        // 遍历集合并打印
+        Set<String> strings = pro.stringPropertyNames();
+        for (String key : strings ) {
+          	System.out.println(key+" -- "+pro.getProperty(key));
+        }
+     }
+}
+输出结果：
+filename -- a.txt
+length -- 209385038
+location -- D:\a.txt
+```
+
+
+
+## 缓冲流
+
+缓冲流也叫高效流，是对4个基本的 `FileXxx` 流的增强。
+
+- **字节缓冲流**：`BufferedInputStream` , `BufferedOutputStream`
+- **字符缓冲流**：`BufferedReader` , `BufferedWriter`
+
+#### 字节缓冲流
+
+**构造方法**
+
+- `public BufferedInputStream(InputStream in)` ：创建缓冲输入流
+- `public BufferedOutputStream(OutputStream out)` ：创建缓冲输出流
+
+```java
+BufferedInputStream bis = new BufferedInputStream(new FileInputStream("a.txt"));
+BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("b.txt"));
+```
+
+#### 字符缓冲流
+
+**构造方法**
+
+- `public BufferedReader(Reader in)` ：创建缓冲输入流
+- `public BufferedWriter(Writer out)` ：创建缓冲输出流
+
+```java
+BufferedReader br = new BufferedReader(new FileReader("a.txt"));
+BufferedWriter bw = new BufferedWriter(new FileWriter("b.txt"));
+```
+
+**特有方法**
+
+- BufferedReader ：`public String readLine()` ：读取一行
+- BufferedWriter ：`public void newLine()` ：写一行分隔符，由系统属性定义符号
+
+
+
+## 转换流
+
+#### InputStreamReader 类
+
+转换流 `java.io.InputStreamReader` ，是 Reader 的子类，是字符流到字节流到桥梁。它读取字节，并使用指定 的字符集将其解码为字符。
+
+**构造方法**
+
+- `InputStreamReader(InputStream in)` ：创建一个使用默认字符集到字符流。
+- `InputStreamReader(InputStream in, String charsetName)` ：创建一个指定字符集的字符流。
+
+**指定编码读取**
+
+```java
+String fileName = "D:\\a.txt";
+InputStreamReader isr = new InputStreamReader(new FileInputStream(fileName), "GBK");
+int read;
+while ((read = isr.read()) != -1) {
+    System.out.println((char)read);
+}
+isr.close();
+```
+
+#### OutputStreamWriter 类
+
+转换流 `java.io.OutputStreamWriter` ，是Writer的子类，是重字符流到字节流的桥梁。
+
+**构造方法**
+
+- `OutputStreamWriter(OutputStream in)` ：创建一个使用默认字符集的字符流。
+- `OutputStreamWriter(OutputStream in, String charsetName)` ：创建一个指定字符集的字符流。
+
+```java
+OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(fileName),"GBK");
+```
 
 
 
 
 
+## 序列化
 
-
-
-
-
-
-
-
-
-
+day10
 
 
 
