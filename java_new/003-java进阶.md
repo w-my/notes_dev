@@ -2068,7 +2068,7 @@ fw.close();
 
 
 
-## IO 异常的处理
+### IO 异常的处理
 
 `try...catch...finally`
 
@@ -2176,7 +2176,7 @@ public class TryDemo {
 
 
 
-## 属性集
+### 属性集
 
 `java.util.Properties ` 继承于` Hashtable` ，来表示一个持久的属性集。它使用键值结构存储数据，每个键及其对应值都是一个字符串。该类也被许多Java类使用，比如获取系统属性时，`System.getProperties` 方法就是返回一个`Properties`对象。
 
@@ -2252,7 +2252,7 @@ location -- D:\a.txt
 
 
 
-## 缓冲流
+### 缓冲流
 
 缓冲流也叫高效流，是对4个基本的 `FileXxx` 流的增强。
 
@@ -2290,7 +2290,7 @@ BufferedWriter bw = new BufferedWriter(new FileWriter("b.txt"));
 
 
 
-## 转换流
+### 转换流
 
 #### InputStreamReader 类
 
@@ -2328,13 +2328,159 @@ OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream(fileName),"
 
 
 
+### 序列化
+
+Java 提供了一种对象**序列化**的机制。用一个字节序列可以表示一个对象，该字节序列包含该`对象的数据`、`对象的类型`和`对象中存储的属性`等信息。字节序列写出到文件之后，相当于文件中**持久保存**了一个对象的信息。 
+
+反之，该字节序列还可以从文件中读取回来，重构对象，对它进行**反序列化**。
+
+#### ObjectOutputStream 类
+
+`java.io.ObjectOutputStream` 类，将java对象的原始数据类型写出到文件，实现对象的持久存储。
+
+**构造方法**
+
+- `public ObjectOutputStream(OutputStream out)` ：创建一个指定OutputStreaam的ObjectOutputStream。
+
+```java
+FileOutputStream fileOut = new FileOutputStream("a.txt");
+ObjectOutputStream out = new ObjectOutputStream(fileOut);
+```
+
+**序列化操作**
+
+1. 一个对象想要序列化，必须满足两个条件：
+
+- 该类必须实现 `java.io.Serializable ` 接口，`Serializable` 是一个标记接口，不实现此接口的类将不会使任何状态序列化或反序列化，会抛出 `NotSerializableException` 。
+- 该类的所有属性必须是可序列化的。如果有一个属性不需要可序列化的，则该属性必须注明是瞬态的，使用 `transient` 关键字修饰。
+
+```java
+public class Employee implements java.io.Serialiizable {
+    public String name;
+    public String address;
+    public transient int age; // transient瞬态修饰成员，不会被序列化
+    public void addressCheck() {
+        System.out.println("Address check: " + name + " -- " + address);
+    }
+}
+```
+
+2. 写出对象方法
+
+- `public final void writeObject(Object obj)` ：将制定的对象写出。
+
+```java
+public static void main(String[] args) {
+    Employee e = new Employee();
+    e.name = "aa";
+    e.address = "bb";
+    e.age = 20;
+    try {
+        FileOutputStream fileOut = new FileOutputStream("a.txt");
+        ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        out.writeObject(e);
+        out.close();
+        fileOut.close();
+        System.out.println("Serialized data is saved");
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+```
+
+#### ObjectInputStream 类
+
+ObjectInputStream反序列化流，将之前使用ObjectOutputStream序列化的原始数据恢复为对象。
+
+**构造方法**
+
+- `public ObjectInputStream(InputStream in)` ：创建一个指定InputStream的ObjectInputStream。
+
+**反序列化操作1**
+
+- `public final Object readObject()` ：读取一个对象。
+
+```java
+public static void main(String[] args) {
+    Employee e = null;
+    try {
+        FileInputStream fileIn = new FileInputStream("a.txt");
+        ObjectInputStream in = new ObjectInputStream(fileIn);
+        e = (Employee) in.readObject();
+        in.close();
+        fileIn.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+        return;
+    } catch (ClassNotFoundException c) {
+        System.out.println("Employee class not found");
+        c.printStackTrace();
+        return;
+    }
+    System.out.println("Name：" + e.name);
+    System.out.println("Address：" + e.address);
+    System.out.println("age：" + e.age);
+}
+```
+
+**对于JVM可以反序列化对象，它必须是能够找到class文件的类。如果找不到该类的class文件，则抛出一个 `ClassNotFoundException` 异常。**
+
+**反序列化操作2**
+
+**另外，当JVM反序列化对象时，能找到class文件，但是class文件在序列化对象之后发生了修改，那么反序列化操作也会失败，抛出一个`InvalidClassException`异常。**发生这个异常的原因如下：
+
+- 该类的序列版本号与从流中读取的类描述符的版本号不匹配 
+- 该类包含未知数据类型 
+- 该类没有可访问的无参数构造方法 
+
+`Serializable` 接口给需要序列化的类，提供了一个序列版本号。`serialVersionUID` 该版本号的目的在于验证序列化的对象和对应类是否版本匹配。
+
+```java
+public class Employee implements java.io.Serializable {
+     // 加入序列版本号
+     private static final long serialVersionUID = 1L;
+     public String name;
+     public String address;
+     // 添加新的属性 ,重新编译, 可以反序列化,该属性赋为默认值.
+     public int eid; 
+
+     public void addressCheck() {
+         System.out.println("Address  check : " + name + " -- " + address);
+     }
+}
+```
 
 
-## 序列化
 
-day10
+### 打印流
 
+`print` 方法和 `println` 方法，都来自于 `java.io.PrintStream` 类。
 
+#### PrintStream 类
 
+**构造方法**
+
+- `public PrintStream(String fileName)` ：使用指定的文件名创建一个新的打印流。
+
+#### 改变打印流向
+
+`System.out` 就是 `PrintStream` 类型的，只不过它的流向是系统规定的，打印在控制台上。不过，既然是流对象，就可以改变它的流向。
+
+```java
+public class PrintDemo {
+    public static void main(String[] args) throws IOException {
+        // 调用系统的打印流,控制台直接输出97
+        System.out.println(97);
+      
+				// 创建打印流,指定文件的名称
+        PrintStream ps = new PrintStream("ps.txt");
+      	
+      	// 设置系统的打印流流向,输出到ps.txt
+        System.setOut(ps);
+      	// 调用系统的打印流,ps.txt中输出97
+        System.out.println(97);
+    }
+}
+```
 
 
