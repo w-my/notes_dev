@@ -162,25 +162,216 @@ ServerSocket server = new ServerSocket(6666);
 
 ##### TCP 通信分析图解
 
+1. 【服务端】启动,创建ServerSocket对象，等待连接。
+2. 【客户端】启动,创建Socket对象，请求连接。
+3. 【服务端】接收连接,调用accept方法，并返回一个Socket对象。
+4. 【客户端】Socket对象，获取OutputStream，向服务端写出数据。
+5. 【服务端】Scoket对象，获取InputStream，读取客户端发送的数据。
 
+> 到此，客户端向服务端发送数据成功。
+
+![004-TCP通信分析图解](./img/004-TCP通信分析图解.png)
+
+> 自此，服务端向客户端回写数据。
+
+6. 【服务端】Socket对象，获取OutputStream，向客户端回写数据。
+7. 【客户端】Scoket对象，获取InputStream，解析回写数据。
+8. 【客户端】释放资源，断开连接。
 
 ##### 客户端向服务端发送数据
 
+**服务端实现**
 
+```java
+public class ServerTCP {
+	public static void main(String[] args) throws IOException {
+		System.out.println("服务端启动，等待连接...");
+		// 1.创建 ServerSocket对象，绑定端口，开始等待连接
+		ServerSocket ss = new ServerSocket(6666);
+		// 2.接收连接 accept 方法, 返回 socket 对象.
+		Socket server = ss.accept();
+		// 3.通过socket 获取输入流
+		InputStream is = server.getInputStream();
+		byte[] b = new byte[1024];
+		int len = is.read(b);
+		String msg = new String(b, 0, len);
+		System.out.println(msg);
+		is.close();
+		server.close();
+	}
+}
+```
+
+**客户端实现**
+
+```java
+public class ClientTCP {
+	public static void main(String[] args) throws Exception {
+		System.out.println("客户端 发送数据");
+		Socket client = new Socket("localhost", 6666);
+		OutputStream os = client.getOutputStream();
+		os.write("你好，tcp".getBytes());
+		os.close();
+		client.close();
+	}
+}
+```
 
 ##### 服务器向客户端回写数据
 
+**服务端实现：**
 
+```java
+public class ServerTCP {
+    public static void main(String[] args) throws IOException {
+        System.out.println("服务端启动 , 等待连接 .... ");
+        // 1.创建 ServerSocket对象，绑定端口，开始等待连接
+        ServerSocket ss = new ServerSocket(6666);
+        // 2.接收连接 accept 方法, 返回 socket 对象.
+        Socket server = ss.accept();
+        // 3.通过socket 获取输入流
+        InputStream is = server.getInputStream();
+        // 4.一次性读取数据
+      	// 4.1 创建字节数组
+        byte[] b = new byte[1024];
+      	// 4.2 据读取到字节数组中.
+        int len = is.read(b)；
+        // 4.3 解析数组,打印字符串信息
+        String msg = new String(b, 0, len);
+        System.out.println(msg);
+      	// =================回写数据=======================
+      	// 5. 通过 socket 获取输出流
+      	 OutputStream out = server.getOutputStream();
+      	// 6. 回写数据
+      	 out.write("我很好,谢谢你".getBytes());
+      	// 7.关闭资源.
+      	out.close();
+        is.close();
+        server.close();
+    }
+}
+```
+
+**客户端实现：**
+
+```java
+public class ClientTCP {
+	public static void main(String[] args) throws Exception {
+		System.out.println("客户端 发送数据");
+		// 1.创建 Socket ( ip , port ) , 确定连接到哪里.
+		Socket client = new Socket("localhost", 6666);
+		// 2.通过Scoket,获取输出流对象 
+		OutputStream os = client.getOutputStream();
+		// 3.写出数据.
+		os.write("你好么? tcp ,我来了".getBytes());
+      	// ==============解析回写=========================
+      	// 4. 通过Scoket,获取 输入流对象
+      	InputStream in = client.getInputStream();
+      	// 5. 读取数据数据
+      	byte[] b = new byte[100];
+      	int len = in.read(b);
+      	System.out.println(new String(b, 0, len));
+		// 6. 关闭资源 .
+      	in.close();
+		os.close();
+		client.close();
+	}
+}
+```
 
 ## 综合案例
 
-
-
 #### 文件上传案例
 
+**保存文件**
 
+```java
+public class FileUpload_Server {
+    public static void main(String[] args) throws IOException {
+        System.out.println("服务器 启动.....  ");
+        // 1. 创建服务端ServerSocket
+        ServerSocket serverSocket = new ServerSocket(6666);
+      	// 2. 循环接收,建立连接
+        while (true) {
+            Socket accept = serverSocket.accept();
+          	/* 
+          	3. socket对象交给子线程处理,进行读写操作
+               Runnable接口中,只有一个run方法,使用lambda表达式简化格式
+            */
+            new Thread(() -> {
+                try (
+                    //3.1 获取输入流对象
+                    BufferedInputStream bis = new BufferedInputStream(accept.getInputStream());
+                    //3.2 创建输出流对象, 保存到本地 .
+                    FileOutputStream fis = new FileOutputStream(System.currentTimeMillis() + ".jpg");
+                    BufferedOutputStream bos = new BufferedOutputStream(fis);) {
+                    // 3.3 读写数据
+                    byte[] b = new byte[1024 * 8];
+                    int len;
+                    while ((len = bis.read(b)) != -1) {
+                      bos.write(b, 0, len);
+                    }
+                    //4. 关闭 资源
+                    bos.close();
+                    bis.close();
+                    accept.close();
+                    System.out.println("文件上传已保存");
+                } catch (IOException e) {
+                  	e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+}
 
+**回写文件**
 
+```java
+public class FileUpload_Server {
+    public static void main(String[] args) throws IOException {
+        System.out.println("服务器 启动.....  ");
+        // 1. 创建服务端ServerSocket
+        ServerSocket serverSocket = new ServerSocket(6666);
+        // 2. 循环接收,建立连接
+        while (true) {
+            Socket accept = serverSocket.accept();
+          	/*
+          	3. socket对象交给子线程处理,进行读写操作
+               Runnable接口中,只有一个run方法,使用lambda表达式简化格式
+            */
+            new Thread(() -> {
+                try (
+                    //3.1 获取输入流对象
+                    BufferedInputStream bis = new BufferedInputStream(accept.getInputStream());
+                    //3.2 创建输出流对象, 保存到本地 .
+                    FileOutputStream fis = new FileOutputStream(System.currentTimeMillis() + ".jpg");
+                    BufferedOutputStream bos = new BufferedOutputStream(fis);
+                ) {
+                    // 3.3 读写数据
+                    byte[] b = new byte[1024 * 8];
+                    int len;
+                    while ((len = bis.read(b)) != -1) {
+                        bos.write(b, 0, len);
+                    }
 
-#### 模拟 B\S 服务器
+                    // 4.=======信息回写===========================
+                    System.out.println("back ........");
+                    OutputStream out = accept.getOutputStream();
+                    out.write("上传成功".getBytes());
+                    out.close();
+                    //================================
+
+                    //5. 关闭 资源
+                    bos.close();
+                    bis.close();
+                    accept.close();
+                    System.out.println("文件上传已保存");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+}
+```
 
