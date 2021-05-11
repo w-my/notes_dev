@@ -1,8 +1,10 @@
-# Java 进阶 - 函数式接口
+# Java 进阶 - 函数式接口、Stream流、方法引用
 
 - 自定义函数接口
 - 函数式编程
 - 常用函数式接口
+- Stream流
+- 方法引用
 
 
 
@@ -496,6 +498,185 @@ public static void main(String[] args) {
                                Function<Integer, Integer> three) {
   	return one.andThen(two).andThen(three).apply(str);
 	} 
+}
+```
+
+
+
+## Stream 流
+
+I/O Stream之外，在 Java 8 中，得益于Lambda带来的函数式编程，引入了全新的 **Stream** 概念，用于解决已有集合类库既有的弊端。
+
+#### 替代集合复杂的遍历
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Demo {
+    public static void main(String[] args) {
+        List<String> list = new ArrayList<String>();
+        list.add("张无忌");
+        list.add("周芷若");
+        list.add("赵敏");
+        list.add("张三");
+        list.add("张三丰");
+
+        list.stream()
+                .filter(s -> s.startsWith("张"))
+                .filter(s -> s.length() == 3)
+                .forEach(System.out::println);
+    }
+}
+```
+
+以上代码实现：**获取流、过滤姓张、过滤长度为3、逐一打印**。
+
+#### 获取流
+
+`java.util.stream.Stream<T>` 
+
+- 所有的 `Collection` 集合都可以通过 `stream` 默认方法获取流。
+- `Stream` 接口的静态方法 `of` 可以获取数组对应的流。
+
+##### 根据 Collection 获取流
+
+```java
+List<String> list = new ArrayList<>();
+Stream<String> stream1 = list.stream();
+
+Set<String> set = new HashSet<>();
+Stream<String> stream2 = set.stream();
+```
+
+##### 根据 Map 获取流
+
+```java
+Map<String, String> map = new HashMap<>();
+Stream<String> keyStream = map.keySet().stream();
+Stream<String> valueStream = map.values().stream();
+Stream<Map.Entry<String, String> entryStream = map.entrySet().stream();
+```
+
+##### 根据数组获取流
+
+如果使用的不是集合或映射而是数组，由于数组对象不可能添加默认方法，所以 Stream 接口中提供了静态方法 of ，使用很简单:
+
+```java
+String[] array = {"aa", "bb", "cc", "dd"};
+Stream<String> stream = Stream.of(array);
+```
+
+#### 常用方法
+
+##### 逐一处理：forEach
+
+```java
+void forEach(Consumer<? super T> action);
+```
+
+```java
+Stream<String> stream = Stream.of("aa", "bb", "cc", "dd");
+stream.forEach(str -> System.out.println(str));
+```
+
+##### 过滤：filter
+
+```java
+Stream<T> filter(Predicate<? super T> predicate);
+```
+
+该接口接收一个 `predicate` 函数式接口参数（可以是一个 Lambda 或方法引用）作为筛选条件。
+
+```java
+Stream<String> original = Stream.of("aa", "bb", "ab", "bc");
+Stream<String> result = original.filter(s -> s.startsWith("a"));
+```
+
+筛选以a开头的字符串作为结果。
+
+##### 映射：map
+
+可以将流中的元素映射到另一个流中。
+
+```java
+<R> Stream<R> map(Function<? super T, ? extends R> mapper);
+```
+
+```java
+Stream<String> original = Stream.of("10", "12", "16");
+Stream<Integer> result = original.map(str -> Integer.parseInt(str));
+```
+
+##### 统计个数：count
+
+```java
+Stream<String> original = Stream.of("aa", "bb", "ab", "cc");
+Stream<String> result = original.filter(s -> s.startsWith("a"));
+System.out.println(result.count()); // 2
+```
+
+##### 取用前几个：limit
+
+```java
+Stream<T> limit(long maxSize);
+```
+
+```java
+Stream<String> original = Stream.of("aa", "bb", "ab", "cc");
+Stream<String> result = original.limit(2);
+System.out.println(result.count()); // 2
+```
+
+##### 跳过前几个：skip
+
+```java
+Stream<T> skip(long n);
+```
+
+```java
+Stream<String> original = Stream.of("aa", "bb", "cc");
+Stream<String> result = original.skip(2);
+System.out.println(result.count()); // 1
+```
+
+##### 组合：concat
+
+```java
+static <T> Stream<T> concat(Stream<? extends T> a, Stream<? extends T> b)
+```
+
+```java
+Stream<String> stream1 = Stream.of("aa");
+Stream<String> stream2 = Stream.of("bb");
+Stream<String> result = Stream.concat(stream1, stream2);
+```
+
+
+
+## 方法引用
+
+`::`
+
+```java
+public class Demo01PrintSimple {
+    private static void printString(Printable data) {
+				data.print("Hello, World!");
+    }
+    public static void main(String[] args) {
+				printString(s ‐> System.out.println(s));
+    } 
+}
+```
+
+```java
+public class Demo02PrintRef {
+    private static void printString(Printable data) {
+        data.print("Hello, World!");
+    }
+    public static void main(String[] args) {
+        printString(System.out::println);
+    } 
 }
 ```
 
