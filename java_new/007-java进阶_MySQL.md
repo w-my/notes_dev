@@ -142,14 +142,13 @@ mysql.server start
 				1. int：整数类型
 					* age int,
 				2. double:小数类型
-					* score double(5,2)
+					* score double(5,2) // 一共5位，小数2位
 				3. date:日期，只包含年月日，yyyy-MM-dd
 				4. datetime:日期，包含年月日时分秒	 yyyy-MM-dd HH:mm:ss
 				5. timestamp:时间戳类型	包含年月日时分秒	 yyyy-MM-dd HH:mm:ss	
 					* 如果将来不给这个字段赋值，或赋值为null，则默认使用当前的系统时间，来自动赋值
 				6. varchar：字符串
 					* name varchar(20):姓名最大20个字符
-					* zhangsan 8个字符  张三 2个字符
       * 创建表
         create table student(
           id int,
