@@ -22,7 +22,7 @@ MySQL安装目录：
 
 添加环境变量：
 
-用户跟目录打开 .zshrc 添加环境变量
+用户根目录打开 .zshrc 添加环境变量
 
 ```
 cd ~
@@ -63,7 +63,7 @@ mysql.server start
 - `mysql -h<ip> -uroot -p<密码>`
 - `mysql --host=<ip> --user=root --password=<密码>`
 
-##### MySQL 推出
+##### MySQL 退出
 
 - `exit`
 - `quit`
@@ -173,7 +173,7 @@ mysql.server start
       3. 添加一列
         alter table 表名 add 列名 数据类型;
       4. 修改列名称 类型
-        alter table 表名 change 列名 新列别 新数据类型;
+        alter table 表名 change 列名 新列名 新数据类型;
         alter table 表名 modify 列名 新数据类型;
       5. 删除列
         alter table 表名 drop 列名;
@@ -182,7 +182,8 @@ mysql.server start
       * drop table  if exists 表名 ;
 ```
 
-- 客户端图形化工具：SQLYog
+- 图形化工具：SQLYog
+- Mac端图形化工具：Navicat Premium
 
 #### DML：增删改表中数据
 
@@ -202,7 +203,7 @@ mysql.server start
 		1. 如果不加条件，则删除表中所有记录。
 		2. 如果要删除所有记录
 			1. delete from 表名; -- 不推荐使用。有多少条记录就会执行多少次删除操作
-			2. TRUNCATE TABLE 表名; -- 推荐使用，效率更高 先删除表，然后再创建一张一样的表。
+			2. TRUNCATE TABLE 表名; -- 推荐使用，效率更高。先删除表，然后再创建一张一样的表。
 3. 修改数据：
 	* 语法：
 		* update 表名 set 列名1 = 值1, 列名2 = 值2,... [where 条件];
@@ -295,7 +296,7 @@ mysql.server start
 			SELECT * FROM student WHERE english IS NULL;
 			
 			-- 查询英语成绩不为null
-			SELECT * FROM student WHERE english  IS NOT NULL;
+			SELECT * FROM student WHERE english IS NOT NULL;
 ```
 
 ```
