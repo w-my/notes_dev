@@ -365,6 +365,82 @@ mysql.server start
   3. limit 是一个MySQL"方言"
 ```
 
+#### DCL：管理用户，授权
+
+DBA：数据库管理员
+
+##### 管理用户
+
+###### 添加用户
+
+```mysql
+CREATE USER '用户名'@'主机名' IDENTIFIED BY '密码';
+```
+
+###### 删除用户
+
+```mysql
+DROP USER '用户名'@'主机名';
+```
+
+###### 修改用户密码
+
+```mysql
+UPDATE USER SET PASSWORD = PASSWORD('新密码') WHERE USER = '用户名';
+UPDATE USER SET PASSWORD = PASSWORD('abc') WHERE USER = 'lisi';
+
+SET PASSWORD FOR '用户名'@'主机名' = PASSWORD('新密码');
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123');
+
+* mysql中忘记了root用户的密码？
+  1. cmd -- > net stop mysql 停止mysql服务
+    * 需要管理员运行该cmd
+
+  2. 使用无验证方式启动mysql服务： mysqld --skip-grant-tables
+  3. 打开新的cmd窗口,直接输入mysql命令，敲回车。就可以登录成功
+  4. use mysql;
+  5. update user set password = password('你的新密码') where user = 'root';
+  6. 关闭两个窗口
+  7. 打开任务管理器，手动结束mysqld.exe 的进程
+  8. 启动mysql服务
+  9. 使用新密码登录。
+```
+
+###### 查询用户
+
+```mysql
+-- 1. 切换到mysql数据库
+USE myql;
+-- 2. 查询user表
+SELECT * FROM USER;
+
+通配符： % 表示可以在任意主机使用用户登录数据库
+```
+
+##### 权限管理
+
+###### 查询权限
+
+```mysql
+SHOW GRANTS FOR '用户名'@'主机名';
+SHOW GRANTS FOR 'lisi'@'%';
+```
+
+###### 授予权限
+
+```mysql
+GRANT 权限列表 TO 数据库名.表名 TO '用户名'@'主机名';
+-- 给张三用户授予所有权限，在任意数据库任意表上
+GRANT ALL ON *.* TO 'zhangsan'@'localhost';
+```
+
+###### 撤销权限
+
+```mysql
+REVOKE 权限列表 ON 数据库名.表名 FROM '用户名'@'主机名';
+REVOKE UPDATE ON db3.`account` FROM 'lisi'@'%';
+```
+
 #### 约束
 
 概念： 对表中的数据进行限定，保证数据的正确性、有效性和完整性。
@@ -721,7 +797,7 @@ SELECT * FROM emp WHERE salary = (SELECT MAX(salary) FROM emp);
 
 **多表查询练习**
 
-```
+```mysql
 -- 部门表
 CREATE TABLE dept (
   id INT PRIMARY KEY, -- 部门id
@@ -737,7 +813,7 @@ INSERT INTO dept(id,dname,loc) VALUES
 (40,'财务部','深圳');
 ```
 
-```
+```mysql
 -- 职务表，职务名称，职务描述
 CREATE TABLE job (
   id INT PRIMARY KEY,
@@ -753,7 +829,7 @@ INSERT INTO job (id, jname, description) VALUES
 (4, '文员', '使用办公软件');
 ```
 
-```
+```mysql
 -- 员工表
 CREATE TABLE emp (
   id INT PRIMARY KEY, -- 员工id
@@ -786,7 +862,7 @@ INSERT INTO emp(id,ename,job_id,mgr,joindate,salary,bonus,dept_id) VALUES
 (1014,'关羽',4,1007,'2002-01-23','13000.00',NULL,10);
 ```
 
-```
+```mysql
 -- 工资等级表
 CREATE TABLE salarygrade (
   grade INT PRIMARY KEY,   -- 级别
@@ -919,9 +995,7 @@ select
   t2.ename
 from emp t1, emp t2
 where t1.mgr = t2.`id`;
-
 */
-
 SELECT 
   t1.ename,
   t1.mgr,
@@ -936,168 +1010,103 @@ ON t1.`mgr` = t2.`id`;
 
 #### 事物
 
-```
-1. 事务的基本介绍
-	1. 概念：
-		*  如果一个包含多个步骤的业务操作，被事务管理，那么这些操作要么同时成功，要么同时失败。
-		
-	2. 操作：
-		1. 开启事务： start transaction;
-		2. 回滚：rollback;
-		3. 提交：commit;
-	3. 例子：
-		CREATE TABLE account (
-			id INT PRIMARY KEY AUTO_INCREMENT,
-			NAME VARCHAR(10),
-			balance DOUBLE
-		);
-		-- 添加数据
-		INSERT INTO account (NAME, balance) VALUES ('zhangsan', 1000), ('lisi', 1000);
-```
+##### 事务的基本介绍
 
+###### 概念
 
+如果一个包含多个步骤的业务操作，被事务管理，那么这些操作要么同时成功，要么同时失败。
 
-```
-		SELECT * FROM account;
-		UPDATE account SET balance = 1000;
-		-- 张三给李四转账 500 元
-		
-		-- 0. 开启事务
-		START TRANSACTION;
-		-- 1. 张三账户 -500
-		
-		UPDATE account SET balance = balance - 500 WHERE NAME = 'zhangsan';
-		-- 2. 李四账户 +500
-		-- 出错了...
-		UPDATE account SET balance = balance + 500 WHERE NAME = 'lisi';
-		
-		-- 发现执行没有问题，提交事务
-		COMMIT;
-		
-		-- 发现出问题了，回滚事务
-		ROLLBACK;
-	4. MySQL数据库中事务默认自动提交
-		
-		* 事务提交的两种方式：
-			* 自动提交：
-				* mysql就是自动提交的
-				* 一条DML(增删改)语句会自动提交一次事务。
-			* 手动提交：
-				* Oracle 数据库默认是手动提交事务
-				* 需要先开启事务，再提交
-		* 修改事务的默认提交方式：
-			* 查看事务的默认提交方式：SELECT @@autocommit; -- 1 代表自动提交  0 代表手动提交
-			* 修改默认提交方式： set @@autocommit = 0;
+###### 操作
+
+1. 开启事务： start transaction;
+2. 回滚：rollback;
+3. 提交：commit;
+
+###### 例子
+
+```mysql
+CREATE TABLE account (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  NAME VARCHAR(10),
+  balance DOUBLE
+);
+-- 添加数据
+INSERT INTO account (NAME, balance) VALUES ('zhangsan', 1000), ('lisi', 1000);
+    SELECT * FROM account;
+UPDATE account SET balance = 1000;
+-- 张三给李四转账 500 元
+
+-- 0. 开启事务
+START TRANSACTION;
+-- 1. 张三账户 -500
+
+UPDATE account SET balance = balance - 500 WHERE NAME = 'zhangsan';
+-- 2. 李四账户 +500
+-- 出错了...
+UPDATE account SET balance = balance + 500 WHERE NAME = 'lisi';
+
+-- 发现执行没有问题，提交事务
+COMMIT;
+
+-- 发现出问题了，回滚事务
+ROLLBACK;
 ```
 
+###### MySQL数据库中事务默认自动提交
 
+* 事务提交的两种方式：
+  * 自动提交：
+    * mysql 就是自动提交的
+    * 一条DML(增删改)语句会自动提交一次事务。
+  * 手动提交：
+    * Oracle 数据库默认是手动提交事务
+    * 需要先开启事务，再提交
+* 修改事务的默认提交方式：
+  * 查看事务的默认提交方式：SELECT @@autocommit; -- 1 代表自动提交  0 代表手动提交
+  * 修改默认提交方式： set @@autocommit = 0;
 
+##### 事务的四大特征
+
+1. 原子性：是不可分割的最小操作单位，要么同时成功，要么同时失败。
+2. 持久性：当事务提交或回滚后，数据库会持久化的保存数据。
+3. 隔离性：多个事务之间。相互独立。
+4. 一致性：事务操作前后，数据总量不变
+
+##### 事务的隔离级别
+
+###### 概念
+
+多个事务之间隔离的，相互独立的。但是如果多个事务操作同一批数据，则会引发一些问题，设置不同的隔离级别就可以解决这些问题。
+
+###### 存在问题
+
+1. 脏读：一个事务，读取到另一个事务中没有提交的数据
+2. 不可重复读(虚读)：在同一个事务中，两次读取到的数据不一样。
+3. 幻读：一个事务操作(DML)数据表中所有记录，另一个事务添加了一条数据，则第一个事务查询不到自己的修改。
+
+###### 隔离级别
+
+1. read uncommitted：读未提交
+  * 产生的问题：脏读、不可重复读、幻读
+2. read committed：读已提交 （Oracle）
+  * 产生的问题：不可重复读、幻读
+3. repeatable read：可重复读 （MySQL默认）
+  * 产生的问题：幻读
+4. serializable：串行化
+  * 可以解决所有的问题
+
+* 注意：隔离级别从小到大安全性越来越高，但是效率越来越低
+* 数据库查询隔离级别：
+  * select @@tx_isolation;
+* 数据库设置隔离级别：
+  * set global transaction isolation level  级别字符串;
+
+**演示**
+
+```mysql
+set global transaction isolation level read uncommitted;
+start transaction;
+-- 转账操作
+update account set balance = balance - 500 where id = 1;
+update account set balance = balance + 500 where id = 2;
 ```
-2. 事务的四大特征：
-	1. 原子性：是不可分割的最小操作单位，要么同时成功，要么同时失败。
-	2. 持久性：当事务提交或回滚后，数据库会持久化的保存数据。
-	3. 隔离性：多个事务之间。相互独立。
-	4. 一致性：事务操作前后，数据总量不变
-3. 事务的隔离级别（了解）
-	* 概念：多个事务之间隔离的，相互独立的。但是如果多个事务操作同一批数据，则会引发一些问题，设置不同的隔离级别就可以解决这些问题。
-	* 存在问题：
-		1. 脏读：一个事务，读取到另一个事务中没有提交的数据
-		2. 不可重复读(虚读)：在同一个事务中，两次读取到的数据不一样。
-		3. 幻读：一个事务操作(DML)数据表中所有记录，另一个事务添加了一条数据，则第一个事务查询不到自己的修改。
-	* 隔离级别：
-		1. read uncommitted：读未提交
-			* 产生的问题：脏读、不可重复读、幻读
-		2. read committed：读已提交 （Oracle）
-			* 产生的问题：不可重复读、幻读
-		3. repeatable read：可重复读 （MySQL默认）
-			* 产生的问题：幻读
-		4. serializable：串行化
-			* 可以解决所有的问题
-
-		* 注意：隔离级别从小到大安全性越来越高，但是效率越来越低
-		* 数据库查询隔离级别：
-			* select @@tx_isolation;
-		* 数据库设置隔离级别：
-			* set global transaction isolation level  级别字符串;
-
-	* 演示：
-		set global transaction isolation level read uncommitted;
-		start transaction;
-		-- 转账操作
-		update account set balance = balance - 500 where id = 1;
-		update account set balance = balance + 500 where id = 2;
-```
-
-
-
-#### DCL
-
-```* SQL分类：
-	1. DDL：操作数据库和表
-	2. DML：增删改表中数据
-	3. DQL：查询表中数据
-	4. DCL：管理用户，授权
-
-* DBA：数据库管理员
-
-* DCL：管理用户，授权
-	1. 管理用户
-		1. 添加用户：
-			* 语法：CREATE USER '用户名'@'主机名' IDENTIFIED BY '密码';
-		2. 删除用户：
-			* 语法：DROP USER '用户名'@'主机名';
-		3. 修改用户密码：
-			
-			UPDATE USER SET PASSWORD = PASSWORD('新密码') WHERE USER = '用户名';
-			UPDATE USER SET PASSWORD = PASSWORD('abc') WHERE USER = 'lisi';
-			
-			SET PASSWORD FOR '用户名'@'主机名' = PASSWORD('新密码');
-			SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123');
-
-			* mysql中忘记了root用户的密码？
-				1. cmd -- > net stop mysql 停止mysql服务
-					* 需要管理员运行该cmd
-
-				2. 使用无验证方式启动mysql服务： mysqld --skip-grant-tables
-				3. 打开新的cmd窗口,直接输入mysql命令，敲回车。就可以登录成功
-				4. use mysql;
-				5. update user set password = password('你的新密码') where user = 'root';
-				6. 关闭两个窗口
-				7. 打开任务管理器，手动结束mysqld.exe 的进程
-				8. 启动mysql服务
-				9. 使用新密码登录。
-		4. 查询用户：
-			-- 1. 切换到mysql数据库
-			USE myql;
-			-- 2. 查询user表
-			SELECT * FROM USER;
-			
-			* 通配符： % 表示可以在任意主机使用用户登录数据库
-
-	2. 权限管理：
-		1. 查询权限：
-			-- 查询权限
-			SHOW GRANTS FOR '用户名'@'主机名';
-			SHOW GRANTS FOR 'lisi'@'%';
-
-		2. 授予权限：
-			-- 授予权限
-			grant 权限列表 on 数据库名.表名 to '用户名'@'主机名';
-			-- 给张三用户授予所有权限，在任意数据库任意表上
-			
-			GRANT ALL ON *.* TO 'zhangsan'@'localhost';
-		3. 撤销权限：
-			-- 撤销权限：
-			revoke 权限列表 on 数据库名.表名 from '用户名'@'主机名';
-			REVOKE UPDATE ON db3.`account` FROM 'lisi'@'%';
-
-
-
-
-
-
-
-
-
-
-
