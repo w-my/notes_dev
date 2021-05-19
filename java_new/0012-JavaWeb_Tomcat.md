@@ -25,34 +25,26 @@ web服务器软件
 
 
 	1. 下载：http://tomcat.apache.org/
-	2. 安装：解压压缩包即可。
-	  * 注意：安装目录建议不要有中文和空格
+	2. 安装（Mac端）：解压压缩包放到期望的位置即可。
+	  * 注意：安装目录不要有中文和空格
 	3. 卸载：删除目录就行了
 	4. 启动：
-	  * bin/startup.bat ,双击运行该文件即可
-	  * 访问：浏览器输入：http://localhost:8080 回车访问自己
-	            http://别人的ip:8080 访问别人
-	  * 可能遇到的问题：
-	    1. 黑窗口一闪而过：
-	      * 原因：没有正确配置JAVA_HOME环境变量
-	      * 解决方案：正确配置JAVA_HOME环境变量
-	    2. 启动报错：
-	      1. 暴力：找到占用的端口号，并且找到对应的进程，杀死该进程
-	        * netstat -ano
-	      2. 温柔：修改自身的端口号
-	        * conf/server.xml
-	        * <Connector port="8888" protocol="HTTP/1.1"
-	                 connectionTimeout="20000"
-	                 redirectPort="8445" />
-	        * 一般会将tomcat的默认端口号修改为80。80端口号是http协议的默认端口号。
-	          * 好处：在访问时，就不用输入端口号
+	  * 终端进入安装目录/bin下，执行 `startup.sh`
+	  * 访问：浏览器输入：
+	  			http://localhost:8080 访问自己
+	        http://别人的ip:8080 访问别人
 	5. 关闭：
 	  1. 正常关闭：
-	    * bin/shutdown.bat
+	    * 终端进入安装目录/bin下，执行 `shutdown.bat`
 	    * ctrl+c
 	  2. 强制关闭：
 	    * 点击启动窗口的×
-	6. 配置:
+	6. 配置全局路径访问：
+		* 编辑配置文件：`vim ~/.bash_profile`
+		* 文件中加入执行文件路径： `export PATH=$PATH:/Library/apache-tomcat-10.0.6/bin`
+		* 保存关闭后，刷新文件：`source ~/.bash_profile`
+		* 之后就可以直接使用 `startup.sh` 或 `shutdown.sh` 开启后关闭tomcat服务了
+	7. 配置：
 	  * 部署项目的方式：
 	    1. 直接将项目放到webapps目录下即可。
 	      * /hello：项目的访问路径-->虚拟目录
