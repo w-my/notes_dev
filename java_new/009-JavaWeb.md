@@ -293,7 +293,6 @@
 				* box-sizing: border-box;  设置盒子的属性，让width和height就是最终盒子的大小
 			* float：浮动
 				* left
-				* center
 				* right
 
 
@@ -606,17 +605,21 @@
             * replaceChild()：用新节点替换一个子节点。
         * 属性：
           * parentNode 返回节点的父节点。
-        * HTML DOM
-          1. 标签体的设置和获取：innerHTML
-          2. 使用html元素对象的属性
-          3. 控制元素样式
-            1. 使用元素的style属性来设置
-              //修改样式方式1
-              div1.style.border = "1px solid red";
-              div1.style.width = "200px";
-              //font-size--> fontSize
-              div1.style.fontSize = "20px";
-            2. 提前定义好类选择器的样式，通过元素的className属性来设置其class属性值。
+      * HTML DOM
+        1. 标签体的设置和获取：innerHTML
+        2. 使用html元素对象的属性
+        3. 控制元素样式
+          1. 使用元素的style属性来设置
+            //修改样式方式1
+            div1.style.border = "1px solid red";
+            div1.style.width = "200px";
+            //font-size --> fontSize
+            div1.style.fontSize = "20px";
+          2. 提前定义好类选择器的样式，通过元素的className属性来设置其class属性值。
+```
+
+```html
+<a href="javascript:void(0);">实现点击不跳转刷新</a>
 ```
 
 
