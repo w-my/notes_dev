@@ -1,4 +1,4 @@
-# JavaWeb - Tomcat
+# JavaWeb - Tomcat&Servlet
 
 
 
@@ -177,14 +177,31 @@ public @interface WebServlet {
 }
 ```
 
+#### Servlet 结构体系
 
+```
+Servlet -- 接口
+  |
+GenericServlet -- 抽象类
+  |
+HttpServlet  -- 抽象类
 
-## IDEA与tomcat的相关配置
+* GenericServlet：将Servlet接口中其他的方法做了默认空实现，只将service()方法作为抽象
+  * 将来定义Servlet类时，可以继承GenericServlet，实现service()方法即可
 
-	1. IDEA会为每一个tomcat部署的项目单独建立一份配置文件
-		* 查看控制台的log：Using CATALINA_BASE:   "C:\Users\fqy\.IntelliJIdea2018.1\system\tomcat\_itcast"
-	
-	2. 工作空间项目 和 tomcat部署的web项目
-		* tomcat真正访问的是“tomcat部署的web项目”，"tomcat部署的web项目"对应着"工作空间项目" 的web目录下的所有资源
-		* WEB-INF目录下的资源不能被浏览器直接访问。
-	3. 断点调试：使用"小虫子"启动 dubug 启动
+* HttpServlet：对http协议的一种封装，简化操作
+  1. 定义类继承HttpServlet
+  2. 复写doGet/doPost方法
+```
+
+#### Servlet相关配置
+
+```
+1. urlpartten:Servlet访问路径
+  1. 一个Servlet可以定义多个访问路径 ： @WebServlet({"/d4","/dd4","/ddd4"})
+  2. 路径定义规则：
+    1. /xxx：路径匹配
+    2. /xxx/xxx:多层路径，目录结构
+    3. *.do：扩展名匹配
+```
+
