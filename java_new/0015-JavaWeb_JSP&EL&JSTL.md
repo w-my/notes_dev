@@ -74,3 +74,112 @@ JSP定义Java代码的方式
 		* 在tomcat服务器真正给客户端做出响应之前，会先找response缓冲区数据，再找out缓冲区数据。				
 		* response.getWriter()数据输出永远在out.write()之前			
 
+
+
+## MVC
+
+```
+在JavaWeb中：
+  1. M：Model，模型。JavaBean
+    * 完成具体的业务操作，如：查询数据库，封装对象
+  2. V：View，视图。JSP
+    * 展示数据
+  3. C：Controller，控制器。Servlet
+    * 获取用户的输入
+    * 调用模型
+    * 将数据交给视图进行展示
+```
+
+
+
+## EL 表达式
+
+`Expression Language` 表达式语言
+
+**作用** ：替换和简化jsp页面中java代码的编写
+
+**语法** ：`${表达式}`
+
+**注意** ：jsp默认支持el表达式的
+
+忽略el表达式：
+
+	1. 设置jsp中page指令中：`isELIgnored="true"` 忽略当前jsp页面中所有的el表达式
+ 	2. `\${表达式}` ：忽略当前这个el表达式
+
+#### 使用
+
+```
+1. 运算：
+  * 运算符：
+    1. 算数运算符： + - * /(div) %(mod)
+    2. 比较运算符： > < >= <= == !=
+    3. 逻辑运算符： &&(and) ||(or) !(not)
+    4. 空运算符： empty
+      * 功能：用于判断字符串、集合、数组对象是否为null或者长度是否为0
+      * ${empty list}:判断字符串、集合、数组对象是否为null或者长度为0
+      * ${not empty str}:表示判断字符串、集合、数组对象是否不为null 并且 长度>0
+2. 获取值
+  1. el表达式只能从域对象中获取值
+  2. 语法：
+    1. ${域名称.键名}：从指定域中获取指定键的值
+      * 域名称：
+        1. pageScope				--> pageContext
+        2. requestScope 		--> request
+        3. sessionScope 		--> session
+        4. applicationScope --> application（ServletContext）
+      * 举例：在request域中存储了name=张三
+      * 获取：${requestScope.name}
+    2. ${键名}：表示依次从最小的域中查找是否有该键对应的值，直到找到为止。
+    3. 获取对象、List集合、Map集合的值
+      1. 对象：${域名称.键名.属性名}
+        * 本质上会去调用对象的getter方法
+      2. List集合：${域名称.键名[索引]}
+      3. Map集合：
+        * ${域名称.键名.key名称}
+        * ${域名称.键名["key名称"]}
+3. 隐式对象：
+  * el表达式中有11个隐式对象
+  * pageContext：
+    * 获取jsp其他八个内置对象
+      * ${pageContext.request.contextPath}：动态获取虚拟目录
+```
+
+
+
+## JSTL
+
+`JavaServer Pages Tag Library`  JSP标准标签库，是由Apache组织提供的开源的免费的jsp标签。
+
+**作用** ：用于简化和替换jsp页面上的java代码。
+
+#### 使用
+
+	1. 导入jstl相关jar包
+	2. 引入标签库：taglib指令：  <%@ taglib %>
+	3. 使用标签
+
+#### 常用JSTL标签
+
+	1. if:相当于java代码的if语句
+	  1. 属性：
+	    * test 必须属性，接受boolean表达式
+	      * 如果表达式为true，则显示if标签体内容，如果为false，则不显示标签体内容
+	      * 一般情况下，test属性值会结合el表达式一起使用
+	  2. 注意：
+			* c:if标签没有else情况，想要else情况，则可以在定义一个c:if标签
+	2. choose:相当于java代码的switch语句
+	  1. 使用choose标签声明         			 相当于switch声明
+	  2. 使用when标签做判断         				相当于case
+	  3. 使用otherwise标签做其他情况的声明   相当于default
+	3. foreach:相当于java代码的for语句
+
+
+
+## 三层架构：软件设计架构
+
+	1. 界面层(表示层)：用户看的得界面。用户可以通过界面上的组件和服务器进行交互
+	2. 业务逻辑层：处理业务逻辑的。
+	3. 数据访问层：操作数据存储文件。
+
+
