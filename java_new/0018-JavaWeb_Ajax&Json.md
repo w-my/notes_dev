@@ -165,7 +165,7 @@ $.ajax({
 	        * writeValueAsString(obj):将对象转为json字符串
 	      2. 注解：
 	        1. @JsonIgnore：排除属性。
-	        2. @JsonFormat：属性值得格式化
+	        2. @JsonFormat：属性值的格式化
 	          * @JsonFormat(pattern = "yyyy-MM-dd")
 	      3. 复杂java对象转换
 	        1. List：数组
@@ -178,8 +178,5 @@ $.ajax({
 			1. $.get(type):将最后一个参数type指定为"json"
 			2. 在服务器端设置MIME类型
 				response.setContentType("application/json;charset=utf-8");
-
-
-
 
 
