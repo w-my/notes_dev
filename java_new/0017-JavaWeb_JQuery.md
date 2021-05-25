@@ -219,7 +219,7 @@ $("#div1").css("backgroundColor", "pink");
 
 #### 动画
 
-##### 默认显示和隐藏方式
+##### 默认显示和隐藏
 
 ```
 1. show([speed,[easing],[fn]])
@@ -233,7 +233,7 @@ $("#div1").css("backgroundColor", "pink");
 3. toggle([speed],[easing],[fn])
 ```
 
-##### 滑动显示和隐藏方式
+##### 滑动显示和隐藏
 
 ```
 1. slideDown([speed],[easing],[fn])
@@ -241,7 +241,7 @@ $("#div1").css("backgroundColor", "pink");
 3. slideToggle([speed],[easing],[fn])
 ```
 
-##### 淡入淡出显示和隐藏方式
+##### 淡入淡出显示和隐藏
 
 ```
 1. fadeIn([speed],[easing],[fn])
@@ -265,7 +265,6 @@ for(初始化值;循环结束条件;步长)
     jquery对象.each(function(index,element){});
       * index:就是元素在集合中的索引
       * element：就是集合中的每一个元素对象
-
       * this：集合中的每一个元素对象
   2. 回调函数返回值：
     * true:如果当前function返回为false，则结束循环(break)。
@@ -346,84 +345,20 @@ for(初始化值;循环结束条件;步长)
 	            //获取广告div，调用隐藏方法
 	            $("#ad").hide("slow");
 	        }
-	      </script>
-	  </head>
-	  <body>
+	    </script>
+	</head>
+	<body>
 	  <!-- 整体的DIV -->
 	  <div>
 	      <!-- 广告DIV -->
 	      <div id="ad" style="display: none;">
 	          <img style="width:100%" src="/Users/caianfang/Downloads/__/20 Java/02-就业课(2.1)-JavaWeb/day21_JQuery高级/img/adv.jpg" />
 	      </div>
-	    <!-- 下方正文部分 -->
-	    <div id="content">
-	        正文部分
-	    </div>
-	</div>
-	</body>
-	</html>
-
-##### 抽奖
-
-
-	<!DOCTYPE html>
-	<html>
-	<head>
-	    <meta charset="UTF-8">
-	    <title>jquery案例之抽奖</title>
-	    <script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
-	
-	    <script language='javascript' type='text/javascript'>
-	
-	        /*
-	            分析：
-	                1. 给开始按钮绑定单击事件
-	                    1.1 定义循环定时器
-	                    1.2 切换小相框的src属性
-	                        * 定义数组，存放图片资源路径
-	                        * 生成随机数。数组索引
-	                2. 给结束按钮绑定单击事件
-	                    1.1 停止定时器
-	                    1.2 给大相框设置src属性
-	
-	         */
-	        var imgs = ["../img/man00.jpg",
-	                    "../img/man01.jpg",
-	                    "../img/man02.jpg",
-	                    "../img/man03.jpg",
-	                    "../img/man04.jpg",
-	                    "../img/man05.jpg",
-	                    "../img/man06.jpg",
-	                    ];
-	        var startId;//开始定时器的id
-	        var index;//随机角标
-	        $(function () {
-	            //处理按钮是否可以使用的效果
-	            $("#startID").prop("disabled",false);
-	            $("#stopID").prop("disabled",true);
-	           //1. 给开始按钮绑定单击事件
-	            $("#startID").click(function () {
-	                // 1.1 定义循环定时器 20毫秒执行一次
-	                startId = setInterval(function () {
-	                    //处理按钮是否可以使用的效果
-	                    $("#startID").prop("disabled",true);
-	                    $("#stopID").prop("disabled",false);
-	                    //1.2生成随机角标 0-6
-	                    index = Math.floor(Math.random() * 7);//0.000--0.999 --> * 7 --> 0.0-----6.9999
-	                    //1.3设置小相框的src属性
-	                    $("#img1ID").prop("src",imgs[index]);
-	
-	                },20);
-	            });
-	            //2. 给结束按钮绑定单击事件
-	            $("#stopID").click(function () {
-	                //处理按钮是否可以使用的效果
-	                $("#startID").prop("disabled",false);
-	                $("#stopID").prop("disabled",true);
-	               // 1.1 停止定时器		                clearInterval(startId);		               // 1.2 给大相框设置src属性		                $("#img2ID").prop("src",imgs[index]).hide();		                //显示1秒之后		                $("#img2ID").show(1000);		            });		        });
-	
-	      </script>
-	</head>		<body>				<!-- 小像框 -->		<div style="border-style:dotted;width:160px;height:100px">		    <img id="img1ID" src="../img/man00.jpg" style="width:160px;height:100px"/>		</div>				<!-- 大像框 -->		<div		        style="border-style:double;width:800px;height:500px;position:absolute;left:500px;top:10px">		    <img id="img2ID" src="../img/man00.jpg" width="800px" height="500px"/>		</div>				<!-- 开始按钮 -->		<input		        id="startID"		        type="button"		        value="点击开始"		        style="width:150px;height:150px;font-size:22px">				<!-- 停止按钮 -->		<input		        id="stopID"		        type="button"		        value="点击停止"		        style="width:150px;height:150px;font-size:22px">
+	      <!-- 下方正文部分 -->
+	      <div id="content">
+	          正文部分
+	      </div>
+	  </div>
 	</body>
 	</html>
 
