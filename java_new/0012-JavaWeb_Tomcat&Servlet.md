@@ -205,3 +205,46 @@ HttpServlet  -- 抽象类
     3. *.do：扩展名匹配
 ```
 
+
+
+#### Servlet 使用优化
+
+`BaseServlet`
+
+```java
+public class BaseServlet extends HttpServlet {
+	@Override
+	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String url = req.getRequestURI();
+		String methodName = uri.subString(uri.lastIndexOf('/') + 1);
+		try {
+			Method method = this.getClass().getMethod(methodName, HttpServletRequest.class, HttpServletResponse.class);
+			method.invoke(this, req, resp);
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
+}
+```
+
+`UserServlet`
+
+```java
+@WebServlet("/user/*");
+public class UserServlet extends BaseServlet {
+	private UserServlet service = new UserServiceImpl();
+
+	public void request(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+	}
+
+	public void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+	}
+}
+```
+
