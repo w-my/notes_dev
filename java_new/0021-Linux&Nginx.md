@@ -580,9 +580,69 @@ service iptables stop;
 
 ## Nginx
 
+Nginx 是一款高性能的 http 服务器/反向代理服务器及电子邮件（IMAP/POP3）代理服务器。由俄罗斯的程序设计师伊戈尔·西索夫（Igor Sysoev）所开发，官方测试 nginx 能够支支撑 5 万并发链接，并且 cpu、内存等资源消耗却非常低，运行非常稳定。
+
+**Nginx** **应用场景：**
+
+1、http 服务器。Nginx 是一个 http 服务可以独立提供 http 服务。可以做网页静态服务器。
+
+2、虚拟主机。可以实现在一台服务器虚拟出多个网站。例如个人网站使用的虚拟主机。
+
+3、反向代理，负载均衡。当网站的访问量达到一定程度后，单台服务器不能满足用户的请求时，需要用多台服务器集群可以使用 nginx 做反向代理。并且多台服务器可以平均分担负载，不会因为某台服务器负载高宕机而某台服务器闲置的情况。
 
 
 
+### Nginx 在 Linux 安装
+
+准备一台新的虚拟机作为服务器。
+
+#### 环境准备
+
+- 安装 gcc 环境
+
+  `yum install gcc-c++`
+
+- 第三方的开发包
+
+  - PCRE
+
+    PCRE(Perl Compatible Regular Expressions)是一个 Perl 库，包括 perl 兼容的正则表达式库。nginx 的 http 模块使用 pcre 来解析正则表达式，所以需要在 linux 上安装 pcre 库。
+
+    `yum install -y pcre pcre-devel`
+
+    注：pcre-devel 是使用 pcre 开发的一个二次开发库。nginx 也需要此库。
+
+  - zlib
+
+    zlib 库提供了很多种压缩和解压缩的方式，nginx 使用 zlib 对 http 包的内容进行 gzip，所以需要在 linux 上安装 zlib 库。
+
+    `yum install -y zlib zlib-devel`
+
+  - OpenSSL
+
+    OpenSSL 是一个强大的安全套接字层密码库，囊括主要的密码算法、常用的密钥和证书封装管理功能及 SSL 协议，并提供丰富的应用程序供测试或其它目的使用。nginx 不仅支持 http 协议，还支持 https（即在 ssl 协议上传输 http），所以需要在 linux安装 openssl 库。
+
+    `yum install -y openssl openssl-devel`
+
+- Nginx 下载
+
+
+
+- Nginx 安装
+
+
+
+#### Nginx 启动与访问
+
+
+
+### Nginx 静态网站部署
+
+
+
+
+
+### Nginx 反向代理与负载均衡
 
 
 
