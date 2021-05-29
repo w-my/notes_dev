@@ -626,49 +626,199 @@ Nginx 是一款高性能的 http 服务器/反向代理服务器及电子邮件�
 
 - Nginx 下载
 
-
+   [nginx](http://nginx.org/)
 
 - Nginx 安装
 
+  - 上传 nginx 源码包 nginx-1.8.0.tar.gz 到 linux 系统
 
+  - 解压缩
+
+    `tar zxvf nginx-1.8.0.tar.gz`
+
+  - 进入 nignx-1.8.0 目，使用 configure 命令创建 makeFile 文件。
+
+    ```
+    ./configure \
+    --prefix=/usr/local/nginx \
+    --pid-path=/var/run/nginx/nginx.pid \
+    --lock-path=/var/lock/nginx.lock \
+    --error-log-path=/var/log/nginx/error.log \
+    --http-log-path=/var/log/nginx/access.log \
+    --with-http_gzip_static_module \
+    --http-client-body-temp-path=/var/temp/nginx/client \
+    --http-proxy-temp-path=/var/temp/nginx/proxy \
+    --http-fastcgi-temp-path=/var/temp/nginx/fastcgi \
+    --http-uwsgi-temp-path=/var/temp/nginx/uwsgi \
+    --http-scgi-temp-path=/var/temp/nginx/scgi
+    ```
+
+    Makefile是一种配置文件， Makefile 一个工程中的源文件不计数，其按类型、功能、模块分别放在若干个目录中，makefile定义了一系列的规则来指定，哪些文件需要先编译，哪些文件需要后编译，哪些文件需要重新编译，甚至于进行更复杂的功能操作，因为 makefile就像一个Shell脚本一样，其中也可以执行操作系统的命令。
+
+    ```
+    configure参数
+    ./configure \
+    --prefix=/usr \                                                        指向安装目录
+    --sbin-path=/usr/sbin/nginx \                                 指向（执行）程序文件（nginx）
+    --conf-path=/etc/nginx/nginx.conf \                      指向配置文件
+    --error-log-path=/var/log/nginx/error.log \              指向log
+    --http-log-path=/var/log/nginx/access.log \            指向http-log
+    --pid-path=/var/run/nginx/nginx.pid \                      指向pid
+    --lock-path=/var/lock/nginx.lock \                         （安装文件锁定，防止安装文件被别人利用，或自己误操作。）
+    --user=nginx \
+    --group=nginx \
+    --with-http_ssl_module \                      启用ngx_http_ssl_module支持（使支持https请求，需已安装openssl）
+    --with-http_flv_module \                       启用ngx_http_flv_module支持（提供寻求内存使用基于时间的偏移量文件）
+    --with-http_stub_status_module \     启用ngx_http_stub_status_module支持（获取nginx自上次启动以来的工作状态）
+    --with-http_gzip_static_module \   启用ngx_http_gzip_static_module支持（在线实时压缩输出数据流）
+    --http-client-body-temp-path=/var/tmp/nginx/client/ \ 设定http客户端请求临时文件路径
+    --http-proxy-temp-path=/var/tmp/nginx/proxy/ \ 设定http代理临时文件路径
+    --http-fastcgi-temp-path=/var/tmp/nginx/fcgi/ \ 设定http fastcgi临时文件路径
+    --http-uwsgi-temp-path=/var/tmp/nginx/uwsgi \ 设定http uwsgi临时文件路径
+    --http-scgi-temp-path=/var/tmp/nginx/scgi \ 设定http scgi临时文件路径
+    --with-pcre 启用pcre库
+    ```
+
+  - 编译
+
+    `make`
+
+  - 安装
+
+    `make install`
+
+    
 
 #### Nginx 启动与访问
+
+启动nginx 之前，上边将临时文件目录指定为/var/temp/nginx/client， 需要在 /var 下创建此目录
+
+```
+mkdir /var/temp/nginx/client -p
+```
+
+进入到Nginx目录下的sbin目录
+
+```
+cd /usr/local/ngiux/sbin
+```
+
+输入命令启动Nginx
+
+```
+./nginx
+```
+
+启动后查看进程
+
+```
+ps aux|grep nginx
+```
+
+地址栏输入虚拟机的IP即可访问（默认为80端口）
+
+关闭 nginx：
+
+```
+./nginx -s stop
+```
+
+或者
+
+```
+./nginx -s quit
+```
+
+重启 nginx：
+
+1. 先关闭后启动
+2. 刷新配置文件
+
+```
+./nginx -s reload
+```
 
 
 
 ### Nginx 静态网站部署
 
+#### 静态网站的部署
 
+将/资料/静态页面/index目录下的所有内容 上传到服务器的/usr/local/nginx/html下即可访问
+
+#### 配置虚拟主机
+
+虚拟主机，也叫“网站空间”，就是把一台运行在互联网上的物理服务器划分成多个“虚拟”服务器。虚拟主机技术极大的促进了网络技术的应用和普及。同时虚拟主机的租用服务也成了网络时代的一种新型经济形式。
+
+- 端口绑定
+
+  - 上传静态网站
+
+    将/资料/静态页面/index目录上传至 /usr/local/nginx/index下
+
+    将/资料/静态页面/regist目录上传至 /usr/local/nginx/regist下
+
+  - 修改Nginx 的配置文件：/usr/local/nginx/conf/nginx.conf
+
+  - 访问测试
+
+    地址栏输入http://192.168.177.129/:81 可以看到首页面
+
+    地址栏输入http://192.168.177.129/:82 可以看到注册页面
+
+- 域名绑定
 
 
 
 ### Nginx 反向代理与负载均衡
 
+#### 反向代理
 
+反向代理（Reverse Proxy）方式是指以[代理服务器](http://baike.baidu.com/item/代理服务器)来接受internet上的连接请求，然后将请求转发给内部网络上的服务器，并将从服务器上得到的结果返回给internet上请求连接的客户端，此时代理服务器对外就表现为一个反向代理服务器。
 
+##### 配置反向代理
 
+1. 将travel案例部署到tomcat中（ROOT目录），上传到服务器。
+2. 启动TOMCAT，输入网址http://192.168.177.129:8080 可以看到网站首页。
+3. 在Nginx主机修改 Nginx配置文件
+4. 重新启动Nginx 然后用浏览器测试：http://www.hmtravel.com  （此域名须配置域名指向）
 
+#### 负载均衡
 
+负载均衡 建立在现有网络结构之上，它提供了一种廉价有效透明的方法扩展 网络设备 和 服务器 的带宽、增加吞吐量、加强网络数据处理能力、提高网络的灵活性和可用性。
 
+##### 配置负载均衡
 
+1. 将刚才的存放工程的tomcat复制三份，修改端口分别为8080 ，8081，8082 。
 
+2. 分别启动这三个tomcat服务。
 
+3. 为了能够区分是访问哪个服务器的网站，可以在首页标题加上标记以便区分。
 
+4. 修改 Nginx配置文件
 
+   ```
+   upstream tomcat-travel {
+    	server 192.168.177.129:8080;
+    	server 192.168.177.129:8081;
+    	server 192.168.177.129:8082;
+   }
+   
+   server {
+       listen       80; # 监听的端口
+       server_name  www.hmtravel.com; # 域名或ip
+       location / {	# 访问路径配置
+           # root   index;# 根目录
+     proxy_pass http://tomcat-travel;
+   
+           index  index.html index.htm; # 默认首页
+       }
+       error_page   500 502 503 504  /50x.html;	# 错误页面
+       location = /50x.html {
+           root   html;
+       }
+   }
+   ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+   
 
