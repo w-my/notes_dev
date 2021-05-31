@@ -26,6 +26,22 @@ AOP 编程的支持
 
 
 
+## Maven 项目创建
+
+1. 在系统目录下创建文件夹 `Spring`
+2. 打开IDEA，选择 `文件`，打开创建的文件夹
+3. 打开后选中项目目录，右键 `New` -> `Module...` -> `Maven` -> `Next`
+4. Groupid 输入 `com.xxx` ，Artifactid 输入 `xx_spring_aop`
+5. 选中 `xx_spring_aop` ，选择菜单栏 `文件` -> `Product Structure...` 
+6. `Project` 选择需要的 `Project SDK` ，选择需要的 `Project language level` ，修改 `Project compiler output` 后部路径：`.../Spring/xx_spring_aop`
+7. `Facets` 点击 `+` ，选择 `xx_spring_aop` 点击 OK
+8. 修改 Type 后部路径：`.../Spring/xx_spring_aop/src/main/webapp/WEB-INF/web.xml`
+9. 修改 `Web Resource Directory` 后部路径 ：`.../Spring/xx_spring_aop/src/main/webapp`
+10. 最后点击 `Apply` 完成 `OK`
+11. 重复3-10，同理创建 `xx_spring_ioc`
+
+
+
 ## Spring快速入门
 
 #### Spring程序开发步骤 
