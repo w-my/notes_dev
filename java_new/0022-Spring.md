@@ -34,7 +34,7 @@ AOP 编程的支持
 4. Groupid 输入 `com.xxx` ，Artifactid 输入 `xx_spring_aop`
 5. 选中 `xx_spring_aop` ，选择菜单栏 `文件` -> `Product Structure...` 
 6. `Project` 选择需要的 `Project SDK` ，选择需要的 `Project language level` ，修改 `Project compiler output` 后部路径：`.../Spring/xx_spring_aop`
-7. `Facets` 点击 `+` ，选择 `xx_spring_aop` 点击 OK
+7. `Facets` 点击 `+` ，选择 `Web` ，选择 `xx_spring_aop` 点击 OK
 8. 修改 Type 后部路径：`.../Spring/xx_spring_aop/src/main/webapp/WEB-INF/web.xml`
 9. 修改 `Web Resource Directory` 后部路径 ：`.../Spring/xx_spring_aop/src/main/webapp`
 10. 最后点击 `Apply` 完成 `OK`
@@ -56,7 +56,7 @@ AOP 编程的支持
 
 ```xml
 <properties>
-  <spring.version>5.0.5.RELEASE</spring.version>
+  	<spring.version>5.0.5.RELEASE</spring.version>
 </properties>
 <!-- 导入spring的context坐标，context依赖core、beans、expression -->
 <dependencies> 
@@ -71,15 +71,15 @@ AOP 编程的支持
 #### 编写Dao接口和实现类
 
 ```java
-public interface UserDao {  
+public interface UserDao {
     public void save();
 }
 
-public class UserDaoImpl implements UserDao {  
-        @Override  
-        public void save() {
-          System.out.println("UserDao save method running....");
-  }
+public class UserDaoImpl implements UserDao {
+    @Override
+    public void save() {
+        System.out.println("userdao save running...");
+    }
 }
 ```
 
@@ -113,7 +113,7 @@ public class UserDaoImpl implements UserDao {
 ```java
 @Test
 public void test1() {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
+	ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
   UserDao userDao = (UserDao) applicationContext.getBean("userDao");
   userDao.save();
 }
@@ -125,7 +125,7 @@ public void test1() {
 
 #### Bean标签基本配置 
 
-用于配置对象交由Spring 来创建。
+用于配置对象交由 Spring 来创建。
 
 默认情况下它调用的是类中的无参构造函数，如果没有无参构造函数则不能创建成功。
 
@@ -230,8 +230,8 @@ public class DynamicFactoryBean {
 public class UserServiceImpl implements UserService {
 	@Override
 	public void save() {
-		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-    UserDao userDao = (UserDao) ac.getBean("userDao");	
+		ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");
+    UserDao userDao = (UserDao) app.getBean("userDao");	
 		userDao.save();
 	}
 }
@@ -246,8 +246,8 @@ public class UserServiceImpl implements UserService {
 3. 从 Spring 容器中获得 UserService 进行操作
 
 ```java
-ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-UserService userService = (UserService) ac.getBean("userService");
+ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");
+UserService userService = (UserService) app.getBean("userService");
 userService.save();
 ```
 
@@ -271,12 +271,18 @@ IOC 解耦只是降低他们的依赖关系，但不会消除。例如：业务�
 
 ```java
 public class UserServiceImpl implements UserService {
-  @Override
-  public void save() {
-    ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-    UserDao userDao = (UserDao) applicationContext.getBean("userDao");
-    userDao.save();
-  }
+    private UserDao userDao;
+
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
+    public UserServiceImpl() {
+    }
+
+    @Override
+    public void save() {
+        userDao.save();
+    }
 }
 ```
 
@@ -295,14 +301,14 @@ public class UserServiceImpl implements UserService {
 
 ```java
 public class UserServiceImpl implements UserService {
-	private UserDao userDao;
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;  
-	} 
-	@Override    
-	public void save() {      
-		userDao.save();
-	}
+    private UserDao userDao;
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+    @Override
+    public void save() {
+        userDao.save();
+    }
 }
 ```
 
@@ -493,6 +499,24 @@ public class UserDaoImpl implements UserDao {
 <import resource="applicationContext-xxx.xml"/>
 ```
 
+#### Spring的重点配置
+
+```xml
+<bean>标签
+    id属性：在容器中Bean实例的唯一标识，不允许重复
+    class属性：要实例化的Bean的全限定名
+    scope属性：Bean的作用范围，常用是Singleton（默认）和prototype
+    <property>标签，属性注入
+        name属性：属性名称
+        value属性：注入的普通属性值
+        ref属性：注入的对象引用值
+        <list>标签
+        <map>标签
+        <properties>标签
+    <constructor-arg>标签
+<import>标签：导入其他Spring的分文件
+```
+
 
 
 ## Spring相关API
@@ -505,7 +529,7 @@ applicationContext：接口类型，代表应用上下文，可以通过其实�
 
 1. `ClassPathXmlApplicationContext `
 
-​      它是从类的根路径下加载配置文件 推荐使用这种
+​      它是从类的根路径下加载配置文件，推荐使用这种
 
 2. `FileSystemXmlApplicationContext `
 
@@ -535,8 +559,472 @@ public <T> T getBean(Class<T> requiredType) throws BeansException {
 **getBean()方法使用**
 
 ```java
-ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
-UserService userService1 = (UserService) ac.getBean("userService");
-UserService userService2 = ac.getBean(UserService.class);
+ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");
+UserService userService1 = (UserService) app.getBean("userService");
+UserService userService2 = app.getBean(UserService.class);
 ```
+
+
+
+## Spring配置数据源
+
+#### 数据源（连接池）的作用 
+
+数据源(连接池)是提高程序性能如出现的
+
+事先实例化数据源，初始化部分连接资源
+
+使用连接资源时从数据源中获取
+
+使用完毕后将连接资源归还给数据源
+
+常见的数据源(连接池)：DBCP、C3P0、BoneCP、Druid等
+
+**开发步骤**
+
+1. 导入数据源的坐标和数据库驱动坐标
+2. 创建数据源对象
+3. 设置数据源的基本连接数据
+4. 使用数据源获取连接资源和归还连接资源
+
+#### 数据源的手动创建
+
+1. 导入
+
+```xml
+<!-- C3P0连接池 -->
+<dependency>
+    <groupId>c3p0</groupId>
+    <artifactId>c3p0</artifactId>
+    <version>0.9.1.2</version>
+</dependency>
+<!-- Druid连接池 -->
+<dependency>
+    <groupId>com.alibaba</groupId>
+    <artifactId>druid</artifactId>
+    <version>1.1.10</version>
+</dependency>
+<!-- mysql驱动 -->
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>5.1.39</version>
+</dependency>
+```
+
+2. 创建C3P0连接池
+
+```java
+@Test
+public void testC3P0() throws Exception {
+    DruidDataSource dataSource = new DruidDataSource();
+    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+    dataSource.setUrl("jdbc:mysql://localhost:3306/db1");
+    dataSource.setUsername("root");
+    dataSource.setPassword("root");
+    DruidPooledConnection connection = dataSource.getConnection();
+    System.out.println(connection);
+    connection.close();
+}
+```
+
+2. 创建Druid连接池
+
+```java
+@Test
+public void testDruid() throws Exception {
+    ComboPooledDataSource dataSource = new ComboPooledDataSource();
+    dataSource.setDriverClass("com.mysql.jdbc.Driver");
+    dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/db1");
+    dataSource.setUser("root");
+    dataSource.setPassword("root");
+    Connection connection = dataSource.getConnection();
+    System.out.println(connection);
+    connection.close();
+}
+```
+
+3. 提取 `jdbc.properties` 配置文件
+
+```properties
+jdbc.driver=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://localhost:3306/db1
+jdbc.username=root
+jdbc.password=root
+```
+
+4. 读取 `jdbc.properties` 配置文件创建连接池
+
+```java
+@Test
+public void testC3P0ByProperties() throws Exception {
+    //加载类路径下的jdbc.properties
+    ResourceBundle rb = ResourceBundle.getBundle("jdbc");
+    ComboPooledDataSource dataSource = new ComboPooledDataSource(); 
+    dataSource.setDriverClass(rb.getString("jdbc.driver"));   
+    dataSource.setJdbcUrl(rb.getString("jdbc.url")); 
+    dataSource.setUser(rb.getString("jdbc.username")); 
+    dataSource.setPassword(rb.getString("jdbc.password"));
+    Connection connection = dataSource.getConnection();   
+    System.out.println(connection);
+}
+```
+
+#### Spring配置数据源
+
+可以将DataSource的创建权交由Spring容器去完成
+
+DataSource有无参构造方法，而Spring默认就是通过无参构造方法实例化对象的
+
+DataSource要想使用需要通过set方法设置数据库连接信息，而Spring可以通过set方法进行字符串注入
+
+```xml
+<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/db1"/>
+    <property name="user" value="root"/>
+    <property name="password" value="12345678"/>
+</bean>
+```
+
+测试从容器当中获取数据源
+
+```java
+@Test
+public void test() throws Exception {
+    ApplicationContext app = new ClassPathXmlApplicationContext("applicationContext.xml");
+    DataSource dataSource = (DataSource) app.getBean("dataSource");
+    Connection connection = dataSource.getConnection();
+    System.out.println(connection);
+    connection.close();
+}
+```
+
+#### 抽取jdbc配置文件
+
+`applicationContext.xml` 加载 `jdbc.properties` 配置文件获得连接信息。
+
+首先，需要引入context命名空间和约束路径：
+
+命名空间：`xmlns:context="http://www.springframework.org/schema/context"`
+
+约束路径：`xsi:schemaLocation` 中添加
+
+​		`http://www.springframework.org/schema/context`  
+
+​		`http://www.springframework.org/schema/context/spring-context.xsd`
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 加载外部properties文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties" />
+
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driver}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+    </bean>
+
+</beans>
+```
+
+#### 知识要点 
+
+Spring容器加载properties文件
+
+```xml
+<context:property-placeholder location="xx.properties"/><property name="" value="${key}"/>
+```
+
+## Spring注解开发
+
+#### Spring原始注解
+
+Spring是轻代码而重配置的框架，配置比较繁重，影响开发效率，所以注解开发是一种趋势，注解代替xml配置文件可以简化配置，提高开发效率。 
+
+Spring原始注解主要是替代<Bean>的配置
+
+| 注解           | 说明                                           |
+| -------------- | ---------------------------------------------- |
+| @Component     | 使用在类上用于实例化Bean                       |
+| @Controller    | 使用在web层类上用于实例化Bean                  |
+| @Service       | 使用在service层类上用于实例化Bean              |
+| @Repository    | 使用在dao层类上用于实例化Bean                  |
+| @Autowired     | 使用在字段上用于根据类型依赖注入               |
+| @Qualifier     | 结合@Autowired一起使用用于根据名称进行依赖注入 |
+| @Resource      | 相当于@Autowired+@Qualifier，按照名称进行注入  |
+| @Value         | 注入普通属性                                   |
+| @Scope         | 标注Bean的作用范围                             |
+| @PostConstruct | 使用在方法上标注该方法是Bean的初始化方法       |
+| @PreDestroy    | 使用在方法上标注该方法是Bean的销毁方法         |
+
+注意：
+
+使用注解进行开发时，需要在 `applicationContext.xml` 中配置组件扫描，作用是指定哪个包及其子包下的Bean需要进行扫描以便识别使用注解配置的类、字段和方法。
+
+```xml
+<!--注解的组件扫描-->
+<context:component-scan base-package="com.xx"></context:component-scan>
+```
+
+使用@Compont或@Repository标识UserDaoImpl需要Spring进行实例化。
+
+```java
+@Repository("userDao")
+public class UserDaoImpl implements UserDao {    
+  @Override    
+  public void save() {    	
+    System.out.println("save running... ...");
+  }
+}
+```
+
+使用@Compont或@Service标识UserServiceImpl需要Spring进行实例化
+
+使用@Autowired或者@Autowired+@Qulifier或者@Resource进行userDao的注入
+
+```java
+@Service("userService")
+public class UserServiceImpl implements UserService {    
+  /*
+  @Autowired    
+  @Qualifier("userDao")
+  */    
+  @Resource(name="userDao")    
+  private UserDao userDao;    
+  @Override    
+  public void save() {          	  
+    userDao.save();    
+  }
+}
+```
+
+使用@Value进行字符串的注入
+
+```java
+@Repository("userDao")
+public class UserDaoImpl implements UserDao {    
+
+  @Value("${jdbc.driver}")    
+  private String driver; 
+  
+  @Override    
+  public void save() {        
+    System.out.println(str);        
+    System.out.println(driver);        
+    System.out.println("save running... ...");    
+  }
+}
+```
+
+使用@Scope标注Bean的范围
+
+```java
+//@Scope("prototype")
+@Scope("singleton")
+public class UserDaoImpl implements UserDao {
+  // 此处省略代码
+}
+```
+
+使用@PostConstruct标注初始化方法，使用@PreDestroy标注销毁方法
+
+```java
+@PostConstructpublic 
+void init() {	
+  System.out.println("初始化方法....");
+}
+@PreDestroypublic 
+void destroy() {	
+  System.out.println("销毁方法.....");
+}
+```
+
+
+
+#### Spring新注解
+
+使用上面的注解还不能全部替代xml配置文件，还需要使用注解替代的配置如下：
+
+非自定义的Bean的配置：`<bean>`
+
+加载properties文件的配置：`<context:property-placeholder>`
+
+组件扫描的配置：`<context:component-scan>`
+
+引入其他文件：`<import>`
+
+| 注解            | 说明                                                         |
+| --------------- | ------------------------------------------------------------ |
+| @Configuration  | 用于指定当前类是一个 Spring 配置类，当创建容器时会从该类上加载注解 |
+| @ComponentScan  | 用于指定 Spring   在初始化容器时要扫描的包。作用和在 Spring 的 xml 配置文件中的 <context:component-scan base-package="com.xx"/>一样 |
+| @Bean           | 使用在方法上，标注将该方法的返回值存储到 Spring 容器中       |
+| @PropertySource | 用于加载 .properties 文件中的配置                            |
+| @Import         | 用于导入其他配置类                                           |
+
+`@Configuration`
+
+`@ComponentScan`
+
+`@Import`
+
+```java
+@Configuration
+@ComponentScan("com.xx")
+@Import({DataSourceConfiguration.class})
+public class SpringConfiguration {}
+```
+
+`@PropertySource`
+
+`@value`
+
+`@Bean`
+
+```java
+@PropertySource("classpath:jdbc.properties")
+public class DataSourceConfiguration {    
+  @Value("${jdbc.driver}")    
+  private String driver;    
+  @Value("${jdbc.url}")    
+  private String url;    
+  @Value("${jdbc.username}")    
+  private String username;    
+  @Value("${jdbc.password}")    
+  private String password;
+  
+  @Bean(name="dataSource")
+  public DataSource getDataSource() throws PropertyVetoException {     
+    ComboPooledDataSource dataSource = new ComboPooledDataSource();     
+    dataSource.setDriverClass(driver);    
+    dataSource.setJdbcUrl(url);    
+    dataSource.setUser(username);    
+    dataSource.setPassword(password);    
+    return dataSource;
+  } 
+}
+```
+
+测试加载核心配置类创建Spring容器
+
+```java
+@Testpublic 
+void testAnnoConfiguration() throws Exception {
+  ApplicationContext app = new AnnotationConfigApplicationContext(SpringConfiguration.class);    
+  UserService userService = (UserService) app.getBean("userService");    
+  userService.save();    
+  
+  DataSource dataSource = (DataSource) app.getBean("dataSource");    
+  Connection connection = dataSource.getConnection();     
+  System.out.println(connection);    
+  connection.close();
+}
+```
+
+
+
+## Spring整合Junit
+
+#### 原始Junit测试Spring的问题
+
+在测试类中，每个测试方法都有以下两行代码：
+
+```java
+ApplicationContext ac = new ClassPathXmlApplicationContext("bean.xml"); 
+IAccountService as = ac.getBean("accountService",IAccountService.class);
+```
+
+这两行代码的作用是获取容器，如果不写的话，直接会提示空指针异常。所以又不能轻易删掉。
+
+#### 上述问题解决思路
+
+让 SpringJunit 负责创建 Spring 容器，但是需要将配置文件的名称告诉它
+
+将需要进行测试 Bean 直接在测试类中进行注入
+
+#### Spring集成Junit步骤
+
+1. 导入spring集成Junit的坐标
+2. 使用@Runwith注解替换原来的运行期
+3. 使用@ContextConfiguration指定配置文件或配置类
+4. 使用@Autowired注入需要测试的对象
+5. 创建测试方法进行测试
+
+#### Spring集成Junit代码实现
+
+1. 导入spring集成Junit的坐标
+
+```xml
+<!--此处需要注意的是，spring5 及以上版本要求 junit 的版本必须是 4.12 及以上-->
+<dependency>    
+  <groupId>org.springframework</groupId>    
+  <artifactId>spring-test</artifactId>    
+  <version>5.0.2.RELEASE</version>
+</dependency>
+<dependency>    
+  <groupId>junit</groupId>    
+  <artifactId>junit</artifactId>    
+  <version>4.12</version>    
+  <scope>test</scope>
+</dependency>
+```
+
+2. 使用@Runwith注解替换原来的运行期
+
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+public class SpringJunitTest {}
+```
+
+3. 使用@ContextConfiguration指定配置文件或配置类
+
+```java
+@RunWith(SpringJUnit4ClassRunner.class)//加载spring核心配置文件
+//@ContextConfiguration(value = {"classpath:applicationContext.xml"})//加载spring核心配置类
+@ContextConfiguration(classes = {SpringConfiguration.class})
+public class SpringJunitTest {}
+```
+
+4. 使用@Autowired注入需要测试的对象
+
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {SpringConfiguration.class})
+public class SpringJunitTest {    
+  @Autowired    
+  private UserService userService;
+}
+```
+
+5. 创建测试方法进行测试
+
+```java
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = {SpringConfiguration.class})
+public class SpringJunitTest {    
+  @Autowired    
+  private UserService userService;    
+  @Test    
+  public void testUserService() {   	 
+    userService.save();    
+  }
+}
+```
+
+Spring集成Junit步骤
+
+1. 导入spring集成Junit的坐标 
+2. 使用@Runwith注解替换原来的运行期
+3. 使用@ContextConfiguration指定配置文件或配置类
+4. 使用@Autowired注入需要测试的对象
+5. 创建测试方法进行测试
 
