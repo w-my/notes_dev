@@ -1607,23 +1607,23 @@ public class MyAspect {
 
 # JdbcTemplate基本使用
 
-## JdbcTemplate基本使用-概述(了解)
+## 概述(了解)
 
-JdbcTemplate是spring框架中提供的一个对象，是对原始繁琐的Jdbc API对象的简单封装。spring框架为我们提供了很多的操作模板类。例如：操作关系型数据的JdbcTemplate和HibernateTemplate，操作nosql数据库的RedisTemplate，操作消息队列的JmsTemplate等等。
+`JdbcTemplate` 是spring框架中提供的一个对象，是对原始繁琐的Jdbc API对象的简单封装。spring框架为我们提供了很多的操作模板类。例如：操作关系型数据的 `JdbcTemplate` 和 `HibernateTemplate` ，操作nosql数据库的 `RedisTemplate` ，操作消息队列的 `JmsTemplate` 等等。
 
-## JdbcTemplate基本使用-开发步骤(理解)
+## 开发步骤(理解)
 
-①导入spring-jdbc和spring-tx坐标
+1. 导入 `spring-jdbc` 和 `spring-tx` 坐标
 
-②创建数据库表和实体
+2. 创建数据库表和实体
 
-③创建JdbcTemplate对象
+3. 创建 JdbcTemplate 对象
 
-④执行数据库操作
+4. 执行数据库操作
 
-## JdbcTemplate基本使用-快速入门代码实现(应用)
+## 快速入门代码实现(应用)
 
-导入spring-jdbc和spring-tx坐标
+导入 `spring-jdbc` 和 `spring-tx` 坐标
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -1632,7 +1632,7 @@ JdbcTemplate是spring框架中提供的一个对象，是对原始繁琐的Jdbc 
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.itheima</groupId>
-  <artifactId>itheima_spring_jdbc</artifactId>
+  <artifactId>xx_spring_jdbc</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
@@ -1729,12 +1729,9 @@ JdbcTemplate是spring框架中提供的一个对象，是对原始繁琐的Jdbc 
     </dependency>
   </dependencies>
 </project>
-
 ```
 
 创建数据库表和实体
-
-![](/Users/caianfang/Downloads/__/20 Java/03-就业课(2.1)-Spring/day04_ JdbcTemplate基本使用/笔记/img/1.png)
 
 ```java
 package com.itheima.domain;
@@ -1744,10 +1741,9 @@ public class Account {
     private String name;
     private double money;
 
-    public String getNa me() {
+    public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -1755,7 +1751,6 @@ public class Account {
     public double getMoney() {
         return money;
     }
-
     public void setMoney(double money) {
         this.money = money;
     }
@@ -1768,7 +1763,6 @@ public class Account {
                 '}';
     }
 }
-
 ```
 
 创建JdbcTemplate对象
@@ -1777,32 +1771,30 @@ public class Account {
 
 ```java
 @Test
-    //测试JdbcTemplate开发步骤
-    public void test1() throws PropertyVetoException {
-        //创建数据源对象
-        ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setDriverClass("com.mysql.jdbc.Driver");
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/test");
-        dataSource.setUser("root");
-        dataSource.setPassword("root");
+public void test1() throws PropertyVetoException {
+    // 创建数据源对象
+    ComboPooledDataSource dataSource = new ComboPooledDataSource();
+    dataSource.setDriverClass("com.mysql.jdbc.Driver");
+    dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/db1");
+    dataSource.setUser("root");
+    dataSource.setPassword("root");
 
-        JdbcTemplate jdbcTemplate = new JdbcTemplate();
-        //设置数据源对象  知道数据库在哪
-        jdbcTemplate.setDataSource(dataSource);
-        //执行操作
-        int row = jdbcTemplate.update("insert into account values(?,?)", "tom", 5000);
-        System.out.println(row);
-
-    }
+    JdbcTemplate jdbcTemplate = new JdbcTemplate();
+    // 设置数据源对象 知道数据库在哪
+    jdbcTemplate.setDataSource(dataSource);
+    // 执行操作
+    int row = jdbcTemplate.update("insert into account values(?,?)", "tom", 5000);
+    System.out.println(row);
+}
 ```
 
 
 
-## JdbcTemplate基本使用-spring产生模板对象分析(理解)
+## spring产生模板对象分析(理解)
 
 我们可以将JdbcTemplate的创建权交给Spring，将数据源DataSource的创建权也交给Spring，在Spring容器内部将数据源DataSource注入到JdbcTemplate模版对象中,然后通过Spring容器获得JdbcTemplate对象来执行操作。
 
-## JdbcTemplate基本使用-spring产生模板对象代码实现(应用)
+## spring产生模板对象代码实现(应用)
 
 配置如下：
 
@@ -1835,7 +1827,7 @@ public class Account {
     }
 ```
 
-## JdbcTemplate基本使用-spring产生模板对象代码实现（抽取jdbc.properties）(应用)
+## spring产生模板对象代码实现（抽取jdbc.properties）(应用)
 
 将数据库的连接信息抽取到外部配置文件中，和spring的配置文件分离开，有利于后期维护
 
@@ -1877,7 +1869,7 @@ jdbc.password=root
 </beans>
 ```
 
-## JdbcTemplate基本使用-常用操作-更新操作(应用)
+## 常用操作-更新操作(应用)
 
 ```java
 package com.itheima.test;
@@ -1917,7 +1909,7 @@ public class JdbcTemplateCRUDTest {
 
 
 
-## JdbcTemplate基本使用-常用操作-查询操作(应用)
+## 常用操作-查询操作(应用)
 
 ```java
 package com.itheima.test;
@@ -1962,7 +1954,7 @@ public class JdbcTemplateCRUDTest {
 }
 ```
 
-## JdbcTemplate基本使用-知识要点(理解，记忆)
+## 知识要点(理解，记忆)
 
 ①导入spring-jdbc和spring-tx坐标
 
