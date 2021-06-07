@@ -410,7 +410,7 @@ SET PASSWORD FOR 'root'@'localhost' = PASSWORD('123');
 
 ```mysql
 -- 1. 切换到mysql数据库
-USE myql;
+USE mysql;
 -- 2. 查询user表
 SELECT * FROM USER;
 
