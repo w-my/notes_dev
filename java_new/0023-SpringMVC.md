@@ -4,23 +4,23 @@
 
 ## Spring与Web环境集成
 
-### 1.1 ApplicationContext应用上下文获取方式
+#### ApplicationContext应用上下文获取方式
 
-应用上下文对象是通过new ClasspathXmlApplicationContext(spring配置文件) 方式获取的，但是每次从容器中获得Bean时都要编写new ClasspathXmlApplicationContext(spring配置文件) ，这样的弊端是配置文件加载多次，应用上下文对象创建多次。
+应用上下文对象是通过 `new ClasspathXmlApplicationContext(spring配置文件) ` 方式获取的，但是每次从容器中获得Bean时都要编写`new ClasspathXmlApplicationContext(spring配置文件) `，这样的弊端是配置文件加载多次，应用上下文对象创建多次。
 
 在Web项目中，可以使用ServletContextListener监听Web应用的启动，我们可以在Web应用启动时，就加载Spring的配置文件，创建应用上下文对象ApplicationContext，在将其存储到最大的域servletContext域中，这样就可以在任意位置从域中获得应用上下文ApplicationContext对象了。
 
-### 1.2 Spring提供获取应用上下文的工具
+#### Spring提供获取应用上下文的工具
 
 上面的分析不用手动实现，Spring提供了一个监听器ContextLoaderListener就是对上述功能的封装，该监听器内部加载Spring配置文件，创建应用上下文对象，并存储到ServletContext域中，提供了一个客户端工具WebApplicationContextUtils供使用者获得应用上下文对象。
 
 所以我们需要做的只有两件事：
 
-①在web.xml中配置ContextLoaderListener监听器（导入spring-web坐标）
+1. 在web.xml中配置ContextLoaderListener监听器（导入spring-web坐标）
 
-②使用WebApplicationContextUtils获得应用上下文对象ApplicationContext
+2. 使用WebApplicationContextUtils获得应用上下文对象ApplicationContext
 
-### 1.3 导入Spring集成web的坐标
+#### 导入Spring集成web的坐标
 
 ```xml
 <dependency>
@@ -30,7 +30,7 @@
 </dependency>
 ```
 
-### 1.4 配置ContextLoaderListener监听器
+#### 配置ContextLoaderListener监听器
 
 ```xml
 <!--全局参数-->
@@ -46,51 +46,52 @@
  </listener>
 ```
 
-### 1.5 通过工具获得应用上下文对象
+#### 通过工具获得应用上下文对象
 
 ```java
-ApplicationContext applicationContext =    
-    WebApplicationContextUtils.getWebApplicationContext(servletContext);
-    Object obj = applicationContext.getBean("id");
+ApplicationContext app = WebApplicationContextUtils.getWebApplicationContext(servletContext);
+Object obj = app.getBean("id");
 ```
 
 **知识要点**
 
 Spring集成web环境步骤
 
-​      ①配置ContextLoaderListener监听器
+1. 配置ContextLoaderListener监听器
 
-​      ②使用WebApplicationContextUtils获得应用上下文
+2. 使用WebApplicationContextUtils获得应用上下文
+
+
 
 ## SpringMVC的简介
 
-### 2.1 SpringMVC概述
+#### SpringMVC概述
 
 SpringMVC 是一种基于 Java 的实现 MVC 设计模型的请求驱动类型的轻量级 Web 框架，属于SpringFrameWork 的后续产品，已经融合在 Spring Web Flow 中。
 
 SpringMVC 已经成为目前最主流的MVC框架之一，并且随着Spring3.0 的发布，全面超越 Struts2，成为最优秀的 MVC 框架。它通过一套注解，让一个简单的 Java 类成为处理请求的控制器，而无须实现任何接口。同时它还支持 RESTful 编程风格的请求。
 
-### 2.3 SpringMVC快速入门
+#### SpringMVC快速入门
 
 需求：客户端发起请求，服务器端接收请求，执行逻辑并进行视图跳转。
 
 **开发步骤**
 
-①导入SpringMVC相关坐标
+1. 导入SpringMVC相关坐标
 
-②配置SpringMVC核心控制器DispathcerServlet
+2. 配置SpringMVC核心控制器DispathcerServlet
 
-③创建Controller类和视图页面
+3. 创建Controller类和视图页面
 
-④使用注解配置Controller类中业务方法的映射地址
+4. 使用注解配置Controller类中业务方法的映射地址
 
-⑤配置SpringMVC核心文件 spring-mvc.xml
+5. 配置SpringMVC核心文件 spring-mvc.xml
 
-⑥客户端发起请求测试
+6. 客户端发起请求测试
 
 **代码实现**
 
-①导入Spring和SpringMVC的坐标、导入Servlet和Jsp的坐标
+1. 导入Spring和SpringMVC的坐标、导入Servlet和Jsp的坐标
 
 ```xml
  <!--Spring坐标-->
@@ -119,7 +120,7 @@ SpringMVC 已经成为目前最主流的MVC框架之一，并且随着Spring3.0 
 </dependency>
 ```
 
-②在web.xml配置SpringMVC的核心控制器
+2. 在web.xml配置SpringMVC的核心控制器
 
 ```xml
 <servlet>
@@ -138,7 +139,7 @@ SpringMVC 已经成为目前最主流的MVC框架之一，并且随着Spring3.0 
 
 ```
 
-③创建Controller和业务方法
+3. 创建Controller和业务方法
 
 ```java
 public class QuickController {
@@ -149,7 +150,7 @@ public class QuickController {
 }
 ```
 
-③创建视图页面index.jsp
+3. 创建视图页面index.jsp
 
 ```jsp
 <html>
@@ -159,7 +160,7 @@ public class QuickController {
 </html>
 ```
 
-④配置注解
+4. 配置注解
 
 ```java
 @Controller
@@ -172,13 +173,13 @@ public class QuickController {
 }
 ```
 
-⑤创建spring-mvc.xml
+5. 创建spring-mvc.xml
 
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"      xmlns:mvc="http://www.springframework.org/schema/mvc"    xmlns:context="http://www.springframework.org/schema/context"     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    xsi:schemaLocation="http://www.springframework.org/schema/beans     http://www.springframework.org/schema/beans/spring-beans.xsd     http://www.springframework.org/schema/mvc       http://www.springframework.org/schema/mvc/spring-mvc.xsd      http://www.springframework.org/schema/context       http://www.springframework.org/schema/context/spring-context.xsd">    <!--配置注解扫描-->    <context:component-scan base-package="com.itheima"/></beans>
 ```
 
-⑥访问测试地址
+6. 访问测试地址
 
 ```xml
 http://localhost:8080/itheima_springmvc1/quick 
@@ -194,11 +195,11 @@ quickMethod running.....
 
 ![SpringMVC](./img/0023-SpringMVC.png)
 
-### 2.3 SpringMVC流程图示
+#### SpringMVC流程图示
 
 ![SpringMVC流程图](./img/0023-SpringMVC流程图.png)
 
-### 2.4 知识要点
+#### 知识要点
 
 SpringMVC的开发步骤 
 
