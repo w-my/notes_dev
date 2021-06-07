@@ -1607,11 +1607,11 @@ public class MyAspect {
 
 # JdbcTemplate基本使用
 
-## 概述(了解)
+## 概述
 
 `JdbcTemplate` 是spring框架中提供的一个对象，是对原始繁琐的Jdbc API对象的简单封装。spring框架为我们提供了很多的操作模板类。例如：操作关系型数据的 `JdbcTemplate` 和 `HibernateTemplate` ，操作nosql数据库的 `RedisTemplate` ，操作消息队列的 `JmsTemplate` 等等。
 
-## 开发步骤(理解)
+## 开发步骤
 
 1. 导入 `spring-jdbc` 和 `spring-tx` 坐标
 
@@ -1621,7 +1621,7 @@ public class MyAspect {
 
 4. 执行数据库操作
 
-## 快速入门代码实现(应用)
+## 快速入门代码实现
 
 导入 `spring-jdbc` 和 `spring-tx` 坐标
 
@@ -1790,28 +1790,27 @@ public void test1() throws PropertyVetoException {
 
 
 
-## spring产生模板对象分析(理解)
+## spring产生模板对象
 
 我们可以将JdbcTemplate的创建权交给Spring，将数据源DataSource的创建权也交给Spring，在Spring容器内部将数据源DataSource注入到JdbcTemplate模版对象中,然后通过Spring容器获得JdbcTemplate对象来执行操作。
 
-## spring产生模板对象代码实现(应用)
+#### spring产生模板对象代码实现
 
 配置如下：
 
 ```xml
 <!--数据源对象-->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
-        <property name="jdbcUrl" value="jdbc:mysql:///test"></property>
-        <property name="user" value="root"></property>
-        <property name="password" value="root"></property>
-    </bean>
+<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+    <property name="jdbcUrl" value="jdbc:mysql:///test"></property>
+    <property name="user" value="root"></property>
+    <property name="password" value="root"></property>
+</bean>
 
-    <!--jdbc模板对象-->
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
-
+<!--jdbc模板对象-->
+<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="dataSource"/>
+</bean>
 ```
 
 测试代码
@@ -1827,7 +1826,7 @@ public void test1() throws PropertyVetoException {
     }
 ```
 
-## spring产生模板对象代码实现（抽取jdbc.properties）(应用)
+#### spring产生模板对象代码实现（抽取jdbc.properties）
 
 将数据库的连接信息抽取到外部配置文件中，和spring的配置文件分离开，有利于后期维护
 
@@ -1869,7 +1868,9 @@ jdbc.password=root
 </beans>
 ```
 
-## 常用操作-更新操作(应用)
+## 常用操作
+
+#### 更新操作
 
 ```java
 package com.itheima.test;
@@ -1892,24 +1893,20 @@ public class JdbcTemplateCRUDTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     
-	//修改更新
+	  // 修改更新
     @Test
     public void testUpdate(){
         jdbcTemplate.update("update account set money=? where name=?",10000,"tom");
     }
-	//删除
+	  // 删除
     @Test
     public void testDelete(){
         jdbcTemplate.update("delete from account where name=?","tom");
     }
-
 }
-
 ```
 
-
-
-## 常用操作-查询操作(应用)
+#### 查询操作
 
 ```java
 package com.itheima.test;
@@ -1932,56 +1929,58 @@ public class JdbcTemplateCRUDTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     
-	//聚合查询
+	  // 聚合查询
     @Test
     public void testQueryCount(){
         Long count = jdbcTemplate.queryForObject("select count(*) from account", Long.class);
         System.out.println(count);
     }
-	//查询一个
+	  // 查询一个
     @Test
     public void testQueryOne(){
         Account account = jdbcTemplate.queryForObject("select * from account where name=?", new BeanPropertyRowMapper<Account>(Account.class), "tom");
         System.out.println(account);
     }
-	//查询所有
+  	// 查询所有
     @Test
     public void testQueryAll(){
         List<Account> accountList = jdbcTemplate.query("select * from account", new BeanPropertyRowMapper<Account>(Account.class));
         System.out.println(accountList);
     }
-
 }
 ```
 
-## 知识要点(理解，记忆)
 
-①导入spring-jdbc和spring-tx坐标
 
-②创建数据库表和实体
+## 知识要点
 
-③创建JdbcTemplate对象
+1. 导入spring-jdbc和spring-tx坐标
 
-    		JdbcTemplate jdbcTemplate = newJdbcTemplate();
-    	       jdbcTemplate.setDataSource(dataSource);
+2. 创建数据库表和实体
 
-④执行数据库操作
+3. 创建JdbcTemplate对象
+
+```java
+JdbcTemplate jdbcTemplate = newJdbcTemplate();
+jdbcTemplate.setDataSource(dataSource);
+```
+
+4. 执行数据库操作
 
     更新操作：
-    
         jdbcTemplate.update (sql,params)
     
     查询操作：
-    
         jdbcTemplate.query (sql,Mapper,params)
-    
-    jdbcTemplate.queryForObject(sql,Mapper,params)
+    		jdbcTemplate.queryForObject(sql,Mapper,params)
+
+
 
 # 声明式事务控制
 
 ## 编程式事务控制相关对象
 
-### PlatformTransactionManager
+#### PlatformTransactionManager
 
 PlatformTransactionManager 接口是 spring 的事务管理器，它里面提供了我们常用的操作事务的方法。
 
@@ -1993,11 +1992,11 @@ PlatformTransactionManager 接口是 spring 的事务管理器，它里面提供
 
 注意：
 
-PlatformTransactionManager 是接口类型，不同的 Dao 层技术则有不同的实现类，例如：Dao 层技术是jdbc 或 mybatis 时：org.springframework.jdbc.datasource.DataSourceTransactionManager 
+PlatformTransactionManager 是接口类型，不同的 Dao 层技术则有不同的实现类，例如：Dao 层技术是 jdbc 或 mybatis 时：org.springframework.jdbc.datasource.DataSourceTransactionManager 
 
 Dao 层技术是hibernate时：org.springframework.orm.hibernate5.HibernateTransactionManager
 
-### TransactionDefinition
+#### TransactionDefinition
 
 TransactionDefinition 是事务的定义信息对象，里面有如下方法：
 
@@ -2008,7 +2007,7 @@ TransactionDefinition 是事务的定义信息对象，里面有如下方法：
 | int getTimeout()             | 获得超时时间       |
 | Boolean isReadOnly()         | 是否只读           |
 
-#### 1. 事务隔离级别
+##### 1. 事务隔离级别
 
 设置隔离级别，可以解决事务并发产生的问题，如脏读、不可重复读和虚读。
 
@@ -2022,7 +2021,7 @@ TransactionDefinition 是事务的定义信息对象，里面有如下方法：
 
 - ISOLATION_SERIALIZABLE
 
-#### 2. 事务传播行为
+##### 2. 事务传播行为
 
 - **REQUIRED：如果当前没有事务，就新建一个事务，如果已经存在一个事务中，加入到这个事务中。一般的选择（默认值）**
 
@@ -2042,7 +2041,7 @@ TransactionDefinition 是事务的定义信息对象，里面有如下方法：
 
 - 是否只读：建议查询时设置为只读
 
-### TransactionStatus
+#### TransactionStatus
 
 TransactionStatus 接口提供的是事务具体的运行状态，方法介绍如下。
 
@@ -2053,19 +2052,19 @@ TransactionStatus 接口提供的是事务具体的运行状态，方法介绍�
 | boolean isNewTransaction() | 是否是新事务   |
 | boolean isRollbackOnly()   | 事务是否回滚   |
 
-### 知识要点
+#### 知识要点
 
 编程式事务控制三大对象
 
 - PlatformTransactionManager
-
 - TransactionDefinition
-
 - TransactionStatus
+
+
 
 ## 基于 XML 的声明式事务控制
 
-### 什么是声明式事务控制
+#### 什么是声明式事务控制
 
 Spring 的声明式事务顾名思义就是采用声明的方式来处理事务。这里所说的声明，就是指在配置文件中声明，用在 Spring 配置文件中声明式的处理事务来代替代码式的处理事务。
 
@@ -2079,7 +2078,7 @@ Spring 的声明式事务顾名思义就是采用声明的方式来处理事务�
 
 
 
-### 声明式事务控制的实现
+#### 声明式事务控制的实现
 
 声明式事务控制明确事项：
 
@@ -2089,7 +2088,7 @@ Spring 的声明式事务顾名思义就是采用声明的方式来处理事务�
 
 - 配置切面？
 
-①引入tx命名空间
+1. 引入tx命名空间
 
 ```xml
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -2106,11 +2105,9 @@ Spring 的声明式事务顾名思义就是采用声明的方式来处理事务�
         http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-
 ```
 
-②配置事务增强
+2. 配置事务增强
 
 ```xml
 <!--平台事务管理器-->
@@ -2126,7 +2123,7 @@ Spring 的声明式事务顾名思义就是采用声明的方式来处理事务�
 </tx:advice>
 ```
 
-③配置事务 AOP 织入
+3. 配置事务 AOP 织入
 
 ```xml
 <!--事务的aop增强-->
@@ -2136,7 +2133,7 @@ Spring 的声明式事务顾名思义就是采用声明的方式来处理事务�
 </aop:config>
 ```
 
-④测试事务控制转账业务代码
+4. 测试事务控制转账业务代码
 
 ```java
 @Override
@@ -2147,7 +2144,7 @@ public void transfer(String outMan, String inMan, double money) {
 }
 ```
 
-### 切点方法的事务参数的配置
+#### 切点方法的事务参数的配置
 
 ```xml
 <!--事务增强配置-->
@@ -2166,7 +2163,7 @@ public void transfer(String outMan, String inMan, double money) {
 
 - name：切点方法名称
 
-- isolation:事务的隔离级别
+- isolation：事务的隔离级别
 
 - propogation：事务的传播行为
 
@@ -2174,21 +2171,21 @@ public void transfer(String outMan, String inMan, double money) {
 
 - read-only：是否只读
 
-### 知识要点
+#### 知识要点
 
 **声明式事务控制的配置要点**
 
 - 平台事务管理器配置
-
 - 事务通知的配置
-
 - 事务aop织入的配置
+
+
 
 ## 基于注解的声明式事务控制
 
-### 使用注解配置声明式事务控制
+#### 使用注解配置声明式事务控制
 
-1. 编写 AccoutDao
+1. 编写 `AccoutDao`
 
 ```java
 @Repository("accountDao")
@@ -2204,7 +2201,7 @@ public class AccountDaoImpl implements AccountDao {
 }
 ```
 
-2. 编写 AccoutService
+2. 编写 `AccoutService`
 
 ```java
 @Service("accountService")
@@ -2221,7 +2218,7 @@ public class AccountServiceImpl implements AccountService {
 }
 ```
 
-3. 编写 applicationContext.xml 配置文件
+3. 编写 `applicationContext.xml` 配置文件
 
 ```xml
 <!—之前省略datsSource、jdbcTemplate、平台事务管理器的配置-->
@@ -2231,17 +2228,17 @@ public class AccountServiceImpl implements AccountService {
 <tx:annotation-driven/>
 ```
 
-### 注解配置声明式事务控制解析
+#### 注解配置声明式事务控制解析
 
-①使用 @Transactional 在需要进行事务控制的类或是方法上修饰，注解可用的属性同 xml 配置方式，例如隔离级别、传播行为等。
+1. 使用 @Transactional 在需要进行事务控制的类或是方法上修饰，注解可用的属性同 xml 配置方式，例如隔离级别、传播行为等。
 
-②注解使用在类上，那么该类下的所有方法都使用同一套注解参数配置。
+2. 注解使用在类上，那么该类下的所有方法都使用同一套注解参数配置。
 
-③使用在方法上，不同的方法可以采用不同的事务参数配置。
+3. 使用在方法上，不同的方法可以采用不同的事务参数配置。
 
-④Xml配置文件中要开启事务的注解驱动<tx:annotation-driven />
+4. Xml配置文件中要开启事务的注解驱动<tx:annotation-driven />
 
-### 知识要点
+#### 知识要点
 
 **注解声明式事务控制的配置要点**
 
