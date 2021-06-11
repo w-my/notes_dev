@@ -907,8 +907,8 @@ public void save21(@CookieValue(value = "JSESSIONID") String jsessionId) throws 
 
 ```jsp
 <form action="${pageContext.request.contextPath}/user/quick22" method="post" enctype="multipart/form-data">
-  <input type="text" name="username"><br/>
-  <input type="file" name="uploadFile"><br/>
+  名称<input type="text" name="username"><br/>
+  文件<input type="file" name="uploadFile"><br/>
   <input type="submit" value="提交">
 </form>
 ```
@@ -1177,18 +1177,18 @@ public class MyInterceptor2 implements HandlerInterceptor {
 
 ```java
 public class PrivilegeInterceptor implements HandlerInterceptor {    
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {        
-    // 逻辑：判断用户是否登录  本质：判断session中有没有user        
-    HttpSession session = request.getSession();        
-    User user = (User) session.getAttribute("user");        
-    if(user==null){            
-      // 没有登录            
-      response.sendRedirect(request.getContextPath()+"/login.jsp");            
-      return false;        
-    }        
-    // 放行 访问目标资源        
-    return true;    
-  }
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws IOException {        
+      // 逻辑：判断用户是否登录  本质：判断session中有没有user        
+        HttpSession session = request.getSession();        
+        User user = (User) session.getAttribute("user");        
+        if(user==null){            
+          // 没有登录            
+            response.sendRedirect(request.getContextPath()+"/login.jsp");            
+            return false;        
+        }        
+        // 放行 访问目标资源        
+        return true;    
+    }
 }
 ```
 
@@ -1288,9 +1288,7 @@ public User login(String username, String password) {
 
 系统中异常包括两类：预期异常和运行时异常RuntimeException，前者通过捕获异常从而获取异常信息，后者主要通过规范代码开发、测试等手段减少运行时异常的发生。
 
-系统的Dao、Service、Controller出现都通过throws Exception向上抛出，最后由SpringMVC前端控制器交由异常处理器进行异常处理，如下图：
-
-![1551078013501](/Users/caianfang/Downloads/__/20 Java/04-就业课(2.1)-SpringMVC/day03_SpringMVC的文件上传/笔记/img/图片1.jpg)
+系统的Dao、Service、Controller出现都通过throws Exception向上抛出，最后由SpringMVC前端控制器交由异常处理器进行异常处理。
 
 #### 异常处理两种方式
 
@@ -1322,7 +1320,7 @@ SpringMVC已经定义好了该类型转换器，在使用时可以根据项目�
 ```java
 public class MyExceptionResolver implements HandlerExceptionResolver {
   @Overridepublic 
-  ModelAndView resolveException(HttpServletRequest request,     HttpServletResponse response, Object handler, Exception ex) {    
+  ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {    
     // 处理异常的代码实现    
     // 创建ModelAndView对象    
     ModelAndView modelAndView = new ModelAndView();     
@@ -1346,7 +1344,7 @@ public class MyExceptionResolver implements HandlerExceptionResolver {
   <head>
     <title>Title</title>
   </head>
-  <body>	这是一个最终异常的显示页面</body>
+  <body>这是一个最终异常的显示页面</body>
 </html>
 ```
 
