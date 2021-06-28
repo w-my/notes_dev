@@ -354,7 +354,7 @@ $ sudo chmod 775 /usr/local
 ###### 尝试1 ：
 
 确定gem 版本 sudo gem update —system 
-确定pod pod update (更新项目podfile) 
+确定pod update (更新项目podfile) 
 确定repo 最新 pod repo update 或者 pod repo update —verbose 
 最后 重新pod setup
 
