@@ -5,6 +5,39 @@
 
 
 
+## GitHub 新认证 Personal Access Token
+
+github 取消了账号密码认证，向 Github 推送代码时，报如下错误：
+
+```
+remote: Support for password authentication was removed on August 13, 2021. Please use a personal access token instead.
+remote: Please see https://github.blog/2020-12-15-token-authentication-requirements-for-git-operations/ for more information.
+```
+
+解决方法：
+
+#### 1. 先去官网申请 Person Access Token
+
+个人主页下 Settings，选择 Developer Settings，选择 Person Access Token，添加一个 token
+
+#### 2. 新建仓库时使用
+
+```sh
+$ git clone ...
+Username: <username>
+Password: <Person Access Token>
+```
+
+#### 3. 已有仓库使用
+
+清除已有的账号密码，然后进行相关操作时输入新账号密码
+
+```sh
+git config --system --unset credential.helper
+```
+
+
+
 ## GitHub无法访问、443 Operation timed out的解决
 
 #### 1. 记录以上三个网址下的 IP Address
@@ -47,6 +80,10 @@ vim /etc/hosts
 ```sh
 sudo killall -HUP mDNSResponder;say DNS cache has been flushed
 ```
+
+
+
+## ----------
 
 
 
