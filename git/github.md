@@ -3,6 +3,53 @@
 [iOS组件化-私有podSpecs](https://blog.csdn.net/MPK_Github/article/details/80825780)
 [GitLab 的安装及使用](https://www.jianshu.com/p/b04356e014fa)
 
+
+
+## GitHub无法访问、443 Operation timed out的解决
+
+#### 1. 记录以上三个网址下的 IP Address
+
+https://github.com.ipaddress.com
+
+https://fastly.net.ipaddress.com/github.global.ssl.fastly.net#ipinfo
+
+https://github.com.ipaddress.com/assets-cdn.github.com
+
+例如：
+
+```sh
+140.82.114.3  		github.com
+199.232.69.194		github.global.ssl.fastly.net
+185.199.108.153		assets-cdn.github.com
+185.199.109.153		assets-cdn.github.com
+185.199.110.153		assets-cdn.github.com
+185.199.111.153		assets-cdn.github.com
+```
+
+#### 2. 将网址映射保存到 /etc/hosts 文件最后
+
+编辑 /etc/hosts 文件，将上面网址复制的 IP Address 保存到最后
+
+```sh
+vim /etc/hosts
+```
+
+注意：需要 root 权限，做如下操作即可：
+
+```sh
+sudo su
+su -
+vim /etc/hosts
+```
+
+##### 3. 刷新DNS，然后就可以神奇的访问 Github 了
+
+```sh
+sudo killall -HUP mDNSResponder;say DNS cache has been flushed
+```
+
+
+
 #### SSH
 
 ```sh
@@ -120,6 +167,3 @@ $ pod repo add ServyouCocoaPod <url>
 ###### 查询是否连接成功
 
 > `$ git remote -v`
-
-
-
