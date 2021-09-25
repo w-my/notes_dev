@@ -120,3 +120,6 @@ $ pod repo add ServyouCocoaPod <url>
 ###### 查询是否连接成功
 
 > `$ git remote -v`
+
+
+
