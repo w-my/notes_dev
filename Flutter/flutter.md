@@ -55,6 +55,20 @@ $ sudo xcodebuild -runFirstLaunch
 
 ##### 3. 启动一次 Xcode 或者运行一下命令行： `sudo xcodebuild -license`
 
+##### 错误：
+
+```
+CocoaPods installed but not working.
+  You appear to have CocoaPods installed but it is not working.
+  This can happen if the version of Ruby that CocoaPods was installed with is different from the one being used to invoke it.
+	This can usually be fixed by re-installing CocoaPods.
+To re-install see https://guides.cocoapods.org/using/getting-started.html#installation for instructions.
+```
+
+解决：
+
+
+
 
 
 #### 配置 iOS simulator
