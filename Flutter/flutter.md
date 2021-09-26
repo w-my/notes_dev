@@ -100,11 +100,11 @@ q # Quit (terminate the application on the device).
 
 
 
-## Android Studio setup
+## Android setup
 
-##### 1. 安装 Android Studio
+#### 安装 Android Studio
 
- [官网](https://developer.android.google.cn/studio/#downloads) 下载安装
+##### 1. [官网](https://developer.android.google.cn/studio/#downloads) 下载安装
 
 ##### 2. 配置 Android Studio
 
@@ -158,6 +158,8 @@ flutter doctor --android-licenses
 ```
 
 
+
+#### 配置 Android emulator
 
 
 
