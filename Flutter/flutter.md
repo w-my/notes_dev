@@ -20,6 +20,7 @@ unzip ~/Downloads/flutter_macos_2.5.1-stable.zip
 ##### 3. 添加到环境变量
 
 ```sh
+# `pwd` 替换成自己的 flutter 解压路径
 export PATH="$PATH:`pwd`/flutter/bin"
 ```
 
@@ -29,13 +30,26 @@ vim ~/.bash_profile
 # 添加 flutter 环境变量
 export PATH="$PATH:~/Library/Flutter/bin"
 # 保存后刷新配置，使配置生效
-source .bash_profile
+source ~/.bash_profile
 ```
 
 ##### 4. 查看 flutter 配置依赖
 
 ```sh
 flutter doctor -v
+```
+
+##### 问题：
+
+`Running "flutter pub get" in flutter_tools...` 一直没动静
+
+解决：
+
+在 `.bash_profile` 文件最后添加如下两行代码，更改依赖下载地址为国内源
+
+```sh
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 ```
 
 
