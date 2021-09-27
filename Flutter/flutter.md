@@ -8,7 +8,7 @@
 
 ##### 1. 下载 Flutter SDK
 
-[Flutter 官网](https://flutter.dev) -> Docs -> Get started -> Install ，选择 MacOS，有详细的官网安装教程
+[Flutter 官网](https://flutter.dev) > Docs > Get started > Install ，选择 MacOS，有详细的官网安装教程
 
 ##### 2. 提取 SDK
 
@@ -138,7 +138,7 @@ q # Quit (terminate the application on the device).
 
 启动 Android Studio，出现配置代理的地方，可以不配置，一路点下去 Finish。
 
-进入主界面后，左上角 Android Studio -> Preferences -> Plugins，
+进入主界面后，左上角 Android Studio > Preferences > Plugins，
 
 搜索 Flutter，点击安装 Install，然后 Restart IDE。
 
@@ -158,7 +158,7 @@ See https://developer.android.com/studio/command-line for more details.
 
 解决：
 
-Android Status -> Preferences... -> Appearance & Behavior -> System Settings -> Android SDK -> SDK Tools
+Android Status > Preferences... > Appearance & Behavior > System Settings > Android SDK > SDK Tools
 
 必须勾选以下4项：
 
@@ -188,6 +188,30 @@ flutter doctor --android-licenses
 
 
 #### 配置 Android emulator
+
+##### 1. 启用 VM acceleration。
+
+##### 2. 创建模拟器
+
+启动 `Android Studio` > `Tools` > `AVD Manager` (需要打开项目才有此选项)
+
+选择 `Create Virtual Device` > `Next` > `建议选择Pie` > `Next` 
+
+在 `Emulated Performance` 下，选择 **Hardware - GLES 2.0** 以启用硬件加速，或者 Automatic > Finish 。
+
+##### 3. 启动模拟器
+
+在 Android Virtual Device Manager 中, 点击 **Run** 。
+
+##### 4. 运行 flutter 项目
+
+进入 flutter 项目目录，执行命令：
+
+```sh
+flutter run
+```
+
+
 
 
 
