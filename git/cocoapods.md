@@ -370,3 +370,26 @@ $ sudo chmod 775 /usr/local
 删除./cocoapods 目录下repo 文件中所有文件 
 重新pod setup 或者直接到spec GitHub 地址 直接下载下来更改文件名称为 master 拖进repos 文件目录下，并进入repos git pull 
 或者是直接pod setup
+
+
+
+##### 问题4
+
+###### can't find gem cocoapods (>= 0.a) with executable pod (Gem::GemNotFoundException)
+
+###### 尝试1:
+
+```sh
+sudo gem update --system
+gem install cocoapods
+```
+
+###### 尝试2:
+
+```sh
+rvm get stable
+gem install cocoapods
+```
+
+
+
