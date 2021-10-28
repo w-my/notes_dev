@@ -33,7 +33,7 @@ Password: <Person Access Token>
 清除已有的账号密码，然后进行相关操作时输入新账号密码
 
 ```sh
-git config --system --unset credential.helper
+sudo git config --system --unset credential.helper
 ```
 
 

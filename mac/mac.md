@@ -18,6 +18,12 @@ $ sudo spctl --master-enable
 
 #### 隐藏文件显示隐藏
 
+###### 显示隐藏快捷键
+
+```
+shift+command+.
+```
+
 ###### 显示隐藏文件，重启 finder 生效
 
 ```sh
