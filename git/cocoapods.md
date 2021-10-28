@@ -176,7 +176,7 @@ rvm install 2.7
 
 找到终端，右键选择显示简介，勾选使用Rosetta打开，这个一定要勾选。
 
-新电脑基本都安装好了最新的roby了，可以查看下版本和sources
+新电脑基本都安装好了最新的ruby了，可以查看下版本和sources
 
 ```sh
 $ ruby -v
@@ -244,7 +244,7 @@ platform :ios, '8.0'
 target 'MyApp' do
     pod 'AFNetworking', '~> 3.0'
 end
-swift如下：
+# swift如下：
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '10.0'
 use_frameworks!
