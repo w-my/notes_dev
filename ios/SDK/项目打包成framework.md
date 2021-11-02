@@ -82,9 +82,83 @@ end
 ```
 
 ```objective-c
+NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle]
+												 pathForResource:@"DemoFramework"
+												 ofType:@"bundle"]];
+	self = [bundle loadNibNamed:NSStringFromClass([self class])
+						  owner:self
+						options:nil].lastObject;
+```
+
+#### 生成 framework
+
+选择真机和模拟器分别编译一下，生成真机和模拟器framework，使用命令合并framework
+
+```sh
+lipo -create /Users/xx/Desktop/DemoFramework/Build/Products/Debug-iphoneos/DemoFramework.framework/DemoFramework /Users/xx/Desktop/DemoFramework/Build/Products/Debug-iphonesimulator/DemoFramework.framework/DemoFramework -output /Users/yq/Desktop/sdk
+```
+
+会生成一个 `.lipo` 文件，把它重命名为 `DemoFramework` ，然后就可以拿去使用了。
+
+#### 脚本生成 framework
+
+在 `TARGETS` 点击 `+` ，选择 `Other` 下的 `Aggregate` ，创建项目 `FrameRunScript`
+
+选中脚本，选择 `Build Phases` ，点击 `+` ，选择 `New Run Script Phase` 
+
+在添加脚本位置，添加如下脚本命令，然后选择 `Any ios Device` 执行 `Commond + B`
+
+```sh
 ```
 
 
 
+
+
+## 打包 bundle
+
+#### 创建 bundle
+
+新建项目，选择 macOS -> Bundle 创建
+
+#### 修改设置
+
+TARGETS 选中创建的 target，修改配置
+
+##### Build Settings
+
+- Architectures
+  - Base SDK ：改为 iOS
+- User-Defined
+  - COMBINE_HIDPI_IMAGES ：改为 NO（否则Bundle图片格式就会为tiff格式）
+- Deployment
+  - Skip Install ：改为 NO（作为资源包只需要编译就好，不需要安装相关配置，同时删除Installation Directory的键值）
+  - Installation Directory ：删除值
+
+##### Build Phases
+
+- Copy Bundle Resources ：添加需要打包的文件
+
+#### 生成 bundle
+
+选择新创建的 bundle 的 Scheme，运行，会在 Products 文件夹下生成 bundle 文件，就那个导入到 framework 项目中 或 导入到测试项目中使用了。
+
+
+
 ## Test
+
+#### 使用
+
+导入 framework 和 bundle 文件；
+
+引入 framework 中使用的三方库；
+
+
+
+## framework中使用其他的framework库
+
+以支付宝为例，新建文件夹，找到 `AlipaySDK.framework` 里 `AlipaySDK` 修改其后缀名为.a并copy 此 framework 包内所有文件到新建的文件夹，然后导入到需要打包的项目中
+
+> 注：1.如果framework使用categary需在引用的项目中target->build setting->other link flag 中添加 -ObjC
+>  2.若打包的framework使用了三方库，那么引用的项目也需导入三方库所需的系统库
 
