@@ -157,8 +157,16 @@ TARGETS 选中创建的 target，修改配置
 
 ## framework中使用其他的framework库
 
-以支付宝为例，新建文件夹，找到 `AlipaySDK.framework` 里 `AlipaySDK` 修改其后缀名为.a并copy 此 framework 包内所有文件到新建的文件夹，然后导入到需要打包的项目中
+以支付宝为例，新建文件夹，找到 `AlipaySDK.framework` 里 `AlipaySDK` 修改其后缀名为.a并copy 此 `framework` 包内所有文件到新建的文件夹，然后导入到需要打包的项目中
 
 > 注：1.如果framework使用categary需在引用的项目中target->build setting->other link flag 中添加 -ObjC
 >  2.若打包的framework使用了三方库，那么引用的项目也需导入三方库所需的系统库
+
+如果使用打包完的 `Framework` 有出现崩溃的情况，可以考虑在项目 `Other linker flags` 中加入一些参数，三个常用参数：
+
+>-ObjC：加了这个参数后，链接器就会把静态库中所有的 Objective-C 类和分类都加载到最后的可执行文件中。
+>
+>-all_load：会让链接器把所有找到的目标文件都加载到可执行文件中，但是千万不要随便使用这个参数！假如你使用了不止一个静态库文件，然后又使用了这个参数，那么你很有可能会遇到 ld: duplicate symbol 错误，因为不同的库文件里面可能会有相同的目标文件，所以建议在遇到 -ObjC 失效的情况下使用 -force_load 参数。
+>
+>-force_load：所做的事情跟 -all_load 其实是一样的，但是 -force_load 需要指定要进行全部加载的库文件的路径，这样的话，你就只是完全加载了一个库文件，不影响其余库文件的按需加载。
 
