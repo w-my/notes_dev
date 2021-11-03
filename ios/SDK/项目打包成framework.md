@@ -155,6 +155,16 @@ TARGETS 选中创建的 target，修改配置
 
 
 
+
+
+## 使用自己打包的framework错误
+
+- `ld: warning: Could not find or use auto-linked framework 'XxxFramework'` 或 `ld: 2 duplicate symbols for architecture arm64`
+
+如果自己的 `framework` 中使用的第三方 `framework`，则需要将第三方改为 `.a` 引入使用
+
+
+
 ## framework中使用其他的framework库
 
 以支付宝为例，新建文件夹，找到 `AlipaySDK.framework` 里 `AlipaySDK` 修改其后缀名为.a并copy 此 `framework` 包内所有文件到新建的文件夹，然后导入到需要打包的项目中
@@ -169,4 +179,24 @@ TARGETS 选中创建的 target，修改配置
 >-all_load：会让链接器把所有找到的目标文件都加载到可执行文件中，但是千万不要随便使用这个参数！假如你使用了不止一个静态库文件，然后又使用了这个参数，那么你很有可能会遇到 ld: duplicate symbol 错误，因为不同的库文件里面可能会有相同的目标文件，所以建议在遇到 -ObjC 失效的情况下使用 -force_load 参数。
 >
 >-force_load：所做的事情跟 -all_load 其实是一样的，但是 -force_load 需要指定要进行全部加载的库文件的路径，这样的话，你就只是完全加载了一个库文件，不影响其余库文件的按需加载。
+
+
+
+
+
+
+
+
+
+## Framework 打包错误
+
+- The linked library 'xxxx.a/Framework' is missing one or more architectures required by this target: armv7.
+
+解决方法：在 TARGETS ——> Build Settings-Excluded Architectures 中添加以下代码：
+
+```sh
+EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_simulator__NATIVE_ARCH_64_BIT_x86_64=arm64 arm64e armv7 armv7s armv6 armv8 EXCLUDED_ARCHS=$(inherited) $(EXCLUDED_ARCHS__EFFECTIVE_PLATFORM_SUFFIX_$(EFFECTIVE_PLATFORM_SUFFIX)__NATIVE_ARCH_64_BIT_$(NATIVE_ARCH_64_BIT))
+```
+
+
 
