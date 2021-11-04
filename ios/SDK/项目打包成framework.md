@@ -49,6 +49,7 @@ end
 
 - Architectures
   - Build Active Architecture Only ：设置为NO（YES打包的Framework，只能用于当前打包所选设备使用）
+  - Architectures ：模拟器下添加 armv7s，真机模式下不要添加，否则会报错
 - Linking
   - Mach-O Type ：设置为 Static Library（非官方Framework只能使用静态模式）
 
@@ -89,6 +90,16 @@ NSBundle *bundle = [NSBundle bundleWithPath:[[NSBundle mainBundle]
 						  owner:self
 						options:nil].lastObject;
 ```
+
+##### plist 文件
+
+同图片一样
+
+或
+
+把plist文件拖进framework中，重新编译framework，把重新编译的framework和plist文件都拖到demo中，这样就可以使用plist文件了
+
+
 
 #### 生成 framework
 
