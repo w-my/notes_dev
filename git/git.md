@@ -23,7 +23,7 @@ $ git config --list
 #### git 命令
 
 ```sh
-$ git init 
+$ git init
 $ git add <file>
 $ git commit -m <message>
 $ git status
