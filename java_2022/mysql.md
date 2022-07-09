@@ -1,12 +1,12 @@
 # mysql
 
 
----
+
 ## mysql 下载安装
 [mysql下载](https://dev.mysql.com/downloads/mysql/) ，直接下载 dmg 格式执行安装，安装过程中最后会让设置数据库密码，需要记住自己设置的密码。
 
 
----
+
 ## mysql 配置
 打开终端，执行：
 ```sh
@@ -25,7 +25,7 @@ source ~/.bash_profile
 ```
 
 
----
+
 ## mysql 使用
 可以通过以下命令登录 mysql，执行命令需要输入数据库密码：
 ```sh
@@ -37,7 +37,7 @@ SET PASSWORD FOR 'root'@'localhost' = PASSWORD('新密码');
 ```
 
 
----
+
 ## idea 配置 mysql
 打开 idea 选择 Database，添加 Data Source，选择 MySql，输入数据库连接配置
 ```text
@@ -50,7 +50,7 @@ URL: jdbc:mysql://localhost:3306/ys_goods?characterEncoding=UTF8&serviceTimezone
 ```
 
 
----
+
 ## 项目配置 mysql 连接
 `application.properties`
 ```properties
