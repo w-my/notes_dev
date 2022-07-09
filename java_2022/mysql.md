@@ -3,8 +3,7 @@
 
 ---
 ## mysql 下载安装
-[mysql下载](https://dev.mysql.com/downloads/mysql/) ，
-直接下载 dmg 格式执行安装，安装过程中最后会让设置数据库密码，需要记住自己设置的密码。
+[mysql下载](https://dev.mysql.com/downloads/mysql/) ，直接下载 dmg 格式执行安装，安装过程中最后会让设置数据库密码，需要记住自己设置的密码。
 
 
 ---
@@ -60,5 +59,25 @@ spring.datasource.username=root
 spring.datasource.password=root1234
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 spring.datasource.url=jdbc:mysql://127.0.0.1:3306/ys_goods?characterEncoding=UTF8&serviceTimezone=UTC&useSSL=false
+```
+
+`pom.xml`
+
+```xml
+<!-- jdbc -->
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+  <groupId>mysql</groupId>
+  <artifactId>mysql-connector-java</artifactId>
+  <scope>runtime</scope>
+</dependency>
+<dependency>
+  <groupId>org.mybatis.spring.boot</groupId>
+  <artifactId>mybatis-spring-boot-starter</artifactId>
+  <version>2.2.2</version>
+</dependency>
 ```
 
