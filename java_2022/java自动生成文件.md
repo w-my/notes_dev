@@ -483,13 +483,16 @@ def generateMapperXml(out, packageName, tableName, className, fields) {
     data.add("\t<sql id=\"selectAllWhere\">")
     fields.each() {
         if ("String" == it.type) {
-            data.add("\t\t\t<if test=\"${it.name} != null and ${it.name} != ''\">")
+            data.add("\t\t\t<if test=\"${it.name} != null and ${it.name} != ''\">" +
+                    "\n\t\t\t\tand ${it.colName} LIKE #{${it.name}}" +
+                    "\n\t\t\t</if>"
+            )
         } else {
-            data.add("\t\t\t<if test=\"${it.name} != null\">")
+            data.add("\t\t\t<if test=\"${it.name} != null\">" +
+                    "\n\t\t\t\tand ${it.colName} = #{${it.name}}" +
+                    "\n\t\t\t</if>"
+            )
         }
-        data.add("\t\t\t\tand ${it.colName} = #{${it.name}}" +
-                "\n\t\t\t</if>"
-        )
     }
     data.add("\t</sql>")
     /**
@@ -634,9 +637,11 @@ def generateServiceImpl(out, packageName, tableName, tableComment, className, da
             "\nimport com.github.pagehelper.PageHelper;" +
             "\nimport com.github.pagehelper.PageInfo;" +
             "\nimport org.apache.dubbo.config.annotation.DubboService;" +
+            "\nimport org.apache.logging.log4j.util.Strings;" +
             "\n" +
             "\nimport javax.annotation.Resource;" +
-            "\nimport java.util.List;"
+            "\nimport java.util.List;" +
+            "\nimport java.util.Objects;"
     )
     data.add("\n/**" +
             "\n * $tableComment($tableName)接口实现类" +
@@ -659,6 +664,19 @@ def generateServiceImpl(out, packageName, tableName, tableComment, className, da
             "\n\t@Override" +
             "\n\tpublic PageResult<${className}> selectByPage(PageReq page, ${className} ${daoName}) {" +
             "\n\t\tPageHelper.startPage(page.getPageNum(), page.getPageSize());" +
+            "\n\t\tif (Objects.isNull(${daoName})) {" +
+            "\n\t\t\t${daoName} = new ${className}();" +
+            "\n\t\t} else {"
+    )
+    fields.each() {
+        if ("String" == it.type) {
+            data.add("\t\t\tif (Strings.isNotBlank(${daoName}.get${firstCharToUp(it.name)}())) {" +
+                    "\n\t\t\t\t${daoName}.set${firstCharToUp(it.name)}(\"%\"+${daoName}.get${firstCharToUp(it.name)}()+\"%\");" +
+                    "\n\t\t\t}"
+            )
+        }
+    }
+    data.add("\t\t}" +
             "\n\t\tList<${className}> list = ${daoName}Mapper.selectAllByLimit(${daoName});" +
             "\n\t\tPageInfo<${className}> pageInfo = PageInfo.of(list);" +
             "\n\t\treturn PageResult.of(pageInfo);" +
