@@ -13,23 +13,25 @@
 ##### 2. 提取 SDK
 
 ```sh
-cd ~/Library/Flutter
+cd ~/development
 unzip ~/Downloads/flutter_macos_2.5.1-stable.zip
 ```
 
 ##### 3. 添加到环境变量
 
-```sh
-# `pwd` 替换成自己的 flutter 解压路径
-export PATH="$PATH:`pwd`/flutter/bin"
-```
+国内访问Flutter可能受限，使用国内开发者搭建的临时镜像 `vim ~/.bash_profile`
 
 ```sh
-# 编辑配置文件
-vim ~/.bash_profile
-# 添加 flutter 环境变量
-export PATH="$PATH:~/Library/Flutter/bin"
-# 保存后刷新配置，使配置生效
+# flutter 国内镜像
+export PUB_HOSTED_URL=https://pub.flutter-io.cn
+export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+# flutter
+export PATH=~/development/flutter/bin:$PATH
+```
+
+保存后刷新配置，使配置生效
+
+```sh
 source ~/.bash_profile
 ```
 
@@ -39,17 +41,10 @@ source ~/.bash_profile
 flutter doctor -v
 ```
 
-##### 问题：
-
-`Running "flutter pub get" in flutter_tools...` 一直没动静
-
-解决：
-
-在 `.bash_profile` 文件最后添加如下两行代码，更改依赖下载地址为国内源
+运行以下命令查看是否需要安装其它依赖项来完成安装
 
 ```sh
-export PUB_HOSTED_URL=https://pub.flutter-io.cn
-export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
+flutter doctor
 ```
 
 
@@ -133,6 +128,8 @@ q # Quit (terminate the application on the device).
 #### 安装 Android Studio
 
 ##### 1. [官网](https://developer.android.google.cn/studio/#downloads) 下载安装
+
+下载地址：https://www.androiddevtools.cn/#android-studio
 
 ##### 2. 配置 Android Studio
 
