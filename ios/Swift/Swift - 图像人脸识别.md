@@ -1,4 +1,5 @@
-## TableView&Cell背景色渐变
+## Swift - 图像人脸识别
+
 提取图片人脸居中显示
 ```swift
 class func centerImageViewOnFace (_ imageView: UIImageView) {

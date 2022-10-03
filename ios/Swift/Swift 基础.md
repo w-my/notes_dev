@@ -1,4 +1,4 @@
-# 如何假装写过 Swift
+# Swift 基础
 
 - Safe & Fast
   - 1. 能用 let，尽量不用 var

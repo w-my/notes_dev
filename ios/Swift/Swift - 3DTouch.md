@@ -1,4 +1,4 @@
-## 3DTouch
+## Swift - 3DTouch
 在 `info.plist` 中配置事件
 
 ```swift
