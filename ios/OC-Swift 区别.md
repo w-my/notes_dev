@@ -95,6 +95,7 @@ Swift 方式二：
 
 ```swift
 Class XXManager {
+		// static let sharedInstance : <#SingletonClass#> = <#SingletonClass#>()
     static let shared = XXManager()
     private override init() {
         // do something 
