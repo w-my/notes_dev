@@ -14,7 +14,7 @@
 
 ```sh
 cd ~/development
-unzip ~/Downloads/flutter_macos_2.5.1-stable.zip
+unzip ~/Downloads/flutter_macos_arm64_3.3.4-stable.zip
 ```
 
 ##### 3. 添加到环境变量
