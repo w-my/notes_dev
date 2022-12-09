@@ -111,17 +111,9 @@ widget 有多组和单组区别。 单组包含 小，中，大，特大(iOS 15)
 
 单组的例子如系统的天气widget包含小，中，大三个组件
 
-![图片](https://mmbiz.qpic.cn/mmbiz_jpg/nVERGuKNwydhFicAx81yr7wk49qDdswS3nbLHQ1ALbYmZfU49VdMaIiaqPjlUn6bU5W6soo7wvDhD9TAW4xekgLA/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)
-
-![图片](https://mmbiz.qpic.cn/mmbiz_jpg/nVERGuKNwydhFicAx81yr7wk49qDdswS3W6bwUkREJTXM2uVicibkXJakj89BW2W1GiboUYk1bAAMKjaap7PHGBCKA/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)
-
-![图片](https://mmbiz.qpic.cn/mmbiz_jpg/nVERGuKNwydhFicAx81yr7wk49qDdswS3BUBVibRiagzSXymCfQBF1icafoh16YoQ4GXfkMplhlrqzPrhMdSDhZcWg/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)
-
 多组以支付宝为例子。包含两个小的组件
 
-![图片](https://mmbiz.qpic.cn/mmbiz_jpg/nVERGuKNwydhFicAx81yr7wk49qDdswS3O0kdoFChAmkAbHp4ftrxzmibKGficSPDk6Jm7LiaibSAGb55BwV6xzXib0A/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)
 
-![图片](https://mmbiz.qpic.cn/mmbiz_jpg/nVERGuKNwydhFicAx81yr7wk49qDdswS37hHfj0D14IPkDxRVzXVkmK3XOjRhaVD7I6mKoRLYxR2vcfFhj3wPeQ/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)
 
 ## 单组件适配开发
 

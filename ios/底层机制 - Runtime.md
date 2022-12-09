@@ -62,6 +62,12 @@ struct objc_method {
 }
 ```
 
+> ivars：用于存放所有的成员变量和属性信息
+>
+> methodLists：用于存放对象的所有成员方法
+>
+> IMP：函数指针，指向方法的实现
+
 1. 系统首先找到消息的接收对象，然后通过对象的`isa`找到它的类。
 2. 在它的类中查找`method_list`，是否有`selector`方法。
 3. 没有则查找父类的`method_list`。
@@ -110,24 +116,21 @@ struct objc_class {
 
 `struct objc_class`结构体定义了很多变量，通过命名不难发现，
  结构体里保存了指向父类的指针、类的名字、版本、实例大小、实例变量列表、方法列表、缓存、遵守的协议列表等，
- 一个类包含的信息也不就正是这些吗？没错，类对象就是一个结构体`struct objc_class`，这个结构体存放的数据称为元数据(`metadata`)，
- 该结构体的第一个成员变量也是`isa`指针，这就说明了`Class`本身其实也是一个对象，因此我们称之为类对象，类对象在编译期产生用于创建实例对象，是单例。
+ 一个类包含的信息也不就正是这些吗？没错，类对象就是一个结构体`struct objc_class`，这个结构体存放的数据称为元数据(`metadata`)，该结构体的第一个成员变量也是`isa`指针，这就说明了`Class`本身其实也是一个对象，因此我们称之为类对象，类对象在编译期产生用于创建实例对象，是单例。
 
 #### 实例(objc_object)
 
 ```cpp
 /// Represents an instance of a class.
 struct objc_object {
-    Class isa  OBJC_ISA_AVAILABILITY;
+    Class isa OBJC_ISA_AVAILABILITY;
 };
 
 /// A pointer to an instance of a class.
 typedef struct objc_object *id;
 ```
 
-类对象中的元数据存储的都是如何创建一个实例的相关信息，那么类对象和类方法应该从哪里创建呢？
- 就是从`isa`指针指向的结构体创建，类对象的`isa`指针指向的我们称之为元类(`metaclass`)，
- 元类中保存了创建类对象以及类方法所需的所有信息，因此整个结构应该如下图所示:
+类对象中的元数据存储的都是如何创建一个实例的相关信息，那么类对象和类方法应该从哪里创建呢？就是从`isa`指针指向的结构体创建，类对象的`isa`指针指向的我们称之为元类(`metaclass`)，元类中保存了创建类对象以及类方法所需的所有信息，因此整个结构应该如下图所示:
 
 ![img](https:////upload-images.jianshu.io/upload_images/301129-cc9c0a7ffb147fed.png?imageMogr2/auto-orient/strip|imageView2/2/w/847/format/webp)
 
@@ -173,9 +176,7 @@ struct objc_method {
 - char *method_types 方法类型
 - IMP method_imp 方法实现
 
-在这个结构体重，我们已经看到了`SEL`和`IMP`，说明`SEL`和`IMP`其实都是`Method`的属性。
-
-我们接着来看`SEL`。
+在这个结构体中，已经看到了`SEL`和`IMP`，说明`SEL`和`IMP`其实都是`Method`的属性。
 
 #### SEL(objc_selector)
 
@@ -242,7 +243,7 @@ typedef id (*IMP)(id, SEL, ...);
 
 #### 类缓存(objc_cache)
 
-当`Objective-C`运行时通过跟踪它的`isa`指针检查对象时，它可以找到一个实现许多方法的对象。然而，你可能只调用它们的一小部分，并且每次查找时，搜索所有选择器的类分派表没有意义。所以类实现一个缓存，每当你搜索一个类分派表，并找到相应的选择器，它把它放入它的缓存。所以当`objc_msgSend`查找一个类的选择器，它首先搜索类缓存。这是基于这样的理论：如果你在类上调用一个消息，你可能以后再次调用该消息。
+当`Objective-C`运行时通过跟踪它的`isa`指针检查对象时，它可以找到一个实现许多方法的对象。然而，你可能只调用它们的一小部分，并且每次查找时，搜索所有选择器的类分派表没有意义。所以类实现一个缓存，每当你搜索一个类分派表，并找到相应的选择器，它把它放入它的缓存。所以当`objc_msgSend`查找一个类的选择器，它首先搜索类缓存。
 
 为了加速消息分发， 系统会对方法和对应的地址进行缓存，就放在上述的`objc_cache`，所以在实际运行中，大部分常用的方法都是会被缓存起来的，`Runtime`系统实际上非常快，接近直接执行内存地址的程序速度。
 
@@ -314,7 +315,7 @@ void fooMethod(id obj, SEL _cmd) {
 ```
 
 > 打印结果：
->  2018-04-01 12:23:35.952670+0800 ocram[87546:23235469] Doing foo
+>  Doing foo
 
 可以看到虽然没有实现`foo:`这个函数，但是我们通过`class_addMethod`动态添加`fooMethod`函数，并执行`fooMethod`这个函数的`IMP`。从打印结果看，成功实现了。
 
@@ -371,7 +372,7 @@ void fooMethod(id obj, SEL _cmd) {
 ```
 
 > 打印结果：
->  2018-04-01 12:45:04.757929+0800 ocram[88023:23260346] Doing foo
+>  Doing foo
 
 可以看到我们通过`forwardingTargetForSelector`把当前`ViewController`的方法转发给了`Person`去执行了。打印结果也证明我们成功实现了转发。
 
@@ -444,7 +445,7 @@ void fooMethod(id obj, SEL _cmd) {
 ```
 
 > 打印结果：
->  2018-04-01 13:00:45.423385+0800 ocram[88353:23279961] Doing foo
+>  Doing foo
 
 从打印结果来看，我们实现了完整的转发。通过签名，`Runtime`生成了一个对象`anInvocation`，发送给了`forwardInvocation`，我们在`forwardInvocation`方法里面让`Person`对象去执行了`foo`函数。签名参数`v@:`怎么解释呢，这里苹果文档[Type Encodings](https://links.jianshu.com/go?to=https%3A%2F%2Fdeveloper.apple.com%2Flibrary%2Fcontent%2Fdocumentation%2FCocoa%2FConceptual%2FObjCRuntimeGuide%2FArticles%2FocrtTypeEncodings.html%23%2F%2Fapple_ref%2Fdoc%2Fuid%2FTP40008048-CH100-SW1)有详细的解释。
 
@@ -467,11 +468,11 @@ void fooMethod(id obj, SEL _cmd) {
 关联对象Runtime提供了下面几个接口：
 
 ```objectivec
-//关联对象
+// 关联对象
 void objc_setAssociatedObject(id object, const void *key, id value, objc_AssociationPolicy policy)
-//获取关联的对象
+// 获取关联的对象
 id objc_getAssociatedObject(id object, const void *key)
-//移除关联的对象
+// 移除关联的对象
 void objc_removeAssociatedObjects(id object)
 ```
 
@@ -536,7 +537,6 @@ static char kDefaultColorKey;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
 
     UIView *test = [UIView new];
     test.defaultColor = [UIColor blackColor];
@@ -663,8 +663,7 @@ self->isa:NSKVONotifying_A
 self class:A
 ```
 
-在这个过程，被观察对象的 `isa` 指针从指向原来的 `A` 类，被`KVO` 机制修改为指向系统新创建的子类`NSKVONotifying_A` 类，来实现当前类属性值改变的监听；
- 所以当我们从应用层面上看来，完全没有意识到有新的类出现，这是系统“隐瞒”了对 `KVO` 的底层实现过程，让我们误以为还是原来的类。但是此时如果我们创建一个新的名为“`NSKVONotifying_A`”的类，就会发现系统运行到注册 `KVO` 的那段代码时程序就崩溃，因为系统在注册监听的时候动态创建了名为 `NSKVONotifying_A` 的中间类，并指向这个中间类了。
+在这个过程，被观察对象的 `isa` 指针从指向原来的 `A` 类，被`KVO` 机制修改为指向系统新创建的类 `NSKVONotifying_A` 类，来实现当前类属性值改变的监听；所以当我们从应用层面上看来，完全没有意识到有新的类出现，这是系统“隐瞒”了对 `KVO` 的底层实现过程，让我们误以为还是原来的类。但是此时如果我们创建一个新的名为“`NSKVONotifying_A`”的类，就会发现系统运行到注册 `KVO` 的那段代码时程序就崩溃，因为系统在注册监听的时候动态创建了名为 `NSKVONotifying_A` 的中间类，并指向这个中间类了。
 
 - 子类setter方法剖析
 
@@ -686,7 +685,7 @@ self class:A
 
 > [JSPatch](https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fbang590%2FJSPatch%2Fwiki%2FJSPatch-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3) 是一个 iOS 动态更新框架，只需在项目中引入极小的引擎，就可以使用 JavaScript 调用任何 Objective-C 原生接口，获得脚本语言的优势：为项目动态添加模块，或替换项目原生代码动态修复 bug。
 
-关于消息转发，前面已经讲到过了，消息转发分为三级，我们可以在每级实现替换功能，实现消息转发，从而不会造成崩溃。[JSPatch](https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fbang590%2FJSPatch%2Fwiki%2FJSPatch-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3)不仅能够实现消息转发，还可以实现方法添加、替换能一系列功能。
+关于消息转发，前面已经讲到过了，消息转发分为三级，我们可以在每级实现替换功能，实现消息转发，从而不会造成崩溃。[JSPatch](https://links.jianshu.com/go?to=https%3A%2F%2Fgithub.com%2Fbang590%2FJSPatch%2Fwiki%2FJSPatch-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E8%AF%A6%E8%A7%A3)不仅能够实现消息转发，还可以实现方法添加、替换等一系列功能。
 
 #### 实现NSCoding的自动归档和自动解档
 

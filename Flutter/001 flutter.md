@@ -26,7 +26,7 @@ unzip ~/Downloads/flutter_macos_arm64_3.3.4-stable.zip
 export PUB_HOSTED_URL=https://pub.flutter-io.cn
 export FLUTTER_STORAGE_BASE_URL=https://storage.flutter-io.cn
 # flutter
-export PATH=~/development/flutter/bin:$PATH
+export PATH="$PATH:`pwd`/flutter/bin"
 ```
 
 保存后刷新配置，使配置生效
@@ -209,6 +209,12 @@ flutter run
 ```
 
 
+
+## 开发工具
+
+官方推荐：Android Studio 和 VSCode
+
+需要安装插件：Flutter 和 Dart 和 Code Runner
 
 
 
