@@ -54,6 +54,9 @@ app.config.errorHandler = (err) => {
 
 ## 模板语法
 
+```template
+<span>Message: {{ msg }}</span>
+```
   
 
   
