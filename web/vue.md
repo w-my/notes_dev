@@ -664,5 +664,67 @@ data() {
 
 ## 条件渲染
 
-#### v-if
+#### `v-if`
+
+```html
+<h1 v-if="awesome">Vue is awesome!</h1>
+```
+
+#### `v-else`
+
+```html
+<h1 v-if="awesome">Vue is awesome!</h1>
+<h1 v-else>Oh no 😢</h1>
+```
+
+#### `v-else-if`
+
+```html
+<div v-if="type === 'A'">
+  A
+</div>
+<div v-else-if="type === 'B'">
+  B
+</div>
+<div v-else-if="type === 'C'">
+  C
+</div>
+<div v-else>
+  Not A/B/C
+</div>
+```
+
+#### `<template>` 上的 `v-if`
+
+```html
+<template v-if="ok">
+  <h1>Title</h1>
+  <p>Paragraph 1</p>
+  <p>Paragraph 2</p>
+</template>
+```
+
+#### `v-show`
+
+```html
+<h1 v-show="ok">Hello!</h1>
+```
+
+不同之处在于 `v-show` 会在 DOM 渲染中保留该元素；`v-show` 仅切换了该元素上名为 `display` 的 CSS 属性。
+
+`v-show` 不支持在 `<template>` 元素上使用，也不能和 `v-else` 搭配使用。
+
+#### `v-if` 和 `v-for`
+
+当 `v-if` 和 `v-for` 同时存在于一个元素上的时候，`v-if` 会首先被执行。查看[列表渲染指南](https://cn.vuejs.org/guide/essentials/list.html#v-for-with-v-if)获取更多细节。
+
+
+
+## 列表渲染
+
+
+
+
+
+
 
