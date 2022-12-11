@@ -1165,9 +1165,134 @@ template
 
 ## 表单输入绑定
 
+#### v-model
+
+```html
+<input v-model="text">
+```
+
+- 文本类型的 `<input>` 和 `<textarea>` 元素会绑定 `value` property 并侦听 `input` 事件；
+- `<input type="checkbox">` 和 `<input type="radio">` 会绑定 `checked` property 并侦听 `change` 事件；
+- `<select>` 会绑定 `value` property 并侦听 `change` 事件。
 
 
 
+#### 基本用法
+
+##### 文本
+
+```html
+<p>Message is: {{ message }}</p>
+<input v-model="message" placeholder="edit me" />
+```
+
+##### 多行文本
+
+```html
+<span>Multiline message is:</span>
+<p style="white-space: pre-line;">{{ message }}</p>
+<textarea v-model="message" placeholder="add multiple lines"></textarea>
+```
+
+##### 复选框
+
+```html
+<input type="checkbox" id="checkbox" v-model="checked" />
+<label for="checkbox">{{ checked }}</label>
+```
+
+将多个复选框绑定到同一个数组或[集合](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set)的值：
+
+```js
+export default {
+  data() {
+    return {
+      checkedNames: []
+    }
+  }
+}
+```
+
+```html
+<div>Checked names: {{ checkedNames }}</div>
+
+<input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+<label for="jack">Jack</label>
+
+<input type="checkbox" id="john" value="John" v-model="checkedNames">
+<label for="john">John</label>
+
+<input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+<label for="mike">Mike</label>
+```
+
+##### 单选按钮
+
+```html
+<div>Picked: {{ picked }}</div>
+
+<input type="radio" id="one" value="One" v-model="picked" />
+<label for="one">One</label>
+
+<input type="radio" id="two" value="Two" v-model="picked" />
+<label for="two">Two</label>
+```
+
+##### 选择器
+
+单个选择器：
+
+```html
+<div>Selected: {{ selected }}</div>
+
+<select v-model="selected">
+  <option disabled value="">Please select one</option>
+  <option>A</option>
+  <option>B</option>
+  <option>C</option>
+</select>
+```
+
+多选 (值绑定到一个数组)：
+
+```html
+<div>Selected: {{ selected }}</div>
+
+<select v-model="selected" multiple>
+  <option>A</option>
+  <option>B</option>
+  <option>C</option>
+</select>
+```
+
+选择器的选项可以使用 `v-for` 动态渲染：
+
+```js
+export default {
+  data() {
+    return {
+      selected: 'A',
+      options: [
+        { text: 'One', value: 'A' },
+        { text: 'Two', value: 'B' },
+        { text: 'Three', value: 'C' }
+      ]
+    }
+  }
+}
+```
+
+```html
+<select v-model="selected">
+  <option v-for="option in options" :value="option.value">
+    {{ option.text }}
+  </option>
+</select>
+
+<div>Selected: {{ selected }}</div>
+```
 
 
+
+#### 值绑定
 
