@@ -677,6 +677,18 @@ Changes to be committed:
 
 
 
+```sh
+git checkout -- filepathname
+git checkout .
+
+git reset HEAD filepathname
+git reset HEAD .
+```
+
+
+
+
+
 ## 远程仓库的使用 
 
 

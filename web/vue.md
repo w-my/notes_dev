@@ -1296,3 +1296,286 @@ export default {
 
 #### 值绑定
 
+对于单选按钮，复选框和选择器选项，`v-model` 绑定的值通常是静态的字符串 (或者对复选框是布尔值)：
+
+```html
+<!-- `picked` 在被选择时是字符串 "a" -->
+<input type="radio" v-model="picked" value="a" />
+
+<!-- `toggle` 只会为 true 或 false -->
+<input type="checkbox" v-model="toggle" />
+
+<!-- `selected` 在第一项被选中时为字符串 "abc" -->
+<select v-model="selected">
+  <option value="abc">ABC</option>
+</select>
+```
+
+但有时我们可能希望将该值绑定到当前组件实例上的动态数据。这可以通过使用 `v-bind` 来实现。此外，使用 `v-bind` 还使我们可以将选项值绑定为非字符串的数据类型。
+
+##### 复选框
+
+```html
+<input
+  type="checkbox"
+  v-model="toggle"
+  true-value="yes"
+  false-value="no" />
+```
+
+```html
+<input
+  type="checkbox"
+  v-model="toggle"
+  :true-value="dynamicTrueValue"
+  :false-value="dynamicFalseValue" />
+```
+
+##### 单选按钮
+
+```html
+<input type="radio" v-model="pick" :value="first" />
+<input type="radio" v-model="pick" :value="second" />
+```
+
+##### 选择器选项
+
+```html
+<select v-model="selected">
+  <!-- 内联对象字面量 -->
+  <option :value="{ number: 123 }">123</option>
+</select>
+```
+
+
+
+#### 修饰符
+
+##### `.lazy`
+
+```html
+<!-- 在 "change" 事件后同步更新而不是 "input" -->
+<input v-model.lazy="msg" />
+```
+
+##### `.number`
+
+如果你想让用户输入自动转换为数字，你可以在 `v-model` 后添加 `.number` 修饰符来管理输入：
+
+```html
+<input v-model.number="age" />
+```
+
+如果该值无法被 `parseFloat()` 处理，那么将返回原始值。
+
+##### `.trim`
+
+```html
+<input v-model.trim="msg" />
+```
+
+
+
+
+
+## 生命周期
+
+#### 注册周期钩子
+
+`mounted` 钩子可以用来在组件完成初始渲染并创建 DOM 节点后运行代码：
+
+```js
+export default {
+  mounted() {
+    console.log(`the component is now mounted.`)
+  }
+}
+```
+
+还有其他一些钩子，会在实例生命周期的不同阶段被调用，最常用的是 [`mounted`](https://cn.vuejs.org/api/options-lifecycle.html#mounted)、[`updated`](https://cn.vuejs.org/api/options-lifecycle.html#updated) 和 [`unmounted`](https://cn.vuejs.org/api/options-lifecycle.html#unmounted)。
+
+
+
+#### 生命周期图示![组件生命周期图示](https://cn.vuejs.org/assets/lifecycle.16e4c08e.png)
+
+
+
+## 侦听器
+
+#### 基本示例
+
+在选项式 API 中，我们可以使用 [`watch` 选项](https://cn.vuejs.org/api/options-state.html#watch)在每次响应式属性发生变化时触发一个函数。
+
+```js
+export default {
+  data() {
+    return {
+      question: '',
+      answer: 'Questions usually contain a question mark. ;-)'
+    }
+  },
+  watch: {
+    // 每当 question 改变时，这个函数就会执行
+    question(newQuestion, oldQuestion) {
+      if (newQuestion.includes('?')) {
+        this.getAnswer()
+      }
+    }
+  },
+  methods: {
+    async getAnswer() {
+      this.answer = 'Thinking...'
+      try {
+        const res = await fetch('https://yesno.wtf/api')
+        this.answer = (await res.json()).answer
+      } catch (error) {
+        this.answer = 'Error! Could not reach the API. ' + error
+      }
+    }
+  }
+}
+```
+
+```html
+<p>
+  Ask a yes/no question:
+  <input v-model="question" />
+</p>
+<p>{{ answer }}</p>
+```
+
+`watch` 选项也支持把键设置成用 `.` 分隔的路径：
+
+```js
+export default {
+  watch: {
+    // 注意：只能是简单的路径，不支持表达式。
+    'some.nested.key'(newValue) {
+      // ...
+    }
+  }
+}
+```
+
+
+
+#### 深层侦听器
+
+`watch` 默认是浅层的：被侦听的属性，仅在被赋新值时，才会触发回调函数——而嵌套属性的变化不会触发。如果想侦听所有嵌套的变更，你需要深层侦听器：
+
+```js
+export default {
+  watch: {
+    someObject: {
+      handler(newValue, oldValue) {
+        // 注意：在嵌套的变更中，
+        // 只要没有替换对象本身，
+        // 那么这里的 `newValue` 和 `oldValue` 相同
+      },
+      deep: true
+    }
+  }
+}
+```
+
+
+
+#### 即时回调的侦听器
+
+`watch` 默认是懒执行的：仅当数据源变化时，才会执行回调。但在某些场景中，我们希望在创建侦听器时，立即执行一遍回调。
+
+```js
+export default {
+  // ...
+  watch: {
+    question: {
+      handler(newQuestion) {
+        // 在组件实例创建时会立即调用
+      },
+      // 强制立即执行回调
+      immediate: true
+    }
+  }
+  // ...
+}
+```
+
+回调函数的初次执行就发生在 `created` 钩子之前。Vue 此时已经处理了 `data`、`computed` 和 `methods` 选项，所以这些属性在第一次调用时就是可用的。
+
+
+
+#### 回调的触发时机
+
+当你更改了响应式状态，它可能会同时触发 Vue 组件更新和侦听器回调。
+
+默认情况下，用户创建的侦听器回调，都会在 Vue 组件更新**之前**被调用。这意味着你在侦听器回调中访问的 DOM 将是被 Vue 更新之前的状态。
+
+如果想在侦听器回调中能访问被 Vue 更新**之后**的 DOM，你需要指明 `flush: 'post'` 选项：
+
+```js
+export default {
+  // ...
+  watch: {
+    key: {
+      handler() {},
+      flush: 'post'
+    }
+  }
+}
+```
+
+##### `this.$watch()`
+
+也可以使用组件实例的 [`$watch()` 方法](https://cn.vuejs.org/api/component-instance.html#watch)来命令式地创建一个侦听器：
+
+```js
+export default {
+  created() {
+    this.$watch('question', (newQuestion) => {
+      // ...
+    })
+  }
+}
+```
+
+如果要在特定条件下设置一个侦听器，或者只侦听响应用户交互的内容，这方法很有用。它还允许你提前停止该侦听器。
+
+
+
+#### 停止侦听器
+
+用 `watch` 选项或者 `$watch()` 实例方法声明的侦听器，会在宿主组件卸载时自动停止。因此，在大多数场景下，你无需关心怎么停止它。
+
+在少数情况下，你的确需要在组件卸载之前就停止一个侦听器，这时可以调用 `$watch()` API 返回的函数：
+
+```js
+const unwatch = this.$watch('foo', callback)
+
+// ...当该侦听器不再需要时
+unwatch()
+```
+
+
+
+## 模版引用
+
+虽然 Vue 的声明性渲染模型为你抽象了大部分对 DOM 的直接操作，但在某些情况下，我们仍然需要直接访问底层 DOM 元素。要实现这一点，我们可以使用特殊的 `ref` attribute：
+
+```html
+<input ref="input">
+```
+
+`ref` 是一个特殊的 attribute，和 `v-for` 章节中提到的 `key` 类似。它允许我们在一个特定的 DOM 元素或子组件实例被挂载后，获得对它的直接引用。这可能很有用，比如说在组件挂载时将焦点设置到一个 input 元素上，或在一个元素上初始化一个第三方库。
+
+
+
+#### 访问模板引用
+
+
+
+
+
+
+
+
+
