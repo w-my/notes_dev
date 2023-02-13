@@ -58,7 +58,7 @@ el 的两种写法
 
 ```html
 <script type="text/javascript">
-    const v = new Vue({
+    const vm = new Vue({
         // el: '#root',
         data: {
             title: 'vue...',
@@ -68,7 +68,7 @@ el 的两种写法
             }
         }
     })
-    v.$mount('#root')
+    vm.$mount('#root')
 </script>
 ```
 
@@ -78,7 +78,7 @@ data 的两种写法
 
 ```html
 <script type="text/javascript">
-    const v = new Vue({
+    const vm = new Vue({
         // el: '#root',
         // data: {
         //     title: 'vue...',
@@ -97,11 +97,43 @@ data 的两种写法
             }
         }
     })
-    v.$mount('#root')
+    vm.$mount('#root')
 </script>
 ```
 
 
+
+## Object.defineProperty
+
+```html
+<body>
+    <script type="text/javascript">
+        let number = 18
+        let person = {
+            name: '张三',
+            sex: '男'
+        }
+        Object.defineProperty(person, 'age', {
+            // value: 18,
+            // enumerable: true, // 控制属性是否可枚举
+            // writable: true, // 控制属性是否可被修改
+            // configurable: true, // 控制属性是否可被删除
+
+            // 动态获取 age 属性的值
+            get() {
+                return number 
+            },
+            set(value) {
+                number = value
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+## 数据代理
 
 
 
