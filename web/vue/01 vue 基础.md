@@ -192,3 +192,63 @@ data 的两种写法
 </body>
 ```
 
+
+
+## 事件修饰符
+
+- prevent：阻止默认事件（常用）
+- stop：阻止事件冒泡（常用）
+- once：事件只发生一次（常用）
+- capture：使用事件的捕获模式
+- self：是有 event.target 是当前操作的元素时才触发事件
+- passive：事件的默认行为立即执行，无需等待事件回调执行完毕
+
+```html
+<body>
+    <div id="root">
+        <a href="http://www.baidu.com" @click.prevent="showInfo">点我提示信息</a>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            methods: {
+                showInfo(e) {
+                    console.log(e);
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+## 键盘事件
+
+- Vue 中常用的按键别名：
+  - 回车 => enter
+  - 删除 => delete（捕获“删除”和“退格”键）
+  - 退出 => esc
+  - 空格 => space
+  - 换行 => tab
+  - 上 => up
+  - 下 => down
+  - 左 => left
+  - 右 => right
+- Vue 未提示别名的按键，可以使用按键原始的 key 值去绑定，但注意要转为 kebab-case（短横线命名）
+- 系统修饰键（用法特殊）：ctrl、alt、shift、meta
+  - 配合 keyup 使用：按下修饰键的同时，在按下其他键，随后释放其他键，事件才被触发
+  - 配合 keydown 使用：正常触发事件
+- 也可以使用 keyCode 去指定具体的按键（不推荐）
+- Vue.config.keyCodes.自定义键名 = 键码，可以去定制按键别名
+
+
+
+
+
+
+
+
+
+
+
