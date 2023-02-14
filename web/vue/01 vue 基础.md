@@ -135,5 +135,60 @@ data 的两种写法
 
 ## 数据代理
 
+数据代理：通过一个对象代理对另一个对象中属性的操作（读/写）
 
+```html
+<body>
+    <script type="text/javascript">
+        let obj = {x: 100}
+        let obj2 = {y: 200}
+        Object.defineProperty(obj2, 'x', {
+            get() {
+                return obj.x
+            },
+            set(value) {
+                obj.x = value
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+## 事件处理
+
+### @click
+
+使用 `v-on:xxx` 或 `@xxx` 绑定事件，其中 `xxx` 是事件名；
+
+事件中的 `this` 是 `vm`；
+
+```html
+<body>
+    <div id="root">
+        <div>欢迎来到 {{ name }}</div>
+        <button v-on:click="showInfo1">不传参</button>
+        <button @click="showInfo2($event, 123)">传参</button>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                name: 'lalall'
+            },
+            methods: {
+                showInfo1(event) {
+                    console.log(this === vm); // true
+                    console.log(event.target); // <button>不传参</button>
+                    console.log(event.target.innerText); // 不传参
+                },
+                showInfo2(event, num) {
+                    console.log(event.target.innerText, num) // 传参 123
+                }
+            }
+        })
+    </script>
+</body>
+```
 
