@@ -267,6 +267,38 @@ data 的两种写法
 
 
 
+## 属性
+
+### computed
+
+```html
+<body>
+    <div id="root">
+        姓：<input type="tex" v-model="firstName"> <br/>
+        名：<input type="tex" v-model="lastName"> <br/>
+        全名：<span>{{ fullName }}</span>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                firstName: '',
+                lastName: ''
+            },
+            computed: {
+                fullName() {
+                    return this.firstName + '-' + this.lastName
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+### wa
+
 
 
 
