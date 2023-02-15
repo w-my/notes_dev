@@ -544,7 +544,42 @@ e.g.
 
 
 
+## 监视数据
 
+### Vue.set()
+
+向响应式对象中添加一个 property，并确保这个新的 property 同样是响应式的，并触发视图更新
+
+```html
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            obj: {
+                name: 'aaa'
+            }
+        },
+        methods: {
+            addColor() {
+                this.$set('this.obj', 'color', 'red')
+            }
+        },
+
+    })
+</script>
+```
+
+### 数组
+
+Vue 将被侦听的数组的变更方法进行了包裹，通过以下方法可以触发视图更新
+
+- push()
+- pop()
+- shift()
+- unshift()
+- splice()
+- sort()
+- reverse()
 
 
 
