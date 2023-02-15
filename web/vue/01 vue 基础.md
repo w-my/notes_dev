@@ -402,6 +402,152 @@ data 的两种写法
 
 
 
+## 样式
+
+### class
+
+```html
+<body>
+    <div id="root">
+        <div class="basic" :class="dynamic" @click="changeClass">字符串方式绑定class样式</div>
+        <div class="basic" :class="classArr" @click="changeClass">数组方式绑定class样式</div>
+        <div class="basic" :class="classObj" @click="changeClass">对象方式绑定class样式</div>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                dynamic: 'bggreen',
+                classArr: ['style1', 'style2'],
+                classObj: {
+                    style1: false,
+                    style2: true
+                }
+            },
+            methods: {
+                changeClass() {
+                    this.dynamic = 'bgblue'
+                }
+            },
+        })
+    </script>
+</body>
+```
+
+### style
+
+```html
+<body>
+    <div id="root">
+        <div class="basic" :style="styleObj">绑定style样式</div>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                styleObj: {
+                    fontSize: '30px',
+                    color: 'red',
+                    backgroundColor: 'orange'
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+## 条件渲染
+
+### v-show
+
+适用：切换频率较高的场景；
+
+特点：不展示的DOM元素未被移除，仅仅是样式隐藏
+
+
+
+### v-if
+
+- v-if
+
+- v-else-if
+
+- v-else
+
+适用：切换频率较低的场景；
+
+特点：不展示的DOM元素直接被移除；
+
+注意：v-if 和 v-else-if、v-else 一起使用时要求结构不能被"打断"
+
+> `<template>` 只能与 `v-if` 使用，不能搭配 `v-show` 使用
+
+
+
+## 列表渲染
+
+### v-for
+
+
+
+e.g.
+
+```html
+<body>
+    <div id="root">
+        <!-- 遍历数组 -->
+        <ul>
+            <li v-for="p in persons" :key="p.id">
+                {{p.name}} - {{p.age}}
+            </li>
+        </ul>
+        <!-- 遍历对象 -->
+        <ul>
+            <li v-for="(value, key) in car" :key="key">
+                {{key}}: {{value}}
+            </li>
+        </ul>
+        <!-- 遍历字符串 -->
+        <ul>
+            <li v-for="(char, idx) in str" :key="idx">
+                {{idx}}: {{char}}
+            </li>
+        </ul>
+        <!-- 遍历次数 -->
+        <ul>
+            <li v-for="(num, idx) of 5" :key="idx">
+                {{idx}}: {{num}}
+            </li>
+        </ul>
+    </div>
+    <script type="text/javascript">
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                persons: [
+                    {id: '01', name: 'name1', age: 10},
+                    {id: '02', name: 'name2', age: 18},
+                    {id: '03 ', name: 'name3', age: 12}
+                ],
+                car: {
+                    name: 'bm',
+                    color: 'black'
+                },
+                str: 'hello'
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+
+
+
+
 
 
 
