@@ -2,6 +2,12 @@
 
 
 
+## 插件
+
+- `Vue 3 Snippets` ：代码提示模版
+
+
+
 ## 数据
 
 ### 数据绑定
@@ -297,7 +303,102 @@ data 的两种写法
 
 
 
-### wa
+### watch
+
+当被监视的属性变化时，回调函数自动调用，进行相关操作
+
+监视方法一：
+
+```html
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            isHot: true
+        },
+        watch: {
+            // isHot: {
+            //     handler(newValue, oldValue) {
+            //         console.log('isHot 被修改了');
+            //     }
+            // }
+          	isHot(newValue, oldValue) {
+                console.log('isHot 被修改了', newValue, oldValue);
+            }
+        }
+    })
+</script>
+```
+
+监视方法二：
+
+```html
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            isHot: true
+        }
+    })
+    // vm.$watch('isHot', {
+    //     handler(newValue, oldValue) {
+    //         console.log('isHot 被修改了');
+    //     }
+    // })
+	  vm.$watch('isHot', function(newValue, oldValue) {
+        console.log('isHot 被修改了', newValue, oldValue);
+    })
+</script>
+```
+
+#### immediate
+
+初始化时让 handler 调用一下
+
+```html
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            isHot: true
+        },
+        watch: {
+            isHot: {
+                immediate: true, // 初始化时让 handler 调用一下
+                handler(newValue, oldValue) {
+                    console.log('isHot 被修改了');
+                }
+            }
+        }
+    })
+</script>
+```
+
+#### deep
+
+深度监视，监视多级结构中所有属性的变化
+
+```html
+<script type="text/javascript">
+    const vm = new Vue({
+        el: '#root',
+        data: {
+            numbers: {
+              a: 1,
+              b: 2
+            }
+        },
+        watch: {
+        		numbers: {
+				        deep: true, // 监视多级结构中所有属性的变化
+        				handler() {
+				            console.log('numbers 被修改了');
+        				}
+				    }
+        }
+    })
+</script>
+```
 
 
 
