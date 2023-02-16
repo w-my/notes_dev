@@ -580,6 +580,279 @@ Vue 将被侦听的数组的变更方法进行了包裹，通过以下方法可�
 - splice()
 - sort()
 - reverse()
+- Vue.set()
+- vm.$set()  e.g.：this.$set(this.arr, 0, 'obj')
+
+
+
+## 表单数据收集
+
+### v-model
+
+- trim
+- number
+- lazy
+
+### radio
+
+需要设置 value 值
+
+### checkbox
+
+需要设置 value 值，同时收集属性需要是 Array
+
+### @submit
+
+通过 @submit 指定自定义方法
+
+通过 .prevent 阻止提交后，默认执行的刷新和跳转
+
+
+
+e.g.
+
+```html
+<body>
+    <div id="root">
+        <form @submit.prevent="submit">
+            账号：<input type="text" v-model.trim="userInfo.account"> <br/><br/>
+            密码：<input type="password" v-model="userInfo.password"> <br/><br/>
+            年龄：<input type="number" v-model.number="userInfo.age"> <br/><br/>
+            性别：
+            男<input type="radio" v-model="userInfo.sex" value="male">
+            女<input type="radio" v-model="userInfo.sex" value="female"> <br/><br/>
+            爱好：
+            学习<input type="checkbox" v-model="userInfo.hobby" value="study">
+            打游戏<input type="checkbox" v-model="userInfo.hobby" value="game">
+            吃饭<input type="checkbox" v-model="userInfo.hobby" value="eat"> <br/><br/>
+            所属校区：
+            <select v-model="userInfo.city">
+                <option>请选择校区</option>
+                <option>北京</option>
+                <option>上海</option>
+                <option>深圳</option>
+            </select> <br/><br/>
+            其他信息：<textarea v-model.lazy="userInfo.other"></textarea> <br/><br/>
+            <input type="checkbox" v-model="userInfo.agree">勾选表示同意<a href="http://baidu.com">《用户协议》</a> <br/><br/>
+            <button>提交</button>
+        </form>
+    </div>
+    <script type="text/javascript">
+        new Vue({
+            el: '#root',
+            data: {
+                userInfo: {
+                    account: '',
+                    password: '',
+                    age: '',
+                    sex: 'male',
+                    hobby: [],
+                    city: '',
+                    other: '',
+                    agree: false
+                }
+            },
+            methods: {
+                submit() {
+                    console.log(JSON.stringify(this.userInfo));
+                }
+            },
+        })
+    </script>
+</body>
+```
+
+
+
+## 过滤器
+
+### filters
+
+可以在 `插值语法` 和 `v-bind` 中使用
+
+e.g.
+
+```html
+<body>
+    <div id="root">
+        <!-- 计算属性实现 -->
+        <div v-model="fmtTime">当前时间：{{ fmtTime }}</div>
+        <!-- 过滤器实现 -->
+        <div v-model="fmtTime">当前时间：{{ time | timeFormater }}</div>
+        <!-- 过滤器传参 -->
+        <div v-model="fmtTime">当前时间：{{ time | timeFormater('YYYY_MM_DD') }}</div>
+        <!-- 过滤器串联  -->
+        <div v-model="fmtTime">当前时间：{{ time | timeFormater('YYYY_MM_DD') | mySlice }}</div>
+    </div>
+    <script type="text/javascript">
+        Vue.filter('mySlice', function(val) {
+            return val.slice(0, 4)
+        })
+        new Vue({
+            el: '#root',
+            data: {
+                time: '1676520323438'
+            },
+            computed: {
+                fmtTime() {
+                    return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                }
+            },
+            filters: {
+                timeFormater(val, str = 'YYYY-MM-DD HH:mm:ss') {
+                    return dayjs(val).format(str)
+                }
+            }
+        })
+    </script>
+</body>
+```
+
+
+
+## 指令
+
+### v-text
+
+向指定节点中渲染文本内容
+
+
+
+### v-html
+
+向指定节点中渲染包含html结构的内容，可以识别 html 结构，所以存在安全性问题，不能用在用户提交的内容上。
+
+
+
+### v-cloak
+
+本质是一个特殊的属性， Vue 实例创建完成并接管容器后，会删掉 v-cloak 属性。
+
+使用 css 配合 v-cloak 可以解决网速慢时页面展示出 {{ xxx }} 的问题。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <div v-cloak>{{ text }}</div>
+    </div>
+    <script type="text/javascript" src="../js/vue.js"></script>
+</body>
+<script type="text/javascript">
+    new Vue({
+        el: '#root',
+        data: {
+            text: 'abcdef'
+        },
+        
+    })
+</script>
+</html>
+```
+
+
+
+### v-once
+
+所在节点在初次动态渲染后，就视为静态内容了。
+
+以后数据的改变不回引起结构的更新，可用于优化性能。
+
+
+
+### v-pre
+
+跳过其所在节点的编译过程。可以跳过没有使用指令语法、插值语法的节点，加快编译。
+
+
+
+### 自定义指令
+
+### directives 
+
+```html
+<body>
+    <div id="root">
+        <div>当前原始值是：<span v-text="num"></span></div>
+        <div>放大10被后的值是在：<span v-big="num"></span></div>
+        <button @click="num++">点击num+1</button>
+        <input type="text" v-fbind:value="num">
+    </div>
+
+</body>
+<script type="text/javascript">
+    // 写法三：
+    // 全局自定义指令
+    // Vue.directive('fbind', {
+    //     // 指令与元素成功绑定时
+    //     bind(element, binding) {
+    //         element.value = binding.value
+    //     },
+    //     // 指令所在元素被插入页面时
+    //     inserted(element, binding) {
+    //         element.focus()
+    //     },
+    //     // 指令所在的模版被重新解析时
+    //     update(element, binding) {
+    //         element.value = binding.value
+    //     }
+    // })
+    new Vue({
+        el: '#root',
+        data: {
+            num: 1
+        },
+        directives: {
+            // 写法一：
+            // big函数调用时机：1.指令与元素成功绑定时；2.指令所在的模板被重新解析时
+            big(element, binding) {
+                element.innerText = binding.value * 10
+            },
+            // 写法二：
+            fbind: {
+                // 指令与元素成功绑定时
+                bind(element, binding) {
+                    element.value = binding.value
+                },
+                // 指令所在元素被插入页面时
+                inserted(element, binding) {
+                    element.focus()
+                },
+                // 指令所在的模版被重新解析时
+                update(element, binding) {
+                    element.value = binding.value
+                }
+            }
+        }
+    })
+</script>
+```
+
+
+
+## 生命周期
+
+
+
+
+
+
+
+
 
 
 
