@@ -1,4 +1,4 @@
-# Vue 基础
+# Vue 核心
 
 
 
@@ -846,19 +846,14 @@ e.g.
 
 ## 生命周期
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+- `beforeCreate`：将要创建
+- `created`：创建完毕
+- `beforeMount`：将要挂载
+- **`mounted`**：挂载完毕
+- `beforeUpdate`：将要更新
+- `updated`：更新完毕
+- **`beforeDestroy`**：将要销毁
+- `destroyed`：销毁完毕
 
 
 
