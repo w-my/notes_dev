@@ -1,3 +1,7 @@
+[TOC]
+
+
+
 # Vue 核心
 
 
@@ -840,6 +844,102 @@ e.g.
         }
     })
 </script>
+```
+
+
+
+## 配置项
+
+### ref 属性
+
+1. 被用来给元素或自组件组册引用信息（id的替代者）
+
+2. 应用在html标签上获取的是真实DOM元素，应用在组件标签上是组件实例对象（vc）
+
+3. 使用方式：
+
+   打标识：
+
+   ```html
+   <h1 ref="xxx">......</h1>
+   <!-- 或 -->
+   <School ref="xxx"></School>
+   ```
+
+   获取：
+
+   ```js
+   this.$refs.xxx
+   ```
+
+   
+
+### props 配置
+
+让组件接收外部传过来的数据
+
+1. 传递数据
+
+```html
+<Demo name="xxx" />
+```
+
+2. 接收数据
+
+```js
+props: {
+  name: {
+    type: String, // 类型
+    required: true, // 是否必填
+    default: 'lalala' // 默认值
+  }
+}
+```
+
+props 是只读的，Vue 底层会检测对 props 的修改，如果修改了会发出警告。
+
+若需要修改，需要在 data 中定义新属性接收传进来的值，然后去修改 data 的数据。
+
+
+
+### mixin（混入）
+
+可以把多个组件共用的配置提取成一个混入对象
+
+使用方式：
+
+1. 定义混合：
+
+```js
+{
+  data() {...},
+  methods: {...}
+  ...
+}
+```
+
+e.g. ： `mixin.js`
+
+```js
+export const mixin = {
+  methods: {
+    showName() {
+      alert(this.name)
+    }
+  }
+}
+```
+
+2. 使用混入：
+
+```js
+// 导入
+import { mixin } from '../mixin'
+
+// 全局混入：
+Vue.mixin(xxx)
+// 局部混入：
+mixins: ['xxx', 'xxx2']
 ```
 
 

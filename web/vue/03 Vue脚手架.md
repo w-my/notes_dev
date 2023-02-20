@@ -1,9 +1,5 @@
 # Vue脚手架
 
-？？？？？ 环境搭建  项目创建
-
-
-
 
 
 ## @vue/cli
@@ -14,23 +10,17 @@ npm install -g @vue/cli
 
 
 
+## 创建项目
+
+```sh
+vue create my-project
+```
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-## 脚手架基础
+## 脚手架分析
 
 
 

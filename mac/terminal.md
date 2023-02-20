@@ -2,13 +2,19 @@
 
 Homebrew 是 Mac OS 平台下的软件包管理工具。
 
+卸载：
+
+```sh
+/bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/HomebrewUninstall.sh)"
+```
+
 安装：
 
 ```sh
 /bin/zsh -c "$(curl -fsSL https://gitee.com/cunkai/HomebrewCN/raw/master/Homebrew.sh)"
 ```
 
-应为墙的原因，使用国内镜像地址安装，这里最好选择 中科大，比较快。
+应为墙的原因，使用国内镜像地址安装，这里最好选择 中科大 or 淘宝，比较快。
 
 > **关于Homebrew：**
 > 1.Homebrew的命令是以brew开头。 例如：brew -v 查看Homebrew版本
@@ -93,15 +99,114 @@ pod --version
 
 
 
-# nodejs
 
-[官网 https://nodejs.org/en/ ](https://nodejs.org/en/) 下载 current 包，手动安装
+
+# npm & nodejs
+
+## npm 卸载
+
+清除 npm 缓存：
+
+```sh
+npm cache clean -f
+```
+
+卸载：
+
+```sh
+sudo npm uninstall npm -g
+```
+
+使用 `npm -v` 显示 `note found` 说明卸载成功
+
+如果卸载没有成功，进入npm所在文件夹
+
+```sh
+cd /usr/local/lib/node_modules/npm
+```
+
+执行卸载
+
+```sh
+sudo make uninstall
+```
+
+## nodejs 卸载
+
+```sh
+sudo rm -rf /usr/local/lib/node /usr/local/lib/node_modules /var/db/receipts/org.nodejs.*
+sudo rm -rf /usr/local/include/node /Users/$USER/.npm 
+sudo rm /usr/local/bin/node
+sudo rm /usr/local/share/man/man1/node.1
+sudo rm /usr/local/lib/dtrace/node.d
+```
+
+是否 `node -v` 查看是否卸载成功。
+
+
+
+## nodejs 安装
+
+[https://nodejs.org/en/download/current/](https://nodejs.org/en/download/current/) 下载包，手动安装
+
+或者brew命令行安装：
+
+```sh
+brew install node
+```
 
 查看当前版本：
 
 ```sh
 node -v
 ```
+
+
+
+## node 版本管理
+
+### n
+
+安装 n 模块：
+
+```sh
+sudo npm i -g n
+```
+
+安装 node 指定版本
+
+```sh
+sudo n 12.13.0
+```
+
+查看已安装 node 列表并切换
+
+```sh
+n
+```
+
+
+
+### n 模块常用指令
+
+```sh
+# 升级到稳定版
+sudo n stable
+# 升级到最新版
+sudo n lastest
+# 切换使用 node 版本
+sudo n 12.12.0
+# 删除某个 node 版本
+sudo n rm 12.12.0
+# 用指定版本执行脚本
+sudo n use 12.12.0  some.js
+```
+
+
+
+
+
+
 
 
 
