@@ -176,7 +176,7 @@ sudo npm i -g n
 安装 node 指定版本
 
 ```sh
-sudo n 12.13.0
+sudo n v1.0.0
 ```
 
 查看已安装 node 列表并切换
@@ -195,16 +195,36 @@ sudo n stable
 # 升级到最新版
 sudo n lastest
 # 切换使用 node 版本
-sudo n 12.12.0
+sudo n 1.0.0
+# 安装指定版本 node
+sudo n v1.0.0
 # 删除某个 node 版本
-sudo n rm 12.12.0
+sudo n rm 1.0.0
 # 用指定版本执行脚本
-sudo n use 12.12.0  some.js
+sudo n use 1.0.0  some.js
 ```
 
 
 
+## node 常见问题
 
+- `npm i` 没有成功
+
+  `npm ERR! node-sass@4.14.1 postinstall: node scripts/build.js`
+
+**解决方式：**：
+
+​		找不到sass，查看node-sass文件，里面没有文件。所以在npm install前设置sass源。建议不要直接使用 cnpm 安装依赖，会有各种诡异的 bug。可以通过如下操作解决 npm 下载速度慢的问题：
+
+```sh
+npm install --registry=registry.npm.taobao.org
+```
+
+- `node-sass` 安装失败解决办法
+
+```sh
+npm config set sass_binary_site=https://npm.taobao.org/mirrors/node-sass
+```
 
 
 

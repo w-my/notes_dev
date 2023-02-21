@@ -6,12 +6,6 @@
 
 
 
-## 插件
-
-- `Vue 3 Snippets` ：代码提示模版
-
-
-
 ## 数据
 
 ### 数据绑定
@@ -918,7 +912,7 @@ props 是只读的，Vue 底层会检测对 props 的修改，如果修改了会
 }
 ```
 
-e.g. ： `mixin.js`
+`mixin.js`
 
 ```js
 export const mixin = {
@@ -940,6 +934,51 @@ import { mixin } from '../mixin'
 Vue.mixin(xxx)
 // 局部混入：
 mixins: ['xxx', 'xxx2']
+```
+
+
+
+## plugins（插件）
+
+功能：用于增强Vue
+
+本质：包含install方法的一个对象，install的第一个参数是Vue，第二个以后的参数是插件使用者传递的数据。	
+
+`plugins.js`
+
+```js
+export default {
+  install(Vue) {
+    // 全局过滤器
+    Vue.filter('mySlice', function(value){
+      return value.slice(0, 4)
+    })
+    // 全局指令
+    Vue.directive('fbind', {
+      // ...
+    })
+    // 全局混入
+    Vue.mixin({
+      // ...
+    })
+    // 给Vue原型上添加方法（vm和vc就都能用了）
+    Vue.prototype.hello = ()=>{ alert('你好!!') }
+  }
+}
+```
+
+
+
+## scoped 样式
+
+用作：让样式在局部生效，防止冲突。
+
+写法：
+
+```style
+<style scoped>
+
+</style>
 ```
 
 

@@ -1,8 +1,34 @@
-# Vue脚手架
+# Vue 项目
+
+## 插件
+
+- `Vue 3 Snippets` ：代码提示模版
 
 
 
-## @vue/cli
+## Less
+
+查看 less-loader 可用版本
+
+```sh
+npm view less-loader versions
+```
+
+安装指定7.下最新版本：
+
+```sh
+npm i less-loader@7
+```
+
+> 注意：vue 使用的 webpack 版本不是最新版本，所以不能使用最新版本的 less-loader 。
+
+
+
+## Vue脚手架
+
+
+
+### @vue/cli
 
 ```sh
 npm install -g @vue/cli
