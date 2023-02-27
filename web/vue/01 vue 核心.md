@@ -996,3 +996,164 @@ export default {
 
 
 
+## 组件自定义事件
+
+一种组件间通信的方式，适用于：**子组件 ==> 父组件**
+
+### 绑定
+
+方式一：
+
+```html
+<Demo @customFum="test"/>
+// or
+<Demo v-on:customFum="test"/>
+```
+
+方式二：
+
+```vue
+<Demo ref="customFum"/>
+...
+mounted() {
+	this.$refs.xxx.$on('customFum', this.test)
+}
+```
+
+若想让自定义事件只触发一次，可以使用 `once` 修饰，或 `$once` 方法。
+
+**组件上也可以绑定原生DOM事件，需要使用 `native` 修饰符**
+
+> 通过 `this.$refs.xxx$on('customClick', 回调)` 绑定自定义事件，回调要么配置在 methods 中，要么用箭头函数，否则 this 指向会出问题。
+
+
+
+### 触发
+
+```js
+this.$emit('customClick', parmas)
+```
+
+
+
+### 解绑
+
+```js
+this.$off('customClick')
+```
+
+
+
+## 全局事件总线（GlobalEventBus）
+
+一种组件间通信的方式，适用于任意组件间通信。
+
+### 安装总线
+
+```vue
+new Vue({
+	...
+	beforeCreate() {
+		Vue.prototype.$bus = this // 安装全局事件总线，$bus 就是当前的vm
+	}
+	...
+})
+```
+
+### 使用总线
+
+**接收数据**
+
+A组件想接收数据，则在A组件中给$bus绑定自定义事件，事件的回调留在A组件自身
+
+```js
+methods() {
+  demo(data) { ... }
+}
+...
+mounted() {
+  this.$bus.$on('xxx', this.demo)
+}
+```
+
+**提供数据**
+
+```js
+this.$bus.$emit('xxx', 数据)
+```
+
+**解绑**
+
+最好在 beforeDestroy 钩子中，用 $off 去解绑当前组件所用到的事件
+
+```js
+beforeDestroy() {
+  this.$bus.$off('xxx')
+}
+```
+
+
+
+## 消息订阅
+
+安装 `pubsub.js` 库
+
+```sh
+npm i pubsub-js
+```
+
+**使用**
+
+订阅：
+
+```vue
+<scrip>
+	import pubsub from 'pubsub-js'
+	export default {
+  	...
+  	methods: {
+  		demo(msgName, data) {
+  			console.log('收到了消息', msgName, data)
+  		}
+  	},
+  	mounted() {
+  		this.pubId = pubsub.subscribe('hello', this.demo)
+  	},
+  	beforeDestroy() {
+  		pubsub.unsubscribe(this.pubId);
+  	}
+  	...
+  }
+</scrip>
+```
+
+发布：
+
+```vue
+ pubsub.publish('xxx', 数据)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
