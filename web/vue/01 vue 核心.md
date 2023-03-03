@@ -567,6 +567,20 @@ e.g.
 </script>
 ```
 
+**Obj.hasOwnProperty('')**
+
+判断对象是否有某个属性
+
+```js
+if (obj.hasOwnProperty('isEdit')) {
+  obj.isEdit = true
+}else { // 没有isEdit属性才使用$set追加属性
+  this.$set(obj, 'isEdit', true)
+}
+```
+
+
+
 ### 数组
 
 Vue 将被侦听的数组的变更方法进行了包裹，通过以下方法可以触发视图更新
@@ -1096,15 +1110,23 @@ beforeDestroy() {
 
 ## 消息订阅
 
-安装 `pubsub.js` 库
+一种组件间通信的方式，适用于任意组件间通信。
+
+**使用**
+
+1. 安装 `pubsub.js` 库
 
 ```sh
 npm i pubsub-js
 ```
 
-**使用**
+2. 引入
 
-订阅：
+```js
+import pubsub from 'pubsub-js'
+```
+
+3. 订阅
 
 ```vue
 <scrip>
@@ -1127,11 +1149,216 @@ npm i pubsub-js
 </scrip>
 ```
 
-发布：
+4. 发布消息
 
 ```vue
  pubsub.publish('xxx', 数据)
 ```
+
+5. 最好在 `beforeDestroy` 钩子中，用 `PubSub.unsubscribe(pid)` 取消订阅。
+
+
+
+## nextTick
+
+1. 语法：`this.$nextTick(回调函数)`
+
+2. 作用：在下一次 DOM 更新结束后执行其指定的回调
+3. 什么时候用：当改变数据后，要基于更新后的新 DOM 进行某些操作时，要在 nextTick 所指定的回调函数中执行。
+
+ e.g.
+
+```js
+... // 触发更新 DOM 的代码
+// 更新完 DOM 后，获取焦点
+this.$nextTick(function() { 
+  this.$refs.inputTitle.focus()
+})
+```
+
+
+
+## transition
+
+e.g.
+
+```vue
+<template>
+	...
+  <button @click="isShow = !isShow">显示/隐藏</button>
+  <transition name="hello" appear>
+    <h1 v-show="isShow">hello</h1>
+  </transition>
+  ...
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        isShow: true
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .hello-entr-active {
+    animation: anima 0.5s linear;
+  }
+  .hello-leave-active {
+    animation: anima 0.5 reverse;
+  }
+  @keyframes atguigu {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0px);
+    }
+  }
+</style>
+```
+
+e.g.
+
+```vue
+<template>
+	...
+  <button @click="isShow = !isShow">显示/隐藏</button>
+  <transition name="hello" appear>
+    <h1 v-show="isShow">hello</h1>
+  </transition>
+  ...
+</template>
+
+<script>
+  export default {
+    data() {
+      return {
+        isShow: true
+      }
+    }
+  }
+</script>
+
+<style scoped>
+  .hello-enter, .hello-leave-to {
+    transform: translateX(-100%);
+  }
+  .hello-enter-to, .hello-leave {
+    transform: translateX(0px);
+  }
+  .hello-enter-active, .hello-leave-active {
+    transition: 0.5s linear;
+  }
+</style>
+```
+
+或者使用 `animate.css` 三方库实现动画。
+
+
+
+## slot
+
+### 默认插槽
+
+父组件：
+
+```html
+<Category>
+	<div>插入到插槽的内容</div>
+</Category>
+```
+
+子组件：
+
+```html
+<template>
+	<div>
+		<!-- 定义插槽 -->
+		<slot>插槽默认内容...</slot>
+	</div>
+</template>
+```
+
+
+
+### 具名插槽
+
+父组件：
+
+```html
+<Category>
+	<template slot="center">
+		<div>center 内容</div>
+	</template>
+	<template v-slot:footer>
+		<div>footer 内容</div>
+	</template>
+</Category>
+```
+
+子组件：
+
+```html
+<template>
+	<div>
+		<!-- 定义插槽 -->
+		<slot name="center">插槽默认内容...</slot>
+		<slot name="footer">插槽默认内容...</slot>
+	</div>
+</template>
+```
+
+
+
+### 作用域插槽
+
+数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定。
+
+父组件：
+
+```html
+<Category>
+	<template scope="scopeData">
+		<ul>
+			<li v-for="g in scopeData.games" :key="g">{{ g }}</li>
+		</ul>
+	</template>
+</Category>
+
+<Category>
+	<template slot-scope="{ games }">
+		<h2 v-for="g in games" :key="g">{{ g }}</h2>
+	</template>
+</Category>
+```
+
+子组件：
+
+```html
+<template>
+	<div>
+		<slot :games="games"></slot>
+	</div>
+</template>
+<script>
+	export default {
+		name: '',
+		props: ['title'],
+		data() {
+			return {
+				games: ['红色警戒', '穿越火线', '超级玛丽']
+			}
+		}
+	}
+</script>
+```
+
+
+
+
 
 
 
