@@ -1,4 +1,8 @@
-## Mac OS 配置 Apache
+# Mac 配置 Apache
+
+https://www.jianshu.com/p/d22baeae50ea
+
+
 
 Mac OS 系统已经集成了 Apache 环境，只需要配置启用就可以了。
 
@@ -24,34 +28,94 @@ Mac OS 系统已经集成了 Apache 环境，只需要配置启用就可以了�
 
 
 
-#### 配置 Apache 目录
+## 配置本地 https 服务
 
-###### Apache系统级根目录及对应网址
+### 自签名证书
 
-> /Library/WebServer/Documents
-> http://127.0.0.1 或 http://localhost
+#### 新建文件夹
 
-###### 用户级的根目录及对应网址
+```sh
+cd desktop/CustomSSL
+```
 
-> ~/Sites 
-> http://localhost/~haibor/
+#### 在SSL文件夹中生成私钥
 
-###### 用户级站点根目录需要手动创建
+```sh
+openssl genrsa -out server.key 2048
+```
 
-> 1、建立站点文件夹 `$ sudo mkdir ~/Sites`
-> 2、`$ cd /etc/apache2/users` 检查目录下是否存在 `Wmy.conf ` 文件，`Wmy` 为当前用户名，如果没有则创建一个 `$ sudo touch Wmy.conf `，并修改文件权限 `$ sudo chmod 644 Wmy.conf `。
-> 3、创建之后，打开  Guest.conf 文件，`$ sudo vi Wmy.conf` 将下面的配置信息写入文件。
->  <Directory "/Users/Wmy/Sites/">
->      Options Indexes MultiViews
->      Require all granted
->      Allow Override all
->      Order allow,deny
->      allow from all
->  </Directory>
-> 4、编辑 httpd.conf文件 `$ sudo vi /etc/apache2/httpd.conf`，将下面两行代码前面的注释符号 `#`删掉。内容比较多，可以使用 ctrl+w 搜索关键词找到对应位置。
-> `Include /private/etc/apache2/extra/httpd-userdir.conf`
-> `LoadModule userdir_module libexec/apache2/mod_userdir.so`
-> 5、编辑 httpd-userdir.conf 文件 `$ sudo vi /etc/apache2/extra/httpd-userdir.conf`，找到下列代码，并将前面的注释符号 # 删除
-> 6、重启 Apache：`$ sudo apachectl restart`
+#### 生成自签名证书
 
-在浏览器中输入 http://127.0.0.1/~Wmy 或 http://localhost/~Wmy ，即可测试用户目录是否工作。
+```sh
+openssl req -new -sha256 -x509 -days 365 -key server.key -out server.crt
+```
+
+req是证书请求的子命令，-sha256表示算法，-x509表示输出证书，-days365 为有效期，此后根据提示输入证书拥有者信息；
+
+其中要输入国家、省份、地区、公司、邮箱等信息，按照个人情况随便填下就行。
+ 但 `Common Name` 应该与域名保持一致(如我的电脑搭建的服务器IP地址为`10.73.20.19`)
+
+> e.g: CN, BeiJing, Beijing, Dgq, Dgq, 10.73.20.19
+
+### 配置Apache服务器SSL
+
+#### 放入证书
+
+将`server.crt`和`server.key`两个文件拷贝
+放到`/etc/apache2/`目录
+
+#### 修改配置文件
+
+```sh
+sudo vim /etc/apache2/httpd.conf
+```
+
+搜索下面内容，并去掉注释符号`#`
+
+```sh
+LoadModule ssl_module libexec/apache2/mod_ssl.so
+Include /private/etc/apache2/extra/httpd-vhosts.conf
+Include /private/etc/apache2/extra/httpd-ssl.conf
+LoadModule socache_shmcb_module libexec/apache2/mod_socache_shmcb.so
+```
+
+```sh
+sudo vim /etc/apache2/extra/httpd-ssl.conf
+```
+
+去掉以下两项注释并检查是否与之前安装私钥和证书的路径一致
+
+```sh
+SSLCertificateFile "/private/etc/apache2/server.crt"
+SSLCertificateKeyFile "/private/etc/apache2/server.key"
+```
+
+```sh
+sudo vim /etc/apache2/extra/httpd-vhosts.conf
+```
+
+在 `<VirtualHost *:80> .....</VirtualHost>` 后面添加一段如下内容：
+
+```sh
+<VirtualHost *:443>
+    SSLEngine on
+    SSLCipherSuite ALL:!ADH:!EXPORT56:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv2:+EXP:+eNULL
+    SSLCertificateFile /private/etc/apache2/server.crt
+    SSLCertificateKeyFile /private/etc/apache2/server.key
+    ServerName 10.73.20.19 
+    DocumentRoot "/Library/WebServer/Documents"
+</VirtualHost>
+```
+
+注意 `ServerName` 填写域名与所需访问一致
+
+#### 重启服务器
+
+```sh
+sudo apachectl restart
+```
+
+访问 `https://10.73.20.19/`
+提示不安全什么的(因为自己的证书没添加到浏览器信任列表)，继续访问
+
+HTTPS可以用啦。
