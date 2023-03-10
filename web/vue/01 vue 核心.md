@@ -1008,6 +1008,36 @@ export default {
 - **`beforeDestroy`**：将要销毁
 - `destroyed`：销毁完毕
 
+生命周期图之外的三个钩子：
+
+- activated
+- deactivated
+
+```js
+activated() {
+	// 组件被激活
+  this.timer= setInterval(() => {
+    ...
+  }, 10)
+},
+deactivated() {
+  // 组件失活了
+  clearInterval(this.timer)
+},
+```
+
+- nextTick
+
+```js
+... // 触发更新 DOM 的代码
+// 更新完 DOM 后，获取焦点
+this.$nextTick(function() { 
+  this.$refs.inputTitle.focus()
+})
+```
+
+
+
 
 
 ## 组件自定义事件

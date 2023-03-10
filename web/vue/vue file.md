@@ -179,51 +179,65 @@ npm i esdk-obs-browserjs
 
 ```sh
 import ObsClient from 'esdk-obs-browserjs/src/obs'
+import { nanoid } from 'nanoid'
 ```
 
 使用：
 
 ```vue
-async putToObs() {
+async upload() {
   let obj = this.getPlistStr();
+  let file = await this.getFile(obj);
+  this.putToObs(file);
+},  
+
+async getFile(obj) {
   let blob = new Blob([obj], { type: 'text/xml;charset=utf-8' });
-  let file = await new window.File([blob], 'app.plist', { type: 'text/xml' });
+  return new File([blob], 'app.plist', { type: 'text/xml' });
+},
+
+async putToObs(file) {
+  const ak = 'WVV14YQUYXBCMOBMSUCT';
+  const sk = 'al8tEuNCT2j9m4iuS2RHiM2bgL2WnBFSFOFAjaWr';
+  const server = 'obs.cn-east-3.myhuaweicloud.com';
+  const bucket = 'digiqal';
+  const key = nanoid() + '.plist';
 
   // 创建ObsClient实例
   var obsClient = new ObsClient({
-    access_key_id: 'WVV14YQUYXBCMOBMSUCT', // 你的ak
-    secret_access_key: 'al8tEuNCT2j9m4iuS2RHiM2bgL2WnBFSFOFAjaWr', // 你的sk
-    server: 'obs.cn-east-3.myhuaweicloud.com' // 你的endPoint
-  })
+    access_key_id: ak,
+    secret_access_key: sk,
+    server: server
+  });
+
+  var callback = function (transferredAmount, totalAmount, totalSeconds) {
+    // 获取上传平均速率（KB/S）
+    console.log(transferredAmount * 1.0 / totalSeconds / 1024);
+    // 获取上传进度百分比
+    console.log(transferredAmount * 100.0 / totalAmount);
+    // 百分比取整数
+    console.log(Math.floor(transferredAmount * 100.0 / totalAmount))
+  };
 
   obsClient.putObject({
-    Bucket: 'digiqal', // 桶名
-    Key: this.path || '' + file.name, // 路径 + 文件名
+    Bucket: bucket, // 桶名
+    Key: key, // 路径 + 文件名
     SourceFile: file,
-    ProgressCallback: this.callback
+    ProgressCallback: callback
   }, function (err, result) {
     if (err) {
       console.error('Error-->' + err)
     } else {
-      console.log('Status-->' + result.CommonMsg.Status)
+      console.log('Status-->', result.CommonMsg.Status, 'https://' + bucket + '.' + server + '/' + key)
     }
   })
-},
-// 上传进度
-callback(transferredAmount, totalAmount, totalSeconds) {
-  // 获取上传平均速率（KB/S）
-  console.log(transferredAmount * 1.0 / totalSeconds / 1024);
-  // 获取上传进度百分比
-  console.log(transferredAmount * 100.0 / totalAmount);
-  // 百分比取整数
-  console.log(Math.floor(transferredAmount * 100.0 / totalAmount))
 },
 ```
 
 上传后的文件路径，需要自己拼接：
 
 ```sh
-'https://' + bucket + '.obs.cn-north-4.myhuaweicloud.com/' + key
+'https://' + bucket + '.' + server + '/' + key
 ```
 
 

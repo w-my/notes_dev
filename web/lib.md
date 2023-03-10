@@ -205,8 +205,110 @@ module.exports = {
 
 
 
+## nanoid
+
+安装：
+
+```javascript
+npm i nanoid
+```
+
+使用：
+
+```js
+import {nanoid} from 'nanoid';
+ 
+let idA = nanoid() // "V1SyGzR8_Z5jdHd8B-myT"
+ 
+// 也可以指定生成字符串的长度
+let idB = nanoid(10)
+```
+
+
+
 ## bootstrap.css
 
+
+
+
+
+## vue-router 
+
+vue 的一个插件库，专门用来实现 SPA 应用。
+
+> vue-router4 可以在 vue3 中使用，vue-router3 才能在 vue2 中使用
+
+安装：
+
+```sh
+npm i vue-router@3
+```
+
+引入：
+
+```sh
+import VueRouter from 'vue-router'
+```
+
+应用插件：
+
+```sh
+Vue.use(VueRouter)
+```
+
+配置路由：
+
+`src/router/index.js`
+
+```js
+import VueRouter from 'vue-router'
+import Home from '../components/Home'
+import About from '../components/About'
+
+export default new VueRouter ({
+  routes: [
+    {
+      path: '/home',
+      component: Home
+    },
+    {
+      path: '/about',
+      component: About
+    }
+  ]
+})
+```
+
+`src/main.js`
+
+```js
+import Vue from 'vue'
+import App from './App.vue'
+
+import VueRouter from 'vue-router'
+import router from './router'
+
+Vue.config.productionTip = false
+
+Vue.use(VueRouter)
+
+new Vue({
+  render: h => h(App),
+  router: router
+}).$mount('#app')
+```
+
+实现切换：
+
+```html
+<router-link active-class="active" to="/home">Home</router-link>
+```
+
+指定展示位置：
+
+```html
+<router-view></router-view>
+```
 
 
 
