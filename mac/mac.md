@@ -139,6 +139,20 @@ $ cal 01 2020
 
 
 
+## 删除锁定软件
+
+```sh
+/bin/ls -dleO@ APP路径
+```
+
+回车，如果看到下面的信息，就可以下一步了
+
+`drwxr-xr-x 3 liyan staff schg 96 4 28 2021 ../../Applications/FortiClient.app`
+
+```sh
+sudo /usr/bin/chflags -R noschg APP路径
+```
+
 
 
 
