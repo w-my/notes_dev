@@ -41,7 +41,7 @@ https://zhuanlan.zhihu.com/c_1147221774730076160?utm_id=0
 ## Mac terminal 连接 CentOS
 
 ```sh
-ssh -l root *.*.*.*
+$ ssh -l root *.*.*.*
 ```
 
 端口默认22，没有修改。
@@ -49,7 +49,7 @@ ssh -l root *.*.*.*
 如果改变端口：
 
 ```sh
-ssh -p 448(端口) -l root(用户名) *.*.*.*
+$ ssh -p 448(端口) -l root(用户名) *.*.*.*
 ```
 
 
@@ -57,7 +57,7 @@ ssh -p 448(端口) -l root(用户名) *.*.*.*
 ## Mac terminal 传文件到 ContOS
 
 ```sh
-scp -P 22 ./Downloads/a.png root@192.168.56.130:/usr/local
+$ scp -P 22 ./Downloads/a.png root@192.168.56.102:/usr/local
 ```
 
 > 22：为服务器端口号
@@ -66,7 +66,7 @@ scp -P 22 ./Downloads/a.png root@192.168.56.130:/usr/local
 >
 > root：服务器用户名
 >
-> 192.168.56.130：服务器地址
+> 192.168.56.102：服务器地址
 >
 > /usr/local：保存文件到的目标目录
 
@@ -79,7 +79,7 @@ scp -P 22 ./Downloads/a.png root@192.168.56.130:/usr/local
 解决方法：
 
 ```sh
-vi ~/.ssh/known_hosts
+$ vi ~/.ssh/known_hosts
 ```
 
 进入此目录，删除192.168.1.90的相关rsa的信息即可.
@@ -87,8 +87,8 @@ vi ~/.ssh/known_hosts
 或者删除这个文件:
 
 ```sh
-cd ~/.ssh/
-rm known_hosts
+$ cd ~/.ssh/
+$ rm known_hosts
 ```
 
 
@@ -100,10 +100,10 @@ rm known_hosts
 1. 依次执行以下命令，安装依赖
 
 ```sh
-yum install gcc-c++
-yum install -y pcre pcre-devel
-yum install -y zlib zlib-devel
-yum install -y openssl openssl-devel
+$ yum install gcc-c++
+$ yum install -y pcre pcre-devel
+$ yum install -y zlib zlib-devel
+$ yum install -y openssl openssl-devel
 ```
 
 2. 下载 Linux 版本的 [Nginx](https://nginx.org/en/download.html) 安装包
@@ -113,40 +113,40 @@ yum install -y openssl openssl-devel
 3. 安装
 
 ```sh
-cd /usr/local
-mkdir nginx
+$ cd /usr/local
+$ mkdir nginx
 ```
 
 将下载的 nginx 安装包采用finalshell或者Xftp软件等上传至/usr/local/nginx下：
 
 ```sh
-scp -P 22 ./Downloads/nginx-1.22.1.tar.gz root@192.168.56.102:/usr/local/nginx/
+$ scp -P 22 ./Downloads/nginx-1.22.1.tar.gz root@192.168.56.102:/usr/local/nginx/
 ```
 
 进入目录，解压 nginx 包：
 
 ```sh
-cd /usr/local/nginx
-tar -zxvf nginx-1.22.1.tar.gz
+$ cd /usr/local/nginx
+$ tar -zxvf nginx-1.22.1.tar.gz
 ```
 
 执行初始化配置：
 
 ```sh
-cd nginx-1.22.1
-./configure
+$ cd nginx-1.22.1
+$ ./configure
 ```
 
 执行编译：
 
 ```sh
-make
+$ make
 ```
 
 执行安装：
 
 ```sh
-make install
+$ make install
 ```
 
 4. 运行 nginx
@@ -181,14 +181,17 @@ root     19738 16629  0 14:31 pts/1    00:00:00 grep --color=auto nginx
 无法访问：
 
 ```sh
+# 关闭防火墙
+$ systemctl stop firewalld.service
+# 或
 # 查询端口是否开放
-firewall-cmd --query-port=8080/tcp
+$ firewall-cmd --query-port=8080/tcp
 # 开放80端口
-firewall-cmd --permanent --add-port=80/tcp
+$ firewall-cmd --permanent --add-port=80/tcp
 # 移除端口
-firewall-cmd --permanent --remove-port=8080/tcp
-#重启防火墙(修改配置后要重启防火墙)
-firewall-cmd --reload
+$ firewall-cmd --permanent --remove-port=8080/tcp
+# 重启防火墙(修改配置后要重启防火墙)
+$ firewall-cmd --reload
 ```
 
 
@@ -204,10 +207,10 @@ $ ./sbin/nginx -s quit   # 优雅关闭（当请求被处理完成之后才关�
 ```
 
 ```sh
-ps -aux | grep nginx      # 查看nginx的进程
-kill -quit 进程号          # 停止某进程，比较安全的退出
-kill -term 进程号					# 强制退出  
-kill -9 进程号							# 强制退出
+$ ps -aux | grep nginx      # 查看nginx的进程
+$ kill -quit 进程号          # 停止某进程，比较安全的退出
+$ kill -term 进程号					# 强制退出  
+$ kill -9 进程号							# 强制退出
 ```
 
 
@@ -215,8 +218,8 @@ kill -9 进程号							# 强制退出
 ### 修改 nginx 的监听端口
 
 ```sh
-# cd /usr/local/nginx/
-# vim conf/nginx.conf
+$ cd /usr/local/nginx/
+$ vim conf/nginx.conf
 ```
 
 ```
@@ -234,10 +237,109 @@ kill -9 进程号							# 强制退出
 ```
 
 ```sh
-# ./sbin/nginx -s reload
+$ ./sbin/nginx -s reload
 ```
 
 用 `ip:8080` 测试访问。
+
+
+
+## Nginx 部署 Vue 应用
+
+### 部署
+
+打包好的 dist 文件压缩后，上传到服务器 html 目录下：
+
+```sh
+$ scp -P 22 ./Downloads/webapp.zip root@192.168.56.102:/usr/local/nginx/html
+```
+
+解压缩
+
+```sh
+$ unzip webapp.zip
+```
+
+修改 `nginx.conf` 配置
+
+```sh
+$ cd /nginx
+$ vim conf/nginx.conf
+```
+
+修改如下 `listen` `server_name` `location-root` 配置项：
+
+```
+    server {
+        listen       9001; # 修改端口号
+        server_name  www.webapp.com; # 修改域名
+
+        #charset koi8-r;
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html/webapp; # 修改项目目录
+            index  index.html index.htm;
+        }
+```
+
+保存后，重启 nginx
+
+```sh
+$ ./sbin/nginx -s reload
+```
+
+重新访问地址 192.168.56.102 就是部署好的项目了。
+
+
+
+### 更新部署
+
+1. 上传新包 `webapp.zip` 到服务器
+
+```sh
+$ scp -P 22 ./Downloads/webapp.zip root@192.168.56.102:/usr/local/nginx/html
+```
+
+2. 连接服务器并进入 `html` 目录
+
+```sh
+$ ssh -l root 192.168.56.102
+$ cd /usr/local/nginx/html
+```
+
+3. 重命名原目录
+
+```sh
+$ mv webapp webapp20230101
+```
+
+4. 解压新项目
+
+```sh
+$ unzip webapp.zip
+```
+
+5. 重启 nginx
+
+```sh
+$ ./sbin/nginx -s reload
+```
+
+然后就可以刷新访问了：`192.168.56.102:9001`
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
