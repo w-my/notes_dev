@@ -19,7 +19,17 @@ $ sudo spctl --master-enable
 ###### 修改目录权限
 
 ```sh
-sudo chmod -R 777 你的文件夹名
+$ sudo chmod -R 777 你的文件夹名
+```
+
+
+
+#### 安装软件打开提示已损坏
+
+执行以下命令输入密码
+
+```sh
+$ sudo xattr -rd com.apple.quarantine /Applications/Navicat\ Premium.app
 ```
 
 
