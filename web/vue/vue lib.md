@@ -19,7 +19,7 @@ npm view less-loader versions
 安装指定7.下最新版本：
 
 ```sh
-npm i less-loader@7
+npm i less-loader@9
 ```
 
 > 注意：vue 使用的 webpack 版本不是最新版本，所以不能使用最新版本的 less-loader 。
@@ -131,6 +131,8 @@ npm i axios
 
 ```js
 import axios from 'axios'
+
+Vue.prototype.$axios = axios;
 ```
 
 e.g.
@@ -309,7 +311,6 @@ new Vue({
 ```html
 <router-view></router-view>
 ```
-
 
 
 
