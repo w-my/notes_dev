@@ -53,7 +53,25 @@ $ brew cask install docker
 查看已安装的镜像
 
 ```sh
-$ docker images
+docker images 查看镜像
+
+docker rmi 镜像id 删除镜像
+
+docker ps-a 查看已有容器
+
+docker start 容器id 运行容器
+
+docke ps 显示所有运行中的容器
+
+docker ps -a 显示所有容器
+
+docker rm 容器 ID 或名称 删除容器
+
+docker start 容器 ID 或名称 启动指定容器
+
+docker stop 容器 ID 或名称 停止指定容器
+
+docker restart 容器 ID 或名称 重启指定容器
 ```
 
 
