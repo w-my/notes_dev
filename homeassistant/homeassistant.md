@@ -1,5 +1,17 @@
 # Home assistant
 
+如果考虑到断网本地化执行，就更复杂了。蓝牙设备需要选支持本地化的网关；wifi设备需要设备本身支持本地化。zigbee设备选aqara 的没问题。
+
+
+
+https://zhuanlan.zhihu.com/p/576523666
+
+https://zhuanlan.zhihu.com/p/556718206
+
+https://github.com/aheadlead/mijia-issue-tracker/issues/2
+
+https://www.bilibili.com/read/cv22291031/
+
 https://www.hachina.io/
 
 1. 安装 python 3.5.4 （https://www.python.org/downloads/macos/）
