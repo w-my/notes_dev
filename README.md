@@ -1,1 +1,9 @@
-# note
+# notes
+
+
+
+- iOS
+- java
+- web
+- 
+
