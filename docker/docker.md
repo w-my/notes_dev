@@ -248,7 +248,3 @@ $ docker commit 容器id 新镜像名
 
 
 
-
-
-
-
