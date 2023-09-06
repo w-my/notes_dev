@@ -216,7 +216,7 @@ $ docker commit 容器id 新镜像名
 
 ## dockerfile
 
-### docker 指令
+### dockerfile 指令
 
 > FROM  这个镜像来于哪（指定基础镜像）
 >
