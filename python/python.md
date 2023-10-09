@@ -2,6 +2,44 @@
 
 
 
+## 安装
+
+#### MacOS 安装
+
+打开 [python 官网](https://www.python.org/downloads/) 选择 Downloads -> macOS
+
+选择一个版本下载 `Python 3.11.5 - Aug. 24, 2023` , 
+
+滑动页面到下面选择 macOS 版本下载，然后安装。
+
+#### 环境配置
+
+编辑配置文件
+
+```sh
+sudo vi ~/.bash_profile
+```
+
+最后添加配置，修改版本为自己安装的版本
+
+```sh
+export PATH="/Library/Frameworks/Python.framework/Versions/3.11/bin:${PATH}"
+```
+
+然后生效配置
+
+```sh
+source ~/.bash_profile
+```
+
+```sh
+pip3 --version
+```
+
+
+
+
+
 ## 基础语法
 
 #### 标准数据类型
