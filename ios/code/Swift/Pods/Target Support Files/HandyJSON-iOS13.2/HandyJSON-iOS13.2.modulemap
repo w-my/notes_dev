@@ -1,0 +1,7 @@
+module HandyJSON {
+  umbrella header "HandyJSON-iOS13.2-umbrella.h"
+  exclude header "HandyJSON-iOS13.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

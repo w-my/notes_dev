@@ -1,0 +1,7 @@
+module ObjectMapper {
+  umbrella header "ObjectMapper-iOS15.0-umbrella.h"
+  exclude header "ObjectMapper-iOS13.2-umbrella.h"
+
+  export *
+  module * { export * }
+}

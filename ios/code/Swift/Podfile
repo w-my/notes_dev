@@ -1,0 +1,60 @@
+
+#target 'Swift笔记' do
+#  use_frameworks!
+#
+#end
+
+targetArray = ['Swift笔记',
+  'RXSwift测试',
+  "RXSwift在TableView中的使用",
+  "RXSwift在TableView中使用MVVM",
+  "字符",
+  "协议",
+  "RXSwift 语法基础",
+  "RXDemo1",
+  "RXDataSourceTest",
+  "PromiseKit Demo"]
+
+targetArray.each do |t|
+	target t do
+    
+          pod 'RxSwift', '~> 5.0'
+          pod 'RxCocoa', '~> 5.0'
+          pod 'RxDataSources', '~> 4.0'
+          
+          pod 'Moya'
+          pod 'Moya/RxSwift' # 为RxSwift专用提供，对Alamofire进行封装的一个网络请求库
+          pod 'HandyJSON'
+          
+          pod 'NSObject+Rx'  # 提供 rx_disposeBag
+          pod 'Then'          # 快速初始化的语法糖
+          pod 'Reusable'     # 帮助我们优雅的使用自定义cell和view,不再出现Optional
+          
+          pod 'MJRefresh'
+          pod 'Kingfisher'
+          
+          pod 'SwiftyJSON'
+          pod 'ObjectMapper'
+          
+          pod 'SnapKit'
+#          pod 'LookinServer', :configurations => ['Debug']
+          pod 'DZNEmptyDataSet'
+          
+          
+          pod 'SYPhotoBrowser'
+          pod 'PromiseKit'
+	end
+end
+
+## CocoPods 下开启 RxSwift 调试 RxSwift.Resources.total
+#post_install do |installer|
+#    installer.pods_project.targets.each do |target|
+#        if target.name == 'RxSwift'
+#            target.build_configurations.each do |config|
+#                if config.name == 'Debug'
+#                    config.build_settings['OTHER_SWIFT_FLAGS'] ||= ['-D', 'TRACE_RESOURCES']
+#                end
+#            end
+#        end
+#    end
+#end

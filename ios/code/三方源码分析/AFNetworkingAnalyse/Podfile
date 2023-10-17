@@ -1,0 +1,3 @@
+target 'AFNetworkingAnalyse' do
+	pod 'AFNetworking'
+end

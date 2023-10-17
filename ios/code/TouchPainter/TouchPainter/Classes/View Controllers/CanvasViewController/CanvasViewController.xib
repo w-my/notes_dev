@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CanvasViewController">
+            <connections>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zu7-l5-qNE">
+                    <rect key="frame" x="0.0" y="806" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <items>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="5EG-zN-6rf"/>
+                        <barButtonItem image="trash" catalog="system" style="plain" id="y7J-pw-aiw"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="08m-75-nGY"/>
+                        <barButtonItem title="Item" image="save.png" style="plain" id="Mch-5F-FUG"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="4vH-Jx-ALp"/>
+                        <barButtonItem title="Item" image="open.png" style="plain" id="GiX-cL-hrG"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="mgZ-7n-yKC"/>
+                        <barButtonItem title="Item" image="palette.png" style="plain" id="TN1-iC-qQL"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="oAC-qq-PEV"/>
+                        <barButtonItem title="Item" image="undo.png" style="plain" id="MA9-ei-dj8"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="viX-JH-Ibu"/>
+                        <barButtonItem title="Item" image="redo.png" style="plain" id="UBP-wh-39c"/>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="nSq-fe-PDo"/>
+                    </items>
+                </toolbar>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <viewLayoutGuide key="safeArea" id="Q5M-cg-NOt"/>
+            <point key="canvasLocation" x="132" y="139"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="open.png" width="24" height="24"/>
+        <image name="palette.png" width="24" height="20"/>
+        <image name="redo.png" width="24" height="24"/>
+        <image name="save.png" width="24" height="24"/>
+        <image name="trash" catalog="system" width="60" height="64"/>
+        <image name="undo.png" width="24" height="24"/>
+    </resources>
+</document>

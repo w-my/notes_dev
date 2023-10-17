@@ -1,0 +1,6 @@
+framework module Pods_AVFoundation__ {
+  umbrella header "Pods-AVFoundation基础-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,7 @@
+target "ReactiveCocoa" do
+
+    pod 'ReactiveObjC'
+    pod 'AFNetworking'
+    pod 'MJExtension'
+    pod 'Masonry'
+end

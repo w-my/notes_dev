@@ -1,0 +1,7 @@
+module Alamofire {
+  umbrella header "Alamofire-iOS13.2-umbrella.h"
+  exclude header "Alamofire-iOS13.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

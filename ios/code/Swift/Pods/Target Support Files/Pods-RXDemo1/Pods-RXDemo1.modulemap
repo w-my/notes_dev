@@ -1,0 +1,6 @@
+module Pods_RXDemo1 {
+  umbrella header "Pods-RXDemo1-umbrella.h"
+
+  export *
+  module * { export * }
+}

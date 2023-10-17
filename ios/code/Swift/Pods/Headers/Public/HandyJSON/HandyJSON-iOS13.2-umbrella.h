@@ -1,0 +1,1 @@
+../../../Target Support Files/HandyJSON-iOS13.2/HandyJSON-iOS13.2-umbrella.h

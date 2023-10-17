@@ -1,0 +1,7 @@
+module Differentiator {
+  umbrella header "Differentiator-iOS13.2-umbrella.h"
+  exclude header "Differentiator-iOS15.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

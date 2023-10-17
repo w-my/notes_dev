@@ -1,0 +1,7 @@
+module Moya {
+  umbrella header "Moya-iOS13.0-umbrella.h"
+  exclude header "Moya-iOS13.2-umbrella.h"
+
+  export *
+  module * { export * }
+}

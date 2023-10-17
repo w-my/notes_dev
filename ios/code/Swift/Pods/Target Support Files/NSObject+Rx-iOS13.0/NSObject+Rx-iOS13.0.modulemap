@@ -1,0 +1,7 @@
+module NSObject_Rx {
+  umbrella header "NSObject+Rx-iOS13.0-umbrella.h"
+  exclude header "NSObject+Rx-iOS13.2-umbrella.h"
+
+  export *
+  module * { export * }
+}

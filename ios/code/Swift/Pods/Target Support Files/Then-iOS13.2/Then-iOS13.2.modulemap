@@ -1,0 +1,7 @@
+module Then {
+  umbrella header "Then-iOS13.2-umbrella.h"
+  exclude header "Then-iOS13.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,3 @@
+target 'SVProgressHUD'  do
+pod 'SVProgressHUD'
+end 

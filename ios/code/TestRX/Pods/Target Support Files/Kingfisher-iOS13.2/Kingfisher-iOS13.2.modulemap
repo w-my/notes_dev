@@ -1,0 +1,7 @@
+module Kingfisher {
+  umbrella header "Kingfisher-iOS13.2-umbrella.h"
+  exclude header "Kingfisher-iOS15.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

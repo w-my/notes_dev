@@ -1,0 +1,6 @@
+framework module Pods_EasyMobIMTest {
+  umbrella header "Pods-EasyMobIMTest-umbrella.h"
+
+  export *
+  module * { export * }
+}

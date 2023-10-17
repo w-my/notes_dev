@@ -1,0 +1,6 @@
+module Pods_RxDataSourcesDemo {
+  umbrella header "Pods-RxDataSourcesDemo-umbrella.h"
+
+  export *
+  module * { export * }
+}

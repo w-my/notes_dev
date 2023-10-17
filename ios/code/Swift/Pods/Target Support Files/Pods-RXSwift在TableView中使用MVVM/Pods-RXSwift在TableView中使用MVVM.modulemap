@@ -1,0 +1,6 @@
+module Pods_RXSwift_TableView___MVVM {
+  umbrella header "Pods-RXSwift在TableView中使用MVVM-umbrella.h"
+
+  export *
+  module * { export * }
+}

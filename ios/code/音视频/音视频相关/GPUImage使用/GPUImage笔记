@@ -1,0 +1,28 @@
+GPUImage :
+
+1.0 OC    基于 OpenGL ES
+2.0 swift 基于 OpenGL ES
+3.0 swift 基于 Metal
+
+AVFoundation 在 GPUImage 中主要是捕捉视频
+
+GPUImage 优势:
+在低版本设备上比 CoreImage 表现要好
+支持自定义滤镜
+开源
+更加易用
+
+CoreImage：
+基于Metal
+Metal SpriteKit Core Animation 配合的更好
+人脸识别
+对于大图 GPUImage(4096 * 4096) 会对图片进行压缩处理，而 CoreImage(拆解成小图处理) 不会
+
+GPUImage 内置滤镜主要分为四类：
+颜色类 (亮度，饱和度，色度，对比对...)
+图像类 (放射变换，剪裁，高斯模糊，毛玻璃...)
+颜色混合 (透明混合，纹理混合)
+效果类 (素描效果,像素化，旋涡效果...)
+
+具有丰富的输出组件(可以输出 为image、视频文件、GPU纹理、二进制数据 )
+灵活的滤镜链

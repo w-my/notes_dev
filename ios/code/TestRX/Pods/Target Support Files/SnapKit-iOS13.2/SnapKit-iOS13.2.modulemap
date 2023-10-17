@@ -1,0 +1,7 @@
+module SnapKit {
+  umbrella header "SnapKit-iOS13.2-umbrella.h"
+  exclude header "SnapKit-iOS15.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

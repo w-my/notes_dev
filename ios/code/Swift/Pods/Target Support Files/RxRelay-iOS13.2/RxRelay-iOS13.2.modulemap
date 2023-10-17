@@ -1,0 +1,7 @@
+module RxRelay {
+  umbrella header "RxRelay-iOS13.2-umbrella.h"
+  exclude header "RxRelay-iOS13.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

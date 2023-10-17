@@ -1,0 +1,6 @@
+${PODS_ROOT}/Target Support Files/Pods-snapKit测试/Pods-snapKit测试-frameworks.sh
+${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet-iOS13.2/DZNEmptyDataSet.framework
+${BUILT_PRODUCTS_DIR}/RxCocoa-iOS13.2/RxCocoa.framework
+${BUILT_PRODUCTS_DIR}/RxRelay-iOS13.2/RxRelay.framework
+${BUILT_PRODUCTS_DIR}/RxSwift-iOS13.2/RxSwift.framework
+${BUILT_PRODUCTS_DIR}/SnapKit-iOS13.2/SnapKit.framework

@@ -1,0 +1,1 @@
+../../../Target Support Files/Kingfisher-iOS13.2/Kingfisher-iOS13.2-umbrella.h

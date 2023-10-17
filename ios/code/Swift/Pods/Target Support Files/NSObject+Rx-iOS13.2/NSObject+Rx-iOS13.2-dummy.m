@@ -1,0 +1,5 @@
+#import <Foundation/Foundation.h>
+@interface PodsDummy_NSObject_Rx_iOS13_2 : NSObject
+@end
+@implementation PodsDummy_NSObject_Rx_iOS13_2
+@end

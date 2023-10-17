@@ -1,0 +1,30 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+#target 'AVFoundation基础' do
+  # Comment the next line if you don't want to use dynamic frameworks
+#  use_frameworks!
+
+  # Pods for AVFoundation基础
+
+#end
+
+#target '视频采集' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  #use_frameworks!
+
+  # Pods for 视频采集
+
+#end
+
+#target '音视频相关' do
+  
+
+#end
+
+targetArray = ['音视频相关','视频采集','GPUImage使用','AVFoundation基础']
+targetArray.each do |t|
+	target t do 
+		pod 'GPUImage'
+	end
+end

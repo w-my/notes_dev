@@ -1,0 +1,6 @@
+module Pods_RXDataSourceTest {
+  umbrella header "Pods-RXDataSourceTest-umbrella.h"
+
+  export *
+  module * { export * }
+}

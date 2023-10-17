@@ -1,0 +1,6 @@
+module Pods_RXSwift_____ {
+  umbrella header "Pods-RXSwift 语法基础-umbrella.h"
+
+  export *
+  module * { export * }
+}

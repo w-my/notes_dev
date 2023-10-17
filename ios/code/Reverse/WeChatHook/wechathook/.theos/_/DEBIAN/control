@@ -1,0 +1,10 @@
+Package: wechathook
+Name: wechathook
+Depends: mobilesubstrate
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: WTW
+Author: WTW
+Section: Tweaks
+Version: 0.0.1-10+debug
+Installed-Size: 212

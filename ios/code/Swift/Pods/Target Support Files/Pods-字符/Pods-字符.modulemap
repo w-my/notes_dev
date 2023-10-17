@@ -1,0 +1,6 @@
+module Pods___ {
+  umbrella header "Pods-字符-umbrella.h"
+
+  export *
+  module * { export * }
+}
