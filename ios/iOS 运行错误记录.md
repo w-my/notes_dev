@@ -13,3 +13,15 @@
 
 
 
+## XCode15 运行 MBProgressHUD 抛错
+
+```[(id)indicator setProgress:progress];``` 报如下错误：
+
+`Multiple methods named 'setProgress:' found with mismatched result, parameter type or attributes`
+
+**fix：**
+
+id -> UIProgressView *
+
+```[(UIProgressView *)indicator setProgress:progress];```
+
