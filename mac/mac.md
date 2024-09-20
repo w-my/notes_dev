@@ -28,6 +28,8 @@ $ sudo chmod -R 777 你的文件夹名
 
 执行以下命令输入密码
 
+`sudo xattr -rd com.apple.quarantine` + app 路径
+
 ```sh
 $ sudo xattr -rd com.apple.quarantine /Applications/Navicat\ Premium.app
 ```
