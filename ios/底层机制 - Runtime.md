@@ -582,7 +582,7 @@ class_addMethod([self class], sel, (IMP)fooMethod, "v@:");
 
 下面实现一个替换`ViewController`的`viewDidLoad`方法的例子。
 
-```kotlin
+```objective-c
 @implementation ViewController
 
 + (void)load {
